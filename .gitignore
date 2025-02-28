@@ -1,0 +1,9 @@
+node_modules
+database.db-shm
+database.db-wal
+test.js
+session
+*.tgz
+release
+debug
+*.db
