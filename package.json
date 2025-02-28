@@ -26,7 +26,6 @@
             "@semantic-release/commit-analyzer",
             "@semantic-release/release-notes-generator",
             "@semantic-release/changelog",
-            "@semantic-release/npm",
             "@semantic-release/github"
         ]
     },
@@ -60,18 +59,15 @@
         "@semantic-release/commit-analyzer": "^13.0.1",
         "@semantic-release/git": "^10.0.1",
         "@semantic-release/github": "^11.0.1",
-        "@semantic-release/npm": "^12.0.1",
         "@semantic-release/release-notes-generator": "^14.0.3",
         "babel-cli": "^6.26.0",
         "eslint": "^9.18.0",
         "eslint-config-prettier": "^10.0.1",
         "eslint-plugin-prettier": "^5.2.3",
+        "pino": "^9.6.0",
         "prettier": "^3.1.0",
         "semantic-release": "^24.2.3",
-        "ts-jest": "^29.2.6",
         "ts-node": "^10.9.2",
-        "typedoc": "^0.27.9",
-        "typedoc-plugin-mdn-links": "^4.0.14",
         "typescript": "^5.7.3"
     },
     "dependencies": {
@@ -80,17 +76,14 @@
         "cheerio": "^1.0.0",
         "file-type": "20.2.0",
         "got": "^14.4.6",
-        "jimp": "^1.6.0",
         "jiti": "^2.4.2",
         "link-preview-js": "^3.0.14",
         "node-webpmux": "^3.2.0",
-        "pino": "^9.6.0",
         "pm2": "^5.4.3",
         "qrcode-terminal": "^0.12.0",
         "sharp": "^0.33.5",
         "sqlite": "^5.1.1",
-        "sqlite3": "^5.1.7",
-        "xstro": "^3.0.0"
+        "sqlite3": "^5.1.7"
     },
     "packageManager": "yarn@1.22.22"
 }
