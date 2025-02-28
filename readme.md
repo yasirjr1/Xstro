@@ -1,7 +1,7 @@
 # `Xstro WA Bot`
 
 > [!IMPORTANT]  
-> An open-source WhatsApp bot built to automate tasks and provide useful services for both casual users and businesses. I’m not liable for any misuse of this software—it’s designed for **educational purposes only**. Please use it responsibly!
+> An open-source WhatsApp bot for automating tasks and providing services. Built for **educational purposes only**—use responsibly!
 
 [![FORK](https://img.shields.io/badge/Fork_Repo-black?style=for-the-badge&logo=git)](https://github.com/AstroX11/Xstro/fork)
 
