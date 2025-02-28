@@ -13,14 +13,14 @@ export async function Antilink(message: MessageType) {
 
     if (settings.mode === "kick") {
         if (!(await message.isBotAdmin())) return;
-        await message.delete();
+        await message.sendMessage(message.jid, { delete: message.key });
         await message.groupParticipantsUpdate(message.jid, [message.sender], "remove");
         await message.sendMessage(message.jid, { text: `@${message.sender.split("@")[0]} has been kicked for sending links!`, mentions: [message.sender] });
     }
 
     if (settings.mode === "delete") {
         if (!(await message.isBotAdmin())) return;
-        await message.delete();
+        await message.sendMessage(message.jid, { delete: message.key });
         await message.sendMessage(message.jid, { text: `@${message.sender.split("@")[0]} links are not allowed here!`, mentions: [message.sender] });
     }
 }
