@@ -1,76 +1,66 @@
 import { isMediaMessage, MessageType, Module } from "#core";
 
-Module(
-    {
-        name: "bio",
-        fromMe: true,
-        desc: "Change your WA Bio",
-        type: "whatsapp",
-    },
-    async (message: MessageType, match: string) => {
+Module({
+    name: "bio",
+    fromMe: true,
+    desc: "Change your WA Bio",
+    type: "whatsapp",
+    function: async (message: MessageType, match: string) => {
         if (!match) {
             return message.send("Give me your new bio!");
         }
         await message.updateProfileStatus(match);
-        return await message.send("Bio Updated");
-    }
-);
-
-Module(
-    {
-        name: "waname",
-        fromMe: true,
-        desc: "Change your WA Profile Name",
-        type: "whatsapp",
+        return message.send("Bio Updated");
     },
-    async (message: MessageType, match: string) => {
+});
+
+Module({
+    name: "waname",
+    fromMe: true,
+    desc: "Change your WA Profile Name",
+    type: "whatsapp",
+    function: async (message: MessageType, match: string) => {
         if (!match) {
             return message.send("Provide a new Profile Name");
         }
         await message.updateProfileName(match);
-        return await message.send("Profile Name Updated");
-    }
-);
-
-Module(
-    {
-        name: "block",
-        fromMe: true,
-        desc: "Block a user from Messaging you",
-        type: "whatsapp",
+        return message.send("Profile Name Updated");
     },
-    async (message: MessageType, match: string) => {
+});
+
+Module({
+    name: "block",
+    fromMe: true,
+    desc: "Block a user from Messaging you",
+    type: "whatsapp",
+    function: async (message: MessageType, match: string) => {
         const user = message.user(match);
         if (!user) return message.send("Provide someone to block!");
         if (!(await message.onWhatsApp(user))) return message.send("Not A WhatsApp User");
         await message.send("Blocked!");
-        return await message.updateBlockStatus(user, "block");
-    }
-);
-
-Module(
-    {
-        name: "unblock",
-        fromMe: true,
-        desc: "Unblock a user to allow Messaging",
-        type: "whatsapp",
+        return message.updateBlockStatus(user, "block");
     },
-    async (message: MessageType, match: string) => {
+});
+
+Module({
+    name: "unblock",
+    fromMe: true,
+    desc: "Unblock a user to allow Messaging",
+    type: "whatsapp",
+    function: async (message: MessageType, match: string) => {
         const user = message.user(match);
         if (!user) return message.send("Provide someone to unblock!");
         await message.send("Unblocked!");
-        return await message.updateBlockStatus(user, "unblock");
-    }
-);
-
-Module(
-    {
-        name: "pp",
-        fromMe: true,
-        desc: "Update Your Profile Image",
-        type: "whatsapp",
+        return message.updateBlockStatus(user, "unblock");
     },
-    async (message: MessageType) => {
+});
+
+Module({
+    name: "pp",
+    fromMe: true,
+    desc: "Update Your Profile Image",
+    type: "whatsapp",
+    function: async (message: MessageType) => {
         if (!message.quoted) {
             return message.send("Reply an Image");
         }
@@ -80,18 +70,16 @@ Module(
         const media = await message.downloadM(message.quoted);
         if (!media) return message.send("Failed to Process Image!");
         await message.updateProfilePicture(message.owner, media);
-        return await message.send("Profile Picture Updated!");
-    }
-);
-
-Module(
-    {
-        name: "vv",
-        fromMe: true,
-        desc: "Forwards a viewonce message",
-        type: "whatsapp",
+        return message.send("Profile Picture Updated!");
     },
-    async (message: MessageType) => {
+});
+
+Module({
+    name: "vv",
+    fromMe: true,
+    desc: "Forwards a viewonce message",
+    type: "whatsapp",
+    function: async (message: MessageType) => {
         if (!message.quoted || (!message.quoted.message.imageMessage?.viewOnce && !message.quoted.message.videoMessage?.viewOnce && !message.quoted.message.audioMessage?.viewOnce)) {
             return message.send("Reply a viewonce message");
         }
@@ -107,17 +95,15 @@ Module(
         }
 
         return message.send("View once message forwarded!");
-    }
-);
-
-Module(
-    {
-        name: "tovv",
-        fromMe: true,
-        desc: "Converts a message to viewonce",
-        type: "whatsapp",
     },
-    async (message: MessageType) => {
+});
+
+Module({
+    name: "tovv",
+    fromMe: true,
+    desc: "Converts a message to viewonce",
+    type: "whatsapp",
+    function: async (message: MessageType) => {
         if (!message.quoted || (!message.quoted.message.imageMessage && !message.quoted.message.videoMessage && !message.quoted.message.audioMessage)) {
             return message.send("Reply to an image, video, or audio message");
         }
@@ -134,17 +120,15 @@ Module(
         }
 
         return message.send("Message converted to view-once");
-    }
-);
-
-Module(
-    {
-        name: "edit",
-        fromMe: true,
-        desc: "Edit your own message",
-        type: "whatsapp",
     },
-    async (message: MessageType, match: string) => {
+});
+
+Module({
+    name: "edit",
+    fromMe: true,
+    desc: "Edit your own message",
+    type: "whatsapp",
+    function: async (message: MessageType, match: string) => {
         if (!message.quoted) {
             return message.send("Reply a message from you.");
         }
@@ -154,18 +138,16 @@ Module(
         if (!match) {
             return message.send(`Usage: ${message.prefix}edit hello there`);
         }
-        return await message.edit(match);
-    }
-);
-
-Module(
-    {
-        name: "dlt",
-        fromMe: false,
-        desc: "Delete a message for ourselves and from other participants if the bot is an admin",
-        type: "whatsapp",
+        return message.edit(match);
     },
-    async (message: MessageType) => {
+});
+
+Module({
+    name: "dlt",
+    fromMe: false,
+    desc: "Delete a message for ourselves and from other participants if the bot is an admin",
+    type: "whatsapp",
+    function: async (message: MessageType) => {
         if (!message.quoted) {
             return message.send("Reply a message");
         }
@@ -184,5 +166,5 @@ Module(
         } else {
             await message.chatModify({ deleteForMe: deleteForMeConfig }, message.jid);
         }
-    }
-);
+    },
+});

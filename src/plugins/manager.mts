@@ -1,14 +1,12 @@
 import { delAntilink, getAntilink, getAntiword, MessageType, Module, setAntilink, setAntiword } from "#core";
 
-Module(
-    {
-        name: "antilink",
-        fromMe: false,
-        isGroup: true,
-        desc: "Manage and Setup Antilink",
-        type: "group",
-    },
-    async (message: MessageType, match?: string) => {
+Module({
+    name: "antilink",
+    fromMe: false,
+    isGroup: true,
+    desc: "Manage and Setup Antilink",
+    type: "group",
+    function: async (message: MessageType, match?: string) => {
         const prefix = message.prefix;
         if (!match) {
             return message.send(`Usage:\n${prefix}antilink on\n${prefix}antilink off\n${prefix}antilink set kick\n${prefix}antilink set delete`);
@@ -36,18 +34,16 @@ Module(
                 return message.send("Antilink mode is now set to delete");
             }
         }
-    }
-);
-
-Module(
-    {
-        name: "antiword",
-        fromMe: false,
-        isGroup: true,
-        desc: "Manage and Setup Antiword",
-        type: "group",
     },
-    async (message: MessageType, match?: string) => {
+});
+
+Module({
+    name: "antiword",
+    fromMe: false,
+    isGroup: true,
+    desc: "Manage and Setup Antiword",
+    type: "group",
+    function: async (message: MessageType, match?: string) => {
         const prefix = message.prefix;
         if (!match) {
             return message.send(`Usage:\n${prefix}antiword on\n${prefix}antiword off\n${prefix}antiword set badword1, badword2, badword3`);
@@ -70,5 +66,5 @@ Module(
             const m = await setAntiword(message.jid, 1, cmd[1].split(","));
             return message.send(`Added ${m.added} badwords to list.`);
         }
-    }
-);
+    },
+});

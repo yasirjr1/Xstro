@@ -2,10 +2,10 @@ import { Command, MessageType } from "#core";
 
 export const commands: Command[] = [];
 
-export function Module(cmd: Partial<Command>, func: Function): Command {
+export function Module(cmd: Partial<Command>): Command {
     const fullCmd: Command = {
         name: new RegExp(`^\\s*(${cmd.name})(?:\\s+([\\s\\S]+))?$`, "i"),
-        function: func,
+        function: cmd.function,
         fromMe: cmd.fromMe || false,
         isGroup: cmd.isGroup || false,
         desc: cmd.desc!,

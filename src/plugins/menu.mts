@@ -1,20 +1,18 @@
 import { MessageType, Module, commands, formatBytes, runtime } from "#core";
 import { platform, totalmem, freemem } from "os";
 
-Module(
-    {
-        name: "menu",
-        fromMe: false,
-        desc: "Show All Commands",
-        type: undefined,
-        dontAddCommandList: true,
-    },
-    async (message: MessageType) => {
+Module({
+    name: "menu",
+    fromMe: false,
+    desc: "Show All Commands",
+    type: undefined,
+    dontAddCommandList: true,
+    function: async (message: MessageType) => {
         const cmds = commands.filter((cmd) => cmd.name && !cmd.dontAddCommandList && !cmd.name.toString().includes("undefined")).length;
         let menuInfo = `\`\`\`
 ╭─── ${process.env.BOT_INFO?.split(";")[0] ?? `χѕтяσ м∂`} ────
-│ User: ${message.pushName ?? `Unknown`}
-│ Owner: ${process.env.BOT_INFO?.split(";")[0] ?? `αѕтяσχ11`}		
+│ User: ${message.pushName?.trim() ?? `Unknown`}
+│ Owner: ${process.env.BOT_INFO?.split(";")[0].trim() ?? `αѕтяσχ11`}		
 │ Plugins: ${cmds}
 │ Mode: ${message.mode ? "Private" : "Public"}
 │ Uptime: ${runtime(process.uptime())}
@@ -51,18 +49,16 @@ Module(
             menuInfo += `╰────────────\n`;
         });
         return await message.send(menuInfo.trim());
-    }
-);
-
-Module(
-    {
-        name: "list",
-        fromMe: false,
-        desc: "Show All Commands",
-        type: undefined,
-        dontAddCommandList: true,
     },
-    async (message: MessageType) => {
+});
+
+Module({
+    name: "list",
+    fromMe: false,
+    desc: "Show All Commands",
+    type: undefined,
+    dontAddCommandList: true,
+    function: async (message: MessageType) => {
         let cmdsList: string = "Command List\n\n";
         let cmdList: { cmd: string; desc?: string }[] = [];
         let cmd: string | undefined;
@@ -84,5 +80,5 @@ Module(
         });
 
         return await message.send(cmdsList);
-    }
-);
+    },
+});

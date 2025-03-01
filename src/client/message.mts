@@ -12,7 +12,7 @@ export async function Message(client: Client, messages: WAMessage) {
     const { user, sendMessage } = client;
     const { prefix, mode, sudo } = await getConfig();
     const owner = numToJid(user!.id);
-    const sender = isJidGroup(key.remoteJid!) || isJidBroadcast(key.remoteJid!) ? key.participant! : key.remoteJid!;
+    const sender = isJidGroup(key.remoteJid!) || isJidBroadcast(key.remoteJid!) ? key.participant : key.fromMe ? owner : key.remoteJid;
     const mtype = getContentType(message);
     function hasContextInfo(msg: any): msg is { contextInfo: WAContextInfo } {
         if (!msg || typeof msg !== "object" || msg === null) return false;
@@ -34,7 +34,7 @@ export async function Message(client: Client, messages: WAMessage) {
         text: extractTextFromMessage(message!),
         mentions: Quoted ? Quoted.mentionedJid : [],
         mode,
-        sudo: sudo.includes(sender) || sender === owner,
+        sudo: sudo.includes(sender!) || sender === owner,
         user: function (match: string) {
             if (match) return numToJid(match);
             if (Quoted!.participant) Quoted!.participant;
@@ -62,7 +62,7 @@ export async function Message(client: Client, messages: WAMessage) {
         isAdmin: async function () {
             const metadata = await this.groupMetadata(this.jid);
             const allAdmins = metadata.participants.filter((v) => v.admin !== null).map((v) => v.id);
-            return !Array.isArray(allAdmins) ? Array.from(allAdmins) : allAdmins.includes(this.sender);
+            return !Array.isArray(allAdmins) ? Array.from(allAdmins) : allAdmins.includes(sender!);
         },
         isBotAdmin: async function () {
             const metadata = await this.groupMetadata(this.jid);

@@ -6,3 +6,4 @@ export * from "./functions.mjs";
 export * from "./scraper.mjs";
 export * from "./worker.mjs";
 export * from "./utilities/index.mjs";
+export * from "./media.mjs";

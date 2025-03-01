@@ -2,6 +2,7 @@ import { Innertube, UniversalCache } from "youtubei.js";
 import type { DownloadOptions } from "youtubei.js/dist/src/types/index.js";
 import * as prop from "youtubei.js";
 import { Boom } from "@hapi/boom";
+import { streamToBuffer } from "#core";
 
 const Client = async () => {
     return await Innertube.create({
@@ -13,7 +14,7 @@ const Client = async () => {
         enable_session_cache: true,
         device_category: "desktop",
         timezone: "America/New_York",
-        cache: new UniversalCache(true, "./cache.json"),
+        cache: new UniversalCache(true, "./cache"),
     });
 };
 
@@ -39,7 +40,7 @@ export const YTDL = async (url: string, options?: DownloadOptions) => {
     const innertube = await Client();
     try {
         const stream = await innertube.download(extractYouTubeId(url)!, options);
-        return stream;
+        return await streamToBuffer(stream!);
     } catch (error) {
         throw new Boom(error.message as Error);
     }
@@ -77,7 +78,7 @@ function extractYouTubeId(url: string): string | null {
     return null;
 }
 
-function isYTUrl(url: string): boolean {
+export function isYTUrl(url: string): boolean {
     const patterns = [
         /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|youtube-nocookie\.com|music\.youtube\.com|kids\.youtube\.com)/i,
         /^(https?:\/\/)?(www\.)?youtu\.be\//i,
