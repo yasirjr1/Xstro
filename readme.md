@@ -5,9 +5,9 @@
 
 ## Quick Links
 
-[![Fork Repo](https://img.shields.io/badge/Fork_Repo-black?style=for-the-badge&logo=git)](https://github.com/AstroX11/Xstro/fork)  
-[![Deploy Now](https://img.shields.io/badge/Deploy-black?style=for-the-badge&logo=rocket)](https://astrox11.github.io/xstroweb/)  
-[![Get Session](https://img.shields.io/badge/Auth-black?style=for-the-badge&logo=github)](https://github.com/AstroX11/XstroSession)
+[![Fork](https://img.shields.io/badge/Fork-black?style=for-the-badge&logo=git)](https://github.com/AstroX11/Xstro/fork)
+
+[![Custom Session](https://img.shields.io/badge/Auth-black?style=for-the-badge&logo=github)](https://github.com/AstroX11/XstroSession)
 
 ## Setup
 
@@ -15,9 +15,10 @@
 
 Before you begin, ensure you have the following installed:
 
-- [Node.js](https://nodejs.org/en) (v16 or higher recommended)
-- [FFmpeg](https://www.ffmpeg.org/) (for media processing)
-- [Git](https://git-scm.com/) (for cloning the repository)
+- [Download Node.js latest Only!](https://nodejs.org/en)
+- [Download FFmpeg](https://www.ffmpeg.org/)
+- [Download Git](https://git-scm.com/)
+- [Download Docker Recommended](https://www.docker.com/products/docker-desktop/)
 
 ### Installation Steps
 
@@ -31,6 +32,19 @@ yarn install
 yarn build
 yarn start
 ```
+
+## Using Node.js Platforms
+
+Run the bot in a pre-configured environment:
+
+[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?skip_quickstart=true&machine=standardLinux32gb&repo=882210451&ref=master&geo=EuropeWest)
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro)
+
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/services/deploy?type=git&builder=dockerfile&repository=https://github.com/AstroX11/Xstro&branch=master&name=xstro&env%5BSESSION_ID%5D=null&env%5BSUDO%5D=null&env%5BBOT_INFO%5D=%CE%B1%D1%95%D1%82%D1%8F%CF%83%CF%8711;%CF%87%D1%95%D1%84%D1%8F%CF%83%20%D0%BC%E2%88%82&env%5BSTICKER_PACK%5D=%D0%BC%CE%B1%E2%88%82%D1%94%20%D0%B1%D1%83;%CF%87%D1%95%D1%84%D1%8F%CF%83%20%D0%BC%CF%85%E2%84%93%D1%82%CE%B9%20%E2%88%82%D1%94%CE%BD%CE%B9%C2%A2%D1%94%20%D0%B2%CF%83%D1%82&env%5BWARN_COUNT%5D=3&env%5BTIME_ZONE%5D=Africa/Lagos)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)
+
 
 ## Contributing
 

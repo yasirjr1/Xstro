@@ -1,0 +1,14 @@
+{
+    "name": "Xstro WA Bot Dev",
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "context": ".."
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "github.vscode-pull-request-github"]
+        }
+    },
+    "postCreateCommand": "yarn build",
+    "postStartCommand": "yarn start"
+}
