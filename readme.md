@@ -3,15 +3,11 @@
 > [!IMPORTANT]  
 > An open-source WhatsApp bot designed to automate tasks and deliver services. Built **solely for educational purposes**—please use responsibly!
 
----
-
 ## Quick Links
 
 [![Fork Repo](https://img.shields.io/badge/Fork_Repo-black?style=for-the-badge&logo=git)](https://github.com/AstroX11/Xstro/fork)  
 [![Deploy Now](https://img.shields.io/badge/Deploy-black?style=for-the-badge&logo=rocket)](https://astrox11.github.io/xstroweb/)  
 [![Get Session](https://img.shields.io/badge/Auth-black?style=for-the-badge&logo=github)](https://github.com/AstroX11/XstroSession)
-
----
 
 ## Setup
 
@@ -35,10 +31,6 @@ yarn install
 yarn build
 yarn start
 ```
-
-> **Tip**: If you encounter issues, ensure all dependencies are installed correctly and check the [troubleshooting guide](#) (link to be added if applicable).
-
----
 
 ## Contributing
 
