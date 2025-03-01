@@ -7,6 +7,7 @@
     "scripts": {
         "start": "pm2 start . --attach --name xstro",
         "stop": "pm2 stop xstro",
+        "build:only": "tsc && babel release --out-dir release",
         "build": "yarn run eslint . --fix && tsc && babel release --out-dir release",
         "semantic-release": "semantic-release"
     },
