@@ -1,4 +1,4 @@
-import { DataType, MediaMessageType, MessageType } from "#core";
+import { DataType, MediaMessageType, XMsg } from "#core";
 import { Boom } from "@hapi/boom/lib/index.js";
 import { getContentType, jidNormalizedUser, WAMessage, WAMessageContent } from "baileys";
 import { fileTypeFromBuffer } from "file-type";

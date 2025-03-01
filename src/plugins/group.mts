@@ -1,4 +1,4 @@
-import { MessageType, Module, numToJid } from "#core";
+import { XMsg, Module, numToJid } from "#core";
 
 Module({
     name: "newgc",
@@ -6,7 +6,7 @@ Module({
     isGroup: false,
     desc: "Add a user to a Group",
     type: "group",
-    function: async (message: MessageType, match: string) => {
+    function: async (message: XMsg, match: string) => {
         if (!match) {
             return message.send(`Usage: ${message.prefix}newgc MyGroup|1244556`);
         }
@@ -26,7 +26,7 @@ Module({
     isGroup: true,
     desc: "Remove a participant from Group",
     type: "group",
-    function: async (message: MessageType, match: string) => {
+    function: async (message: XMsg, match: string) => {
         if (!(await message.isAdmin())) {
             return message.send("You are not Admin.");
         }
@@ -50,7 +50,7 @@ Module({
     isGroup: true,
     desc: "Update Group Name",
     type: "group",
-    function: async (message: MessageType, match: string) => {
+    function: async (message: XMsg, match: string) => {
         if (!match) {
             return message.send("Provide A New Group Name");
         }
@@ -71,7 +71,7 @@ Module({
     isGroup: true,
     desc: "Update Group Description",
     type: "group",
-    function: async (message: MessageType, match?: string) => {
+    function: async (message: XMsg, match?: string) => {
         if (!(await message.isAdmin())) {
             return message.send("You are not Admin");
         }

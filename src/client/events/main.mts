@@ -1,11 +1,11 @@
-import { getAntilink, getAntiword, MessageType } from "#core";
+import { getAntilink, getAntiword, XMsg } from "#core";
 
 function isUrl(text: string): boolean {
     const urlRegex = /\bhttps?:\/\/[^\s/$.?#].[^\s]*|www\.[^\s/$.?#].[^\s]*\b/gi;
     return urlRegex.test(text);
 }
 
-export async function Antilink(message: MessageType) {
+export async function Antilink(message: XMsg) {
     if (!message.isGroup || !message.text || message.sudo || (await message.isAdmin())) return;
     const settings = await getAntilink(message.jid);
     if (!settings?.status) return;
@@ -25,7 +25,7 @@ export async function Antilink(message: MessageType) {
     }
 }
 
-export async function Antiword(message: MessageType) {
+export async function Antiword(message: XMsg) {
     if (!message.isGroup || !message.text || message.sudo || (await message.isAdmin())) return;
     const settings = await getAntiword(message.jid);
     if (!settings?.status) return;
@@ -43,7 +43,7 @@ export async function Antiword(message: MessageType) {
     }
 }
 
-export async function Chatbot(message: MessageType) {
+export async function Chatbot(message: XMsg) {
     if (!message.text) return;
     if (!message.mentions?.includes(message.owner) && message.quoted?.sender !== message.owner) return;
 }

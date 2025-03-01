@@ -1,5 +1,5 @@
 import { WAProto, WASocket, GroupMetadata, WAMessage } from "baileys";
-import { MessageType } from "#core";
+import { XMsg } from "#core";
 
 // WhatsApp Core Types
 export type Client = WASocket;
@@ -29,7 +29,7 @@ export interface Command {
     /** Should the command always run when it recieves a messgae */
     on?: string | undefined;
     /** Function of the command, must be async */
-    function?: (message: MessageType, match?: string) => Promise<any>;
+    function?: (message: XMsg, match?: string) => Promise<any>;
     /** Should the command be for only sudo and bot owner */
     fromMe?: boolean;
     /** Should the command only be for Groups */

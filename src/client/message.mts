@@ -170,4 +170,4 @@ export async function Message(client: Client, messages: WAMessage) {
     };
 }
 
-export type MessageType = ReturnType<typeof Message> extends Promise<infer T> ? T : never;
+export type XMsg = ReturnType<typeof Message> extends Promise<infer T> ? T : never;

@@ -1,4 +1,4 @@
-import { Command, MessageType } from "#core";
+import { Command, XMsg } from "#core";
 
 export const commands: Command[] = [];
 
@@ -16,7 +16,7 @@ export function Module(cmd: Partial<Command>): Command {
     return fullCmd;
 }
 
-export async function runCommand(message: MessageType): Promise<void> {
+export async function runCommand(message: XMsg): Promise<void> {
     if (!message.text) return;
 
     for (const cmd of commands) {

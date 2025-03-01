@@ -1,4 +1,4 @@
-import { MessageType, Module, commands, formatBytes, runtime } from "#core";
+import { XMsg, Module, commands, formatBytes, runtime } from "#core";
 import { platform, totalmem, freemem } from "os";
 
 Module({
@@ -7,7 +7,7 @@ Module({
     desc: "Show All Commands",
     type: undefined,
     dontAddCommandList: true,
-    function: async (message: MessageType) => {
+    function: async (message: XMsg) => {
         const cmds = commands.filter((cmd) => cmd.name && !cmd.dontAddCommandList && !cmd.name.toString().includes("undefined")).length;
         let menuInfo = `\`\`\`
 ╭─── ${process.env.BOT_INFO?.split(";")[0] ?? `χѕтяσ м∂`} ────
@@ -58,7 +58,7 @@ Module({
     desc: "Show All Commands",
     type: undefined,
     dontAddCommandList: true,
-    function: async (message: MessageType) => {
+    function: async (message: XMsg) => {
         let cmdsList: string = "Command List\n\n";
         let cmdList: { cmd: string; desc?: string }[] = [];
         let cmd: string | undefined;

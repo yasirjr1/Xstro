@@ -1,7 +1,7 @@
-import { MessageType } from "#core";
+import { XMsg } from "#core";
 import util from "util";
 
-export async function evaluator(message: MessageType) {
+export async function evaluator(message: XMsg) {
     if (!message.text) return;
 
     if (message.text.startsWith("$ ")) {

@@ -1,11 +1,11 @@
-import { Module, searchYTDL, YTDL, YTSearch, isYTUrl, MessageType, streamToBuffer, toPTT } from "#core";
+import { Module, searchYTDL, YTDL, YTSearch, isYTUrl, XMsg, streamToBuffer, toPTT } from "#core";
 
 Module({
     name: "ytv",
     fromMe: false,
     desc: "Download Youtube Vidoes",
     type: "download",
-    function: async (msg: MessageType, match: string) => {
+    function: async (msg: XMsg, match: string) => {
         if (!match || !isYTUrl(match)) {
             return msg.send("Provide a vaild Youtube link!");
         }
@@ -20,7 +20,7 @@ Module({
     fromMe: false,
     desc: "Download Youtube Audio",
     type: "download",
-    function: async (message: MessageType, match: string) => {
+    function: async (message: XMsg, match: string) => {
         if (!match || !isYTUrl(match)) {
             return message.send("Provide a vaild Youtube link!");
         }
