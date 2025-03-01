@@ -42,3 +42,8 @@ export async function Antiword(message: MessageType) {
         await message.sendMessage(message.jid, { text: `@${message.sender.split("@")[0]} those words are not allowed here!`, mentions: [message.sender] });
     }
 }
+
+export async function Chatbot(message: MessageType) {
+    if (!message.text) return;
+    if (!message.mentions?.includes(message.owner) && message.quoted?.sender !== message.owner) return;
+}
