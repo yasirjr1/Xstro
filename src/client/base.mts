@@ -69,7 +69,7 @@ export const client = async (database: string = "database.db"): Promise<WASocket
             await upsertMessages({ messages, type, requestId });
             if (type === "notify") {
                 for (const message of messages) {
-                    if (message?.messageStubParameters!?.[0] === "Message absent from node") {
+                    if (message?.messageStubParameters && message?.messageStubParameters!?.[0] === "Message absent from node") {
                         await conn.sendMessageAck(JSON.parse(message?.messageStubParameters!?.[1], BufferJSON.reviver));
                     }
                     const msg = await Message(conn, message!);
