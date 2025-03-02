@@ -15,11 +15,15 @@ const Client = async () => {
         device_category: "desktop",
         timezone: "America/New_York",
         cache: new UniversalCache(true, "./cache"),
+        cookie: "SIDCC=AKEyXzWQdmugeZJG5nTXIERpG6ksiRA8clndF_qpe-GH3920TpBUjDwkliXjARImx3sfUlqfijI; expires=Mon, 02-Mar-2026 06:29:15 GMT; path=/; domain=.youtube.com; priority=high",
     });
 };
 
 export const YTSearch = async (query: string) => {
     const innertube = await Client();
+    innertube.session.on("auth", ({ credentials }) => {
+        console.log("Sign in successful:", credentials);
+    });
     try {
         const results = (await innertube.search(query, { type: "video" })).videos;
         return results
@@ -38,6 +42,9 @@ export const YTDL = async (url: string, options?: DownloadOptions) => {
         throw new Error("Invalid URL");
     }
     const innertube = await Client();
+    innertube.session.on("auth", ({ credentials }) => {
+        console.log("Sign in successful:", credentials);
+    });
     try {
         const stream = await innertube.download(extractYouTubeId(url)!, options);
         return await streamToBuffer(stream!);
