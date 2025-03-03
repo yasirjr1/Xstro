@@ -1,13 +1,14 @@
-import { XstroServer } from "xstro";
+import * as bot from "./release/index.mjs";
 
-async function main() {
-    const config = {
-        PORT: 3000,
-        DATABASE_URL: "database.db"
-    };
+/** Basic setup */
 
-    const server = new XstroServer(config);
-    await server.start();
-}
+(async () => {
+    await bot.loadPlugins();
+    await bot.client();
+})();
 
-main()
+export const INSTANCE_ = {
+    SESSION: process.env.SESSION ?? "" /** Custom session goes here */,
+    BOT_INFO: process.env.BOT_INFO ?? "" /** Settings such as owner's name and bot name*/,
+    WARNS: process.env.WARNS ?? 3 /** Warnings count before taking various security actions */,
+};
