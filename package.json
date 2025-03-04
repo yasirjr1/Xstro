@@ -20,13 +20,12 @@
     "homepage": "https://github.com/AstroX11/xstro#readme",
     "author": "AstroX11 <danielfx0012@gmail.com>",
     "devDependencies": {
-        "@types/node": "^22.13.8",
         "eslint": "^9.18.0",
         "eslint-config-prettier": "^10.0.2",
         "eslint-plugin-prettier": "^5.2.3",
         "jiti": "^2.4.2",
         "prettier": "^3.5.2",
-        "typescript": "^5.8.2"
+        "typescript": "^5.9.0-dev.20250303"
     },
     "dependencies": {
         "@hapi/boom": "^10.0.1",
