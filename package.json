@@ -3,7 +3,7 @@
     "version": "2.0.0",
     "description": "OpenSource WhatsApp Userbot",
     "type": "module",
-    "main": "main.js",
+    "main": "main.mjs",
     "scripts": {
         "start": "pm2 start . --attach --name xstro",
         "stop": "pm2 stop xstro",
@@ -24,7 +24,7 @@
         "eslint-config-prettier": "^10.0.2",
         "eslint-plugin-prettier": "^5.2.3",
         "jiti": "^2.4.2",
-        "prettier": "^3.5.2",
+        "prettier": "^3.5.3",
         "typescript": "^5.9.0-dev.20250303"
     },
     "dependencies": {

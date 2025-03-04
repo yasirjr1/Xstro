@@ -21,7 +21,7 @@ export const logger = P.pino({
 });
 
 export const client = async (database?: string): Promise<WASocket> => {
-    const { state, saveCreds } = useSqliteAuthState(new DatabaseSync("database.db"), { enableWAL: true });
+    const { state, saveCreds } = useSqliteAuthState(new DatabaseSync(database ? database : "database.db"), { enableWAL: true });
     const cache = new CacheStore.default();
     Store();
 
@@ -43,7 +43,7 @@ export const client = async (database?: string): Promise<WASocket> => {
             if (connection === "connecting") console.log("connecting...");
             else if (connection === "close") (lastDisconnect?.error as Boom)?.output?.statusCode === DisconnectReason.loggedOut ? process.exit(1) : client(database);
             else if (connection === "open") {
-                await conn.sendMessage(conn?.user?.id!, { text: "Bot is online now!" });
+                await conn.sendMessage(conn?.user?.id!, { text: "```Bot is online now!```" });
                 console.log(`Connected!`);
             }
         }
