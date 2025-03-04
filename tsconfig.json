@@ -3,8 +3,8 @@
         "target": "ESNext",
         "module": "NodeNext",
         "moduleResolution": "nodenext",
-        "outDir": "release",
-        "rootDir": "./src",
+        "outDir": ".",
+        "rootDir": ".",
         "strictNullChecks": true,
         "skipLibCheck": true,
         "noImplicitThis": true,
@@ -17,6 +17,6 @@
         },
         "allowSyntheticDefaultImports": true
     },
-    "include": ["src/**/*.mts"],
+    "include": ["src/**/*.mts","scripts/**/*.mts", "main.mts"],
     "exclude": ["app.json", "package.json", "tsconfig.json"]
 }

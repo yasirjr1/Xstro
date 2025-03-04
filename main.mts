@@ -1,5 +1,4 @@
-import * as bot from "./release/index.mjs";
-
+import * as bot from "./src/index.mjs";
 
 (async () => {
     await bot.loadPlugins();

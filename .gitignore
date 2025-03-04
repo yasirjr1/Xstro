@@ -7,3 +7,5 @@ session
 release
 debug
 *.db
+*.mjs
+*.d.mts
