@@ -1,4 +1,4 @@
-import { XMessage, Module, voxnews, wabetanews } from "../index.mjs";
+import { XMessage, Module, voxnews, wabetanews, technews } from "../index.mjs";
 
 Module({
     name: "news",
@@ -21,5 +21,17 @@ Module({
         const wabetaInfo = await wabetanews();
         if (!wabetaInfo) return message.send("No WA updates avaliable");
         return await message.send(wabetaInfo);
+    },
+});
+
+Module({
+    name: "technews",
+    fromMe: false,
+    desc: "Get Tech News",
+    type: "news",
+    function: async (message: XMessage) => {
+        const techInfo = await technews();
+        if (!techInfo) return message.send("No tech news updates!");
+        return await message.send(techInfo);
     },
 });

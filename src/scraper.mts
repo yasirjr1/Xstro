@@ -58,3 +58,41 @@ export const wabetanews = async (): Promise<string> => {
         throw new Boom(error as Error);
     }
 };
+
+/**
+ * Tech news gizmodo
+ */
+export const technews = async (): Promise<string> => {
+    interface NewsItem {
+        title: string;
+        description: string;
+        postLink: string;
+    }
+
+    try {
+        const html: string = await fetchJson("https://gizmodo.com/tech");
+        const $ = cheerio.load(html);
+        const newsItems: NewsItem[] = [];
+
+        $("a.block").each((index: number, element: cheerio.Element) => {
+            const $article = $(element);
+            const title: string = $article.find("h2.font-bold").text().trim();
+            const description: string = $article.find("p.font-serif").text().trim();
+            const postLink: string = $article.attr("href") || "";
+
+            const newsItem: NewsItem = {
+                title,
+                description,
+                postLink,
+            };
+
+            if (title && description && postLink) {
+                newsItems.push(newsItem);
+            }
+        });
+
+        return newsItems.map((posts: NewsItem) => `${posts.title}\n${posts.description}\n${posts.postLink}\n`).join("\n");
+    } catch (error) {
+        throw new Error(error instanceof Error ? error.message : String(error));
+    }
+};

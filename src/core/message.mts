@@ -79,19 +79,20 @@ export async function XMsg(client: Client, messages: WAMessage) {
                     const { mimeType, contentType } = atype;
                     switch (contentType) {
                         case "text":
-                            return { text: content.toString() };
+                            return { text: content.toString(), ...options };
                         case "image":
-                            return { image: Buffer.isBuffer(content) ? content : Buffer.from(content) };
+                            return { image: Buffer.isBuffer(content) ? content : Buffer.from(content), ...options };
                         case "audio":
-                            return { audio: Buffer.isBuffer(content) ? content : Buffer.from(content) };
+                            return { audio: Buffer.isBuffer(content) ? content : Buffer.from(content), ...options };
                         case "video":
-                            return { video: Buffer.isBuffer(content) ? content : Buffer.from(content) };
+                            return { video: Buffer.isBuffer(content) ? content : Buffer.from(content), ...options };
                         case "sticker":
-                            return { sticker: Buffer.isBuffer(content) ? content : Buffer.from(content) };
+                            return { sticker: Buffer.isBuffer(content) ? content : Buffer.from(content), ...options };
                         case "document":
                             return {
                                 document: Buffer.isBuffer(content) ? content : Buffer.from(content),
                                 mimetype: mimeType || "application/octet-stream",
+                                ...options,
                             };
                         default:
                             throw new Error(`Unsupported auto-detected content type: ${contentType}`);
