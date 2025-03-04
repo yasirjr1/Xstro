@@ -3,8 +3,8 @@ import { getDb } from "./database.mjs";
 import { GroupMetadata } from "baileys";
 
 function initMetadataDb(): void {
-    const db: DatabaseSync = getDb();
-    db.exec(`
+     const db: DatabaseSync = getDb();
+     db.exec(`
     CREATE TABLE IF NOT EXISTS group_metadata (
       jid TEXT PRIMARY KEY,
       metadata JSON
@@ -13,25 +13,25 @@ function initMetadataDb(): void {
 }
 
 export const groupSave = (jid: string, metadata: GroupMetadata): void => {
-    const db: DatabaseSync = getDb();
-    initMetadataDb();
+     const db: DatabaseSync = getDb();
+     initMetadataDb();
 
-    const jsonMetadata = JSON.stringify(metadata);
-    const stmt: StatementSync = db.prepare(`
+     const jsonMetadata = JSON.stringify(metadata);
+     const stmt: StatementSync = db.prepare(`
     INSERT INTO group_metadata (jid, metadata)
     VALUES (?, ?)
     ON CONFLICT(jid) DO UPDATE SET metadata = excluded.metadata;
   `);
 
-    stmt.run(jid, jsonMetadata);
+     stmt.run(jid, jsonMetadata);
 };
 
 export const groupMetadata = (jid: string): GroupMetadata | undefined => {
-    const db: DatabaseSync = getDb();
-    initMetadataDb();
+     const db: DatabaseSync = getDb();
+     initMetadataDb();
 
-    const stmt: StatementSync = db.prepare(`SELECT metadata FROM group_metadata WHERE jid = ?;`);
-    const result = stmt.get(jid) as { metadata: string } | undefined;
+     const stmt: StatementSync = db.prepare(`SELECT metadata FROM group_metadata WHERE jid = ?;`);
+     const result = stmt.get(jid) as { metadata: string } | undefined;
 
-    return result && result.metadata ? JSON.parse(result.metadata) : undefined;
+     return result && result.metadata ? JSON.parse(result.metadata) : undefined;
 };
