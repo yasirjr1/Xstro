@@ -1,6 +1,6 @@
 import util from "util";
 import { isUrl } from "./constants.mjs";
-import { XMessage } from "./core/index.mjs";
+import { XMessage } from "./base/index.mjs";
 import { getAntiword, getAntilink } from "./model/index.mjs";
 
 export async function upsertsM(message: XMessage) {
