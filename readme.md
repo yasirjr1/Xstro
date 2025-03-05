@@ -7,6 +7,9 @@
 
 [![Session Builder](https://img.shields.io/badge/Session_Builder-black?style=for-the-badge&logo=rocket)](https://github.com/AstroX11/XstroSession)
 
+[![Pair Now](https://img.shields.io/badge/Pair_Now-black?style=for-the-badge&logo=rocket)](https://xstrosession.koyeb.app/)
+
+
 ### Setup
 
 #### Prerequisites for development stage
