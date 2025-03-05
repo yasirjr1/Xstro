@@ -34,11 +34,11 @@ Module({
      desc: "Block a user from Messaging you",
      type: "whatsapp",
      function: async (message: XMessage, match: string) => {
-          const user = message.user(match);
-          if (!user) return message.send("Provide someone to block!");
-          if (!(await message.onWhatsApp(user))) return message.send("Not A WhatsApp User");
+          const jid = message.user(match);
+          if (!jid) return message.send("Provide someone to block!");
+          if (!(await message.onWhatsApp(jid))) return message.send("Not A WhatsApp User");
           await message.send("Blocked!");
-          return message.updateBlockStatus(user, "block");
+          return message.updateBlockStatus(jid, "block");
      },
 });
 
@@ -48,10 +48,10 @@ Module({
      desc: "Unblock a user to allow Messaging",
      type: "whatsapp",
      function: async (message: XMessage, match: string) => {
-          const user = message.user(match);
-          if (!user) return message.send("Provide someone to unblock!");
+          const jid = message.user(match);
+          if (!jid) return message.send("Provide someone to unblock!");
           await message.send("Unblocked!");
-          return message.updateBlockStatus(user, "unblock");
+          return message.updateBlockStatus(jid, "unblock");
      },
 });
 
@@ -167,20 +167,20 @@ Module({
           }
 
           const quoted = message.quoted;
-          const deleteForMeConfig = {
+          const notfromMe = {
                deleteMedia: isMediaMessage(quoted),
                key: quoted.key,
                timestamp: Date.now(),
           };
 
-          const canDeleteDirectly = message.isGroup
+          const fromMe = message.isGroup
                ? (await message.isBotAdmin()) || quoted.key.fromMe === true
                : quoted.key.fromMe;
 
-          if (canDeleteDirectly) {
+          if (fromMe) {
                await message.delete(quoted);
           } else {
-               await message.chatModify({ deleteForMe: deleteForMeConfig }, message.jid);
+               await message.chatModify({ deleteForMe: notfromMe }, message.jid);
           }
      },
 });

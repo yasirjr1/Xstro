@@ -39,11 +39,9 @@ Module({
           if (!match) {
                return message.send("Provide a participant to kick.");
           }
-          const user = message.user(match);
-          if (!user) {
-               return message.send("Provide a participant to kick.");
-          }
-          await message.groupParticipantsUpdate(message.jid, [user], "remove");
+          const jid = message.user(match);
+          if (!jid) return message.send("tag, reply or provide the user number");
+          await message.groupParticipantsUpdate(message.jid, [jid], "remove");
      },
 });
 

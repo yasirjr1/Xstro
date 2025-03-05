@@ -52,10 +52,14 @@ export async function XMsg(client: Client, messages: WAMessage) {
           mode,
           sudo: sudo.includes(sender!) || sender === owner,
           user: function (match: string) {
-               if (match) return numToJid(match);
-               if (Quoted!.participant) Quoted!.participant;
-               if (isJidGroup(this.jid) && Quoted?.mentionedJid?.[0]) return Quoted.mentionedJid[0];
-               if (!isJidGroup(this.jid) && key!.remoteJid) return key!.remoteJid!;
+               if (this.isGroup) {
+                    if (this.quoted && this.quoted.sender) return this.quoted.sender;
+                    if (match && Array.isArray(match)) return numToJid(match[0]);
+                    if (match && !Array.isArray(match)) return numToJid(match);
+               } else {
+                    if (this.quoted && this.quoted.sender) return this.quoted.sender;
+                    if (match) return numToJid(match);
+               }
                return undefined;
           },
           quoted:
