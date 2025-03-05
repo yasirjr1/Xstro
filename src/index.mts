@@ -9,3 +9,4 @@ export * from "./store.mjs";
 export * from "./types.mjs";
 export * from "./upserts.mjs";
 export * from "./use-sqlite-authstate.mjs";
+export * from "../scripts/index.mjs";

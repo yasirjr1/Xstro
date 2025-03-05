@@ -22,16 +22,11 @@ export const useSqliteAuthState = (
 ): { state: AuthenticationState; saveCreds: () => void } => {
      // Initialize database schema
      database.exec(`
-        CREATE TABLE IF NOT EXISTS creds (
-            id TEXT PRIMARY KEY DEFAULT 'default',
-            data TEXT NOT NULL
-        ) WITHOUT ROWID;
-
-        CREATE TABLE IF NOT EXISTS auth_keys (
-            type TEXT NOT NULL,
-            id TEXT NOT NULL,
-            value TEXT NOT NULL,
-            PRIMARY KEY (type, id)
+        CREATE TABLE IF NOT EXISTS session (
+            name TEXT NOT NULL,  -- 'creds' or key type (e.g., 'app-state-sync-key')
+            id TEXT NOT NULL,    -- Unique identifier for the data (e.g., key ID or 'default' for creds)
+            value TEXT NOT NULL, -- JSON-encoded data
+            PRIMARY KEY (name, id)
         ) WITHOUT ROWID;
     `);
 
@@ -41,15 +36,15 @@ export const useSqliteAuthState = (
 
      // Initialize credentials
      let creds: AuthenticationCreds;
-     const credsStmt = database.prepare("SELECT data FROM creds WHERE id = ?");
-     const credsRow = credsStmt.get("default") as { data: string } | undefined;
+     const credsStmt = database.prepare("SELECT value FROM session WHERE name = ? AND id = ?");
+     const credsRow = credsStmt.get("creds", "default") as { value: string } | undefined;
 
      if (credsRow) {
-          creds = JSON.parse(credsRow.data, BufferJSON.reviver);
+          creds = JSON.parse(credsRow.value, BufferJSON.reviver);
      } else {
           creds = initAuthCreds();
-          const insertCreds = database.prepare("INSERT INTO creds (id, data) VALUES (?, ?)");
-          insertCreds.run("default", JSON.stringify(creds, BufferJSON.replacer));
+          const insertCreds = database.prepare("INSERT INTO session (name, id, value) VALUES (?, ?, ?)");
+          insertCreds.run("creds", "default", JSON.stringify(creds, BufferJSON.replacer));
      }
 
      return {
@@ -59,14 +54,11 @@ export const useSqliteAuthState = (
                     get: (type, ids) => {
                          const data: { [id: string]: SignalDataTypeMap[typeof type] } = {};
                          const stmt = database.prepare(
-                              `SELECT id, value FROM auth_keys 
-                         WHERE type = ? AND id IN (${ids.map(() => "?").join(",")})`
+                              `SELECT id, value FROM session 
+                         WHERE name = ? AND id IN (${ids.map(() => "?").join(",")})`
                          );
 
-                         const rows = stmt.all(type, ...ids) as Array<{
-                              id: string;
-                              value: string;
-                         }>;
+                         const rows = stmt.all(type, ...ids) as Array<{ id: string; value: string }>;
 
                          for (const row of rows) {
                               let value = JSON.parse(row.value, BufferJSON.reviver);
@@ -82,10 +74,10 @@ export const useSqliteAuthState = (
                          database.exec("BEGIN TRANSACTION");
                          try {
                               const insertStmt = database.prepare(
-                                   "INSERT OR REPLACE INTO auth_keys (type, id, value) VALUES (?, ?, ?)"
+                                   "INSERT OR REPLACE INTO session (name, id, value) VALUES (?, ?, ?)"
                               );
 
-                              const deleteStmt = database.prepare("DELETE FROM auth_keys WHERE type = ? AND id = ?");
+                              const deleteStmt = database.prepare("DELETE FROM session WHERE name = ? AND id = ?");
 
                               for (const category of Object.keys(data)) {
                                    for (const id of Object.keys(data[category])) {
@@ -107,8 +99,8 @@ export const useSqliteAuthState = (
                },
           },
           saveCreds: () => {
-               const stmt = database.prepare("UPDATE creds SET data = ? WHERE id = ?");
-               stmt.run(JSON.stringify(creds, BufferJSON.replacer), "default");
+               const stmt = database.prepare("INSERT OR REPLACE INTO session (name, id, value) VALUES (?, ?, ?)");
+               stmt.run("creds", "default", JSON.stringify(creds, BufferJSON.replacer));
           },
      };
 };

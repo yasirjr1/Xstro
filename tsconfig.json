@@ -10,7 +10,7 @@
         "noImplicitThis": true,
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
-        "declaration": false,
+        "declaration": true,
         "removeComments": true,
         "paths": {
             "*": ["./node_modules/*", "./src/*"]
