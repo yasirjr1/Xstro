@@ -1,4 +1,4 @@
-import { XMessage, Module } from "../index.mjs";
+import { XMessage, Module } from "../../src/index.mjs";
 
 Module({
      name: "pin",

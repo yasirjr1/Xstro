@@ -1,4 +1,4 @@
-import { XMessage, Module, numToJid } from "../index.mjs";
+import { XMessage, Module, numToJid } from "../../src/index.mjs";
 
 Module({
      name: "newgc",

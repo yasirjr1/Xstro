@@ -1,4 +1,5 @@
-import { XMessage, Module, voxnews, wabetanews, technews } from "../index.mjs";
+import { XMessage, Module } from "../../src/index.mjs";
+import { voxnews, wabetanews, technews } from "../scraper.mjs";
 
 Module({
      name: "news",

@@ -1,6 +1,6 @@
 import { getDb } from "./database.mjs";
 import { StatementSync } from "node:sqlite";
-import { Config } from "../index.mjs";
+import { Config } from "../../src/index.mjs";
 
 function initConfigDb(): void {
      const db = getDb();

@@ -1,4 +1,6 @@
-import { Client, extractTextFromMessage, getConfig, getDataType, MessageMisc, numToJid } from "../index.mjs";
+import { extractTextFromMessage, getDataType, numToJid } from "./constants.mjs";
+import { getConfig } from "./model/index.mjs";
+import { Client, MessageMisc } from "./types.mjs";
 import { Boom } from "@hapi/boom";
 import {
      AnyMessageContent,

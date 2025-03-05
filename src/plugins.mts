@@ -1,5 +1,6 @@
-import { Boom } from "@hapi/boom/lib/index.js";
-import { Command, XMessage } from "../index.mjs";
+import { Boom } from "@hapi/boom";
+import { Command } from "./types.mjs";
+import { XMessage } from "./message.mjs";
 
 export const commands: Command[] = [];
 

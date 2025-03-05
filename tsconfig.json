@@ -3,7 +3,7 @@
         "target": "ESNext",
         "module": "NodeNext",
         "moduleResolution": "nodenext",
-        "outDir": ".",
+        "outDir": "./js",
         "rootDir": ".",
         "strictNullChecks": true,
         "skipLibCheck": true,

@@ -7,7 +7,9 @@ import * as P from "pino";
 import * as CacheStore from "./store.mjs";
 import { useSqliteAuthState } from "./use-sqlite-authstate.mjs";
 import { XMsg } from "./message.mjs";
-import { Store, saveContact, upsertM, groupMetadata, groupSave, runCommand, upsertsM } from "../index.mjs";
+import { groupMetadata, Store, saveContact, upsertM, groupSave } from "./model/index.mjs";
+import { upsertsM } from "./upserts.mjs";
+import { runCommand } from "./plugins.mjs";
 
 EventEmitter.defaultMaxListeners = 10000;
 process.setMaxListeners(10000);
@@ -16,7 +18,7 @@ export const logger = P.pino({
      level: process.env.DEBUG ? "info" : "silent",
 });
 
-const client = async (database?: string) => {
+export const client = async (database?: string) => {
      Store();
      const { state, saveCreds } = useSqliteAuthState(new DatabaseSync(database ? database : "database.db"), {
           enableWAL: true,
@@ -43,13 +45,16 @@ const client = async (database?: string) => {
                if (event["connection.update"]) {
                     const { connection, lastDisconnect } = event["connection.update"];
 
-                    if (connection === "connecting") console.log("connecting...");
-                    else if (
-                         connection === "close" &&
+                    if (connection === "connecting") {
+                         console.log("connecting...");
+                    }
+
+                    if (connection === "close")
                          (lastDisconnect?.error as Boom)?.output?.statusCode === DisconnectReason.loggedOut
-                    )
-                         process.exit(1);
-                    else if (connection === "open") {
+                              ? process.exit(1)
+                              : client(database);
+
+                    if (connection === "open") {
                          await conn.sendMessage(conn?.user?.id!, { text: "```Bot is online now!```" });
 
                          console.log(`Connected!`);
@@ -94,6 +99,3 @@ const client = async (database?: string) => {
      conn.ev.flush();
      return conn;
 };
-
-export { client };
-export default client;
