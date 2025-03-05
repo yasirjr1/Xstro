@@ -1,7 +1,10 @@
+import dotenv from "dotenv";
 import * as xprocess from "./src/index.mjs";
 
+dotenv.config();
+
 const SESSION = process.env.SESSION ? process.env.SESSION : "XSTRO_97_30_78";
-const DB_URI = process.env.DB_URI ? process.env.DB_URL : undefined;
+const DB_URI = process.env.DB_URI ? process.env.DB_URI : undefined;
 
 const startBot = async (): Promise<void> => {
      /** Replace here with your own custom session sever */

@@ -32,6 +32,7 @@
         "@hapi/boom": "^10.0.1",
         "baileys": "^6.7.16",
         "cheerio": "^1.0.0",
+        "dotenv": "^16.4.7",
         "file-type": "20.4.0",
         "got": "^14.4.6",
         "link-preview-js": "^3.0.14",
