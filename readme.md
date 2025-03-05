@@ -5,7 +5,7 @@
 
 [![Fork](https://img.shields.io/badge/Fork-black?style=for-the-badge&logo=git)](https://github.com/AstroX11/Xstro/fork)
 
-[![Session Builder](https://img.shields.io/badge/Session_Builder-black?style=for-the-badge&logo=rocket)](https://github.com/AstroX11/Xstro/fork)
+[![Session Builder](https://img.shields.io/badge/Session_Builder-black?style=for-the-badge&logo=rocket)](https://github.com/AstroX11/XstroSession)
 
 ### Setup
 
