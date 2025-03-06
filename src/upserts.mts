@@ -22,9 +22,9 @@ async function evaluator(message: XMessage) {
 }
 
 async function Antilink(message: XMessage) {
-     if (!message.isGroup || !message.text || message.sudo || (await message.isAdmin())) return;
-     const settings = await getAntilink(message.jid);
+     const settings = getAntilink(message.jid);
      if (!settings?.status) return;
+     if (!message.isGroup || !message.text || message.sudo || (await message.isAdmin())) return;
      if (!isUrl(message.text)) return;
 
      if (settings.mode === "kick") {
@@ -49,7 +49,7 @@ async function Antilink(message: XMessage) {
 
 async function Antiword(message: XMessage) {
      if (!message.isGroup || !message.text || message.sudo || (await message.isAdmin())) return;
-     const settings = await getAntiword(message.jid);
+     const settings = getAntiword(message.jid);
      if (!settings?.status) return;
 
      if (message.text) message.text = message.text.toLowerCase();
