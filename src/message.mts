@@ -51,7 +51,7 @@ export async function XMsg(client: Client, messages: WAMessage) {
           mentions: Quoted ? Quoted.mentionedJid : [],
           mode,
           sudo: sudo.includes(sender!) || sender === owner,
-          user: function (match: string) {
+          user: function (match?: string) {
                if (this.isGroup) {
                     if (this.quoted && this.quoted.sender) return this.quoted.sender;
                     if (match && Array.isArray(match)) return numToJid(match[0]);

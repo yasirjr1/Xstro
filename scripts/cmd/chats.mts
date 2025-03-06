@@ -5,7 +5,7 @@ Module({
      fromMe: true,
      desc: "Pin a chat",
      type: "chats",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           await message.chatModify({ pin: true }, message.jid);
           return message.send("Pined.");
      },
@@ -16,7 +16,7 @@ Module({
      fromMe: true,
      desc: "Unpin a chat",
      type: "chats",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           await message.chatModify({ pin: false }, message.jid);
           return message.send("Unpined.");
      },
@@ -27,7 +27,7 @@ Module({
      fromMe: true,
      desc: "Archive a chat",
      type: "chats",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           await message.chatModify(
                {
                     archive: true,
@@ -44,7 +44,7 @@ Module({
      fromMe: true,
      desc: "Unarchive a chat",
      type: "chats",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           await message.chatModify(
                {
                     archive: false,
@@ -61,7 +61,7 @@ Module({
      fromMe: true,
      desc: "Clear a chat",
      type: "chats",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           await message.chatModify(
                {
                     delete: true,
@@ -78,7 +78,7 @@ Module({
      fromMe: true,
      desc: "Delete a chat",
      type: "chats",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           return await message.chatModify(
                {
                     delete: true,
@@ -94,7 +94,7 @@ Module({
      fromMe: true,
      desc: "Star a message",
      type: "chats",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           if (!message.quoted) {
                return message.send("Reply a message to star");
           }
@@ -113,7 +113,7 @@ Module({
      fromMe: true,
      desc: "Unstar a message",
      type: "chats",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           if (!message.quoted) {
                return message.send("Reply a message to unstar");
           }
@@ -124,5 +124,31 @@ Module({
                message.jid
           );
           return message.send("Unstarred.");
+     },
+});
+
+Module({
+     name: "pinm",
+     fromMe: false,
+     desc: "Pin a message",
+     type: "chats",
+     function: async (message) => {
+          if (!message.quoted) {
+               return message.send("Reply a message to pin it.");
+          }
+          return await message.sendMessage(message.jid, { pin: message.quoted.key, type: 1, time: 604800 });
+     },
+});
+
+Module({
+     name: "unpinm",
+     fromMe: false,
+     desc: "Unpin a message",
+     type: "chats",
+     function: async (message) => {
+          if (!message.quoted) {
+               return message.send("Reply a message to pin it.");
+          }
+          return await message.sendMessage(message.jid, { pin: message.quoted.key, type: 2, time: undefined });
      },
 });

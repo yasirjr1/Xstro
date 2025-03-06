@@ -6,7 +6,7 @@ Module({
      isGroup: true,
      desc: "Manage and Setup Antilink",
      type: "group",
-     function: async (message: XMessage, match?: string) => {
+     function: async (message, match?: string) => {
           const prefix = message.prefix;
           if (!match) {
                return message.send(
@@ -46,7 +46,7 @@ Module({
      isGroup: true,
      desc: "Manage and Setup Antiword",
      type: "group",
-     function: async (message: XMessage, match?: string) => {
+     function: async (message, match?: string) => {
           const prefix = message.prefix;
           if (!match) {
                return message.send(

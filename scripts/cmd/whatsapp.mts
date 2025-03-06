@@ -5,7 +5,7 @@ Module({
      fromMe: true,
      desc: "Change your WA Bio",
      type: "whatsapp",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           if (!match) {
                return message.send("Give me your new bio!");
           }
@@ -19,7 +19,7 @@ Module({
      fromMe: true,
      desc: "Change your WA Profile Name",
      type: "whatsapp",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           if (!match) {
                return message.send("Provide a new Profile Name");
           }
@@ -33,7 +33,7 @@ Module({
      fromMe: true,
      desc: "Block a user from Messaging you",
      type: "whatsapp",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           const jid = message.user(match);
           if (!jid) return message.send("Provide someone to block!");
           if (!(await message.onWhatsApp(jid))) return message.send("Not A WhatsApp User");
@@ -47,7 +47,7 @@ Module({
      fromMe: true,
      desc: "Unblock a user to allow Messaging",
      type: "whatsapp",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           const jid = message.user(match);
           if (!jid) return message.send("Provide someone to unblock!");
           await message.send("Unblocked!");
@@ -60,7 +60,7 @@ Module({
      fromMe: true,
      desc: "Update Your Profile Image",
      type: "whatsapp",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           if (!message.quoted) {
                return message.send("Reply an Image");
           }
@@ -79,7 +79,7 @@ Module({
      fromMe: true,
      desc: "Forwards a viewonce message",
      type: "whatsapp",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           if (
                !message.quoted ||
                (!message.quoted.message.imageMessage?.viewOnce &&
@@ -110,7 +110,7 @@ Module({
      fromMe: true,
      desc: "Converts a message to viewonce",
      type: "whatsapp",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           if (
                !message.quoted ||
                (!message.quoted.message.imageMessage &&
@@ -142,7 +142,7 @@ Module({
      fromMe: true,
      desc: "Edit your own message",
      type: "whatsapp",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           if (!message.quoted) {
                return message.send("Reply a message from you.");
           }
@@ -161,7 +161,7 @@ Module({
      fromMe: false,
      desc: "Delete a message for ourselves and from other participants if the bot is an admin",
      type: "whatsapp",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           if (!message.quoted) {
                return message.send("Reply a message");
           }

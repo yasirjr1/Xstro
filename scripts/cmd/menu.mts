@@ -7,7 +7,7 @@ Module({
      desc: "Show All Commands",
      type: undefined,
      dontAddCommandList: true,
-     function: async (message: XMessage) => {
+     function: async (message) => {
           const cmds = commands.filter(
                (cmd) => cmd.name && !cmd.dontAddCommandList && !cmd.name.toString().includes("undefined")
           ).length;
@@ -60,7 +60,7 @@ Module({
      desc: "Show All Commands",
      type: undefined,
      dontAddCommandList: true,
-     function: async (message: XMessage) => {
+     function: async (message) => {
           let cmdsList: string = "Command List\n\n";
           let cmdList: { cmd: string; desc?: string }[] = [];
           let cmd: string | undefined;

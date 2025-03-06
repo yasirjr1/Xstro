@@ -67,8 +67,3 @@ async function Antiword(message: XMessage) {
           });
      }
 }
-
-export async function Chatbot(message: XMessage) {
-     if (!message.text) return;
-     if (!message.mentions?.includes(message.owner) && message.quoted?.sender !== message.owner) return;
-}

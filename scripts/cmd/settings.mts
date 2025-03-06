@@ -5,7 +5,7 @@ Module({
      fromMe: true,
      desc: "Configure a custom prefix",
      type: "settings",
-     function: async (message: XMessage, match?: string) => {
+     function: async (message, match?: string) => {
           if (!match) {
                return message.send(`Usage: ${message.prefix}setprefix .,/*`);
           }
@@ -19,7 +19,7 @@ Module({
      fromMe: true,
      desc: "Configure the bot to be public or private",
      type: "settings",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           if (!match) {
                return message.send(`Usage: ${message.prefix}setmode private | public`);
           }
@@ -39,7 +39,7 @@ Module({
      fromMe: true,
      desc: "Sudo a number",
      type: "settings",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           const jid = message.user(match);
           if (!jid) return message.send("tag, reply or provide the user number");
           const config = getConfig();
@@ -57,7 +57,7 @@ Module({
      fromMe: true,
      desc: "Remove sudo from a number",
      type: "settings",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           const jid = message.user(match);
           if (!jid) return message.send("tag, reply or provide the user number");
           const config = getConfig();
@@ -75,7 +75,7 @@ Module({
      fromMe: true,
      desc: "List all sudo users",
      type: "settings",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           const config = getConfig();
           if (!config.sudo || config.sudo.length === 0) {
                return message.send("No sudo users found");
@@ -90,7 +90,7 @@ Module({
      fromMe: true,
      desc: "Ban a user from using commands",
      type: "settings",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           const jid = message.user(match);
           if (!jid) return message.send("tag, reply or provide a number");
           const db = getConfig();
@@ -109,7 +109,7 @@ Module({
      fromMe: true,
      desc: "Unban a user from using commands",
      type: "settings",
-     function: async (message: XMessage, match: string) => {
+     function: async (message, match) => {
           const jid = message.user(match);
           if (!jid) return message.send("tag, reply or provide a number");
           const db = getConfig();
@@ -129,7 +129,7 @@ Module({
      fromMe: true,
      desc: "List all banned users",
      type: "settings",
-     function: async (message: XMessage) => {
+     function: async (message) => {
           const db = getConfig();
           if (!db.banned || db.banned.length === 0) {
                return message.send("No banned users found");

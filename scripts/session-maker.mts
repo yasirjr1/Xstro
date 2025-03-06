@@ -32,13 +32,17 @@ export async function fetchSessionfromServer(
 function decryptSession(source: { key: string; iv: string; data: string }, savefile: string) {
      const algorithm = "aes-256-cbc";
      const key = Buffer.from(source.key, "hex");
+     console.log(key);
      const iv = Buffer.from(source.iv, "hex");
+     console.log(iv);
      const decipher = crypto.createDecipheriv(algorithm, key, iv);
+     console.log(decipher);
      let decrypted: string;
      decrypted = decipher.update(source.data, "hex", "utf8");
      decrypted += decipher.final("utf8");
      let data: { creds: { myAppStateKeyId: string }; syncKey: string };
      data = JSON.parse(decrypted);
+     console.log(data);
      fs.mkdirSync(savefile, { recursive: true });
      if (data.creds) {
           fs.writeFileSync(P.join(savefile, "creds.json"), JSON.stringify(data.creds));
