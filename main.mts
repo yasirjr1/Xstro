@@ -1,14 +1,20 @@
 import * as xprocess from "./src/index.mjs";
 import * as config from "./set.mjs";
 import { createServer } from "http";
+import { Boom } from "@hapi/boom";
 
 const startBot = async (): Promise<void> => {
-     await xprocess.fetchSessionfromServer(config.SESSION_SERVER_URL, {
-          decode: true,
-     });
-     if (!(xprocess.getSessionId() === config.SESSION__ID)) {
-          await xprocess.cfaSqliteMigrator("session", config.DATABASE_URL ?? "database.db");
-          xprocess.setSessionId(config.SESSION__ID);
+     await xprocess.checkNodeVersion();
+     try {
+          await xprocess.fetchSessionfromServer(config.SESSION_SERVER_URL, {
+               decode: true,
+          });
+          if (!(xprocess.getSessionId() === config.SESSION__ID)) {
+               await xprocess.cfaSqliteMigrator("session", config.DATABASE_URL ?? "database.db");
+               xprocess.setSessionId(config.SESSION__ID);
+          }
+     } catch (error) {
+          console.error(`SESSION ERROR:`, new Boom(error.message as Error));
      }
      await xprocess.loadPlugins();
      await xprocess.client(config.DATABASE_URL);
