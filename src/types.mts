@@ -1,5 +1,5 @@
-import { WAProto, WASocket, WAMessage } from "baileys";
-import { XMessage } from "./message.mjs";
+import type { WASocket, WAMessage } from "baileys";
+import type { XMessage } from "./message.mjs";
 
 export type Client = WASocket;
 
@@ -26,9 +26,9 @@ export interface Command {
      /** Should the command only be for Groups */
      isGroup?: boolean;
      /** Description of what the command does */
-     desc: string | undefined;
+     desc?: string | undefined;
      /** Category of where the command should below */
-     type: cmdCategories;
+     type?: cmdCategories;
      /** Should the command appear on the menu list? */
      dontAddCommandList?: boolean;
 }
@@ -62,32 +62,13 @@ export type Config = {
      banned: string[];
 };
 
-// Message Sending
-export interface MessageMisc {
-     /** Who to send the message to */
-     jid: string;
-     /** ContextInfo of the message */
-     contextInfo?: WAProto.IContextInfo;
-     /** mention users */
-     mentions?: string[];
-     /** type of message, text,audio, video, document etc, leave empty for automatic dectection */
-     type?: "text" | "audio" | "image" | "video" | "sticker" | "document";
-     /** custom mimetype, xstro auto generates one */
+export type MessageMisc = {
+     /** Send to a specific number else it will auto get the jid */
+     jid?: string;
+     /** mime type */
      mimetype?: string;
-     /** should the message disapper from chat */
-     disappearingMessagesInChat?: boolean | number;
-     /** Name of the file if sending as document */
-     fileName?: string;
-     /** should send file as push to talk? */
-     ptt?: boolean;
-     /** should send file as video note? */
-     ptv?: boolean;
-     /** caption for video or audio message */
-     caption?: string;
-     /** choose through if you want the message to play as gif */
-     gifPlayback?: boolean;
-     /** Wa message */
+     /** Select your content type if you want it for a specific type */
+     type?: "text" | "audio" | "image" | "video" | "sticker" | "document";
+     /** quoted message */
      quoted?: WAMessage;
-     /** idk */
-     ephemeralExpiration?: number | string;
-}
+};

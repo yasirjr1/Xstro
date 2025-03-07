@@ -1,6 +1,4 @@
-import { extractTextFromMessage, getDataType, numToJid } from "./constants.mjs";
-import { getConfig } from "./model/index.mjs";
-import { Client, MessageMisc } from "./types.mjs";
+import { writeFile } from "fs/promises";
 import { Boom } from "@hapi/boom";
 import {
      AnyMessageContent,
@@ -12,8 +10,11 @@ import {
      WAContextInfo,
      WAMessage,
 } from "baileys";
-import { writeFile } from "fs/promises";
+import { extractTextFromMessage, getDataType, numToJid } from "./constants.mjs";
+import { getConfig } from "./model/index.mjs";
+import type { Client, MessageMisc } from "./types.mjs";
 
+/** Message repack to simplfy over all bot message handling */
 export async function XMsg(client: Client, messages: WAMessage) {
      const normalizedMessages = {
           ...messages,
@@ -92,89 +93,35 @@ export async function XMsg(client: Client, messages: WAMessage) {
                const allAdmins = metadata.participants.filter((v) => v.admin !== null).map((v) => v.id);
                return !Array.isArray(allAdmins) ? Array.from(allAdmins) : allAdmins.includes(this.owner);
           },
-          send: async function (content: string | Buffer, options: Partial<MessageMisc> = {}) {
-               const jid = options.jid ?? this.jid;
-               const type = options.type as "text" | "audio" | "image" | "video" | "sticker" | "document" | undefined;
-               const atype = await getDataType(content);
+          send: async function (content: string | Buffer, options?: MessageMisc & Partial<AnyMessageContent>) {
+               const jid = options?.jid ?? this.jid;
+               const explicitType = options?.type;
+               const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
+               let messageContent: AnyMessageContent;
 
-               const getMessageContent = async (): Promise<AnyMessageContent> => {
-                    if (!type) {
-                         const { mimeType, contentType } = atype;
-                         switch (contentType) {
-                              case "text":
-                                   return { text: content.toString(), ...options };
-                              case "image":
-                                   return {
-                                        image: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                        ...options,
-                                   };
-                              case "audio":
-                                   return {
-                                        audio: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                        ...options,
-                                   };
-                              case "video":
-                                   return {
-                                        video: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                        ...options,
-                                   };
-                              case "sticker":
-                                   return {
-                                        sticker: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                        ...options,
-                                   };
-                              case "document":
-                                   return {
-                                        document: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                        mimetype: mimeType || "application/octet-stream",
-                                        ...options,
-                                   };
-                              default:
-                                   throw new Error(`Unsupported auto-detected content type: ${contentType}`);
-                         }
-                    }
+               const type = explicitType || (await getDataType(content)).contentType;
+               const mimeType = explicitType ? options?.mimetype : (await getDataType(content)).mimeType;
 
-                    switch (type) {
-                         case "text":
-                              return { text: content.toString(), ...options };
-                         case "image":
-                              return {
-                                   image: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                   ...options,
-                              };
-                         case "audio":
-                              return {
-                                   audio: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                   ptt: options.ptt,
-                                   ...options,
-                              };
-                         case "video":
-                              return {
-                                   video: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                   ptv: options.ptv,
-                                   gifPlayback: options.gifPlayback,
-                                   caption: options.caption,
-                                   ...options,
-                              };
-                         case "sticker":
-                              return {
-                                   sticker: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                   ...options,
-                              };
-                         case "document":
-                              return {
-                                   document: Buffer.isBuffer(content) ? content : Buffer.from(content),
-                                   mimetype: options.mimetype || atype.mimeType || "application/octet-stream",
-                                   fileName: options.fileName,
-                                   caption: options.caption,
-                                   ...options,
-                              };
-                         default:
-                              throw new Error(`Unsupported explicit type: ${type}`);
-                    }
-               };
+               if (type === "text") {
+                    messageContent = { text: content.toString(), ...options };
+               } else if (type === "image") {
+                    messageContent = { image: buffer, ...options };
+               } else if (type === "audio") {
+                    messageContent = { audio: buffer, ...options };
+               } else if (type === "video") {
+                    messageContent = { video: buffer, ...options };
+               } else if (type === "sticker") {
+                    messageContent = { sticker: buffer, ...options };
+               } else if (type === "document") {
+                    messageContent = {
+                         document: buffer,
+                         mimetype: mimeType || "application/octet-stream",
+                         ...options,
+                    };
+               } else {
+                    throw new Boom("Unknown content type");
+               }
 
-               const messageContent = await getMessageContent();
                const m = await sendMessage(jid!, messageContent, { ...options });
                return XMsg(client, m!);
           },

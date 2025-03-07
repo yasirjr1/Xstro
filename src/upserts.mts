@@ -1,7 +1,7 @@
 import util from "util";
 import { isUrl } from "./constants.mjs";
-import { XMessage } from "./message.mjs";
 import { getAntiword, getAntilink } from "./model/index.mjs";
+import type { XMessage } from "./message.mjs";
 
 export async function upsertsM(message: XMessage) {
      Promise.all([evaluator(message), Antilink(message), Antiword(message)]);
