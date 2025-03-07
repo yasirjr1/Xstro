@@ -17,5 +17,5 @@
         },
         "allowSyntheticDefaultImports": true
     },
-    "include": ["src/**/*.mts","scripts/**/*.mts", "eslint.config.mts"]
+    "include": ["src/**/*.mts","scripts/**/*.mts", "eslint.config.mts", "main.mts", "set.mts"]
 }
