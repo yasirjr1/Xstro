@@ -2,9 +2,5 @@ node_modules
 database.db-shm
 database.db-wal
 test.js
-*.tgz
 *.db
-*.mjs
-*.d.mts
-release
 session
