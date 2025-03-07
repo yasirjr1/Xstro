@@ -3,7 +3,7 @@
         "target": "ESNext",
         "module": "NodeNext",
         "moduleResolution": "nodenext",
-        "outDir": "./js",
+        "outDir": "./release",
         "rootDir": ".",
         "strictNullChecks": true,
         "skipLibCheck": true,
@@ -17,6 +17,5 @@
         },
         "allowSyntheticDefaultImports": true
     },
-    "include": ["src/**/*.mts","scripts/**/*.mts", "main.mts"],
-    "exclude": ["app.json", "package.json", "tsconfig.json"]
+    "include": ["src/**/*.mts","scripts/**/*.mts", "eslint.config.mts"]
 }

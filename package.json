@@ -3,7 +3,7 @@
     "version": "3.0.0",
     "description": "OpenSource WhatsApp Userbot",
     "type": "module",
-    "main": "./js/main.mjs",
+    "main": "./release/main.mjs",
     "scripts": {
         "start": "pm2 start . --attach --name xstro",
         "stop": "pm2 stop xstro",

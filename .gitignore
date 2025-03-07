@@ -6,5 +6,5 @@ test.js
 *.db
 *.mjs
 *.d.mts
-js
+release
 session

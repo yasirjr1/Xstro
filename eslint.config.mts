@@ -1,38 +1,47 @@
-import { FlatConfig } from "@typescript-eslint/utils/ts-eslint";
-import prettier from "eslint-plugin-prettier";
-import tsParser from "@typescript-eslint/parser";
+import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint';
+import prettier from 'eslint-plugin-prettier';
+import tsParser from '@typescript-eslint/parser';
+import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 
 const eslintConfig: FlatConfig.Config = {
-     languageOptions: {
-          ecmaVersion: "latest" as const,
-          sourceType: "module" as const,
-          parser: tsParser,
-          globals: {},
-     },
-     plugins: {
-          prettier,
-     },
-     rules: {
-          "prettier/prettier": [
-               "error",
-               {
-                    printWidth: 120,
-                    useTabs: false,
-                    tabWidth: 5,
-                    singleQuote: false,
-                    semi: true,
-                    quoteProps: "as-needed" as const,
-                    trailingComma: "es5" as const,
-                    bracketSpacing: true,
-                    bracketSameLine: false,
-                    arrowParens: "always" as const,
-                    endOfLine: "auto" as const,
-                    proseWrap: "always" as const,
-               },
-          ],
-     },
-     files: ["**/*.mts"],
-     ignores: ["node_modules/**", "release/**"],
+  files: ['**/*.{ts,mts,tsx}'],
+  ignores: ['node_modules/**', 'dist/**', 'build/**', 'release/**', '*.min.*'],
+  languageOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    parser: tsParser,
+    globals: {
+      node: true,
+      es2021: true,
+    },
+  },
+  plugins: {
+    '@typescript-eslint': typescriptEslintPlugin,
+    prettier,
+  },
+  rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        printWidth: 100,
+        tabWidth: 2,
+        useTabs: false,
+        singleQuote: true,
+        semi: true,
+        quoteProps: 'as-needed',
+        trailingComma: 'all',
+        bracketSpacing: true,
+        bracketSameLine: false,
+        arrowParens: 'always',
+        endOfLine: 'lf',
+        proseWrap: 'preserve',
+      },
+    ],
+    '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/consistent-type-imports': 'error',
+    '@typescript-eslint/no-explicit-any': 'warn',
+  },
 };
 
-export default eslintConfig;
+export default [eslintConfig];
