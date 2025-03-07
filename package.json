@@ -14,9 +14,6 @@
         "type": "git",
         "url": "git+https://github.com/AstroX11/xstro"
     },
-    "bugs": {
-        "url": "https://github.com/AstroX11/xstro/issues"
-    },
     "homepage": "https://github.com/AstroX11/xstro#readme",
     "author": "AstroX11 <danielfx0012@gmail.com>",
     "devDependencies": {

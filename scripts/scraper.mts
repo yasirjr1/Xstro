@@ -80,7 +80,7 @@ export const technews = async (): Promise<string> => {
     const $ = cheerio.load(html);
     const newsItems: NewsItem[] = [];
 
-    $('a.block').each((index: number, element: unknown) => {
+    $('a.block').each((index: number, element: cheerio.TagElement) => {
       const $article = $(element);
       const title: string = $article.find('h2.font-bold').text().trim();
       const description: string = $article.find('p.font-serif').text().trim();
