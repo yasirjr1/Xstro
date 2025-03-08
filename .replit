@@ -1,8 +1,8 @@
 run = "yarn start"
-entrypoint = "index.js"  # Adjust this if your main file is different
+modules = ["nodejs-23", "typescript-language-server"]
 
-[env]
-PORT = "8000"
+[nix]
+channel = "stable-24_05"
 
-[interpreter]
-command = "bash -c 'nix-shell --run \"yarn && yarn start\"'"
+[deployment]
+run = ["sh", "-c", "yarn start"]

@@ -1,9 +1,0 @@
-{ pkgs }: {
-  deps = [
-    pkgs.nodejs_23
-    pkgs.yarn
-  ];
-  env = {
-    NODE_VERSION = "23.9.0";
-  };
-}
