@@ -1,0 +1,8 @@
+run = "yarn start"
+entrypoint = "index.js"  # Adjust this if your main file is different
+
+[env]
+PORT = "8000"
+
+[interpreter]
+command = "bash -c 'nix-shell --run \"yarn && yarn start\"'"

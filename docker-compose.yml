@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  xstro:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: xstro-app
+    command: yarn start
+    working_dir: /Xstro
+    ports:
+      - "8000:8000"
