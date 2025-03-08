@@ -3,19 +3,19 @@ import type { WASocket } from 'baileys';
 import { makeWASocket, makeCacheableSignalKeyStore, DisconnectReason, Browsers } from 'baileys';
 import { EventEmitter } from 'events';
 import { DatabaseSync } from 'node:sqlite';
-import * as P from 'pino';
+import * as Logger from 'pino';
 
-import * as CacheStore from './store.mjs';
-import { useSqliteAuthState } from './use-sqlite-authstate.mjs';
-import { XMsg } from './message.mjs';
-import { groupMetadata, Store, saveContact, upsertM, groupSave } from './model/index.mjs';
-import { upsertsM } from './upserts.mjs';
-import { runCommand } from './plugins.mjs';
+import * as CacheStore from './store.mts';
+import { useSqliteAuthState } from './authstate.mts';
+import { XMsg } from './message.mts';
+import { groupMetadata, Store, saveContact, upsertM, groupSave } from './model/index.mts';
+import { upsertsM } from './upserts.mts';
+import { runCommand } from './plugins.mts';
 
 EventEmitter.defaultMaxListeners = 10000;
 process.setMaxListeners(10000);
 
-export const logger = P.pino({
+export const logger = Logger.pino({
   level: process.env.DEBUG ? 'info' : 'silent',
 });
 

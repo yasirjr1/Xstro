@@ -1,5 +1,5 @@
-import { Module } from '../../src/index.mjs';
-import { voxnews, wabetanews, technews } from '../scraper.mjs';
+import { Module } from '../index.mts';
+import { voxnews, wabetanews, technews } from '../index.mts';
 
 Module({
   name: 'news',

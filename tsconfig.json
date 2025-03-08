@@ -1,21 +1,19 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "NodeNext",
-        "moduleResolution": "nodenext",
-        "outDir": "../xstro-bot",
-        "rootDir": ".",
-        "strictNullChecks": true,
-        "skipLibCheck": true,
-        "noImplicitThis": true,
-        "resolveJsonModule": true,
-        "forceConsistentCasingInFileNames": true,
-        "declaration": false,
-        "removeComments": true,
-        "paths": {
-            "*": ["./node_modules/*", "./src/*"]
-        },
-        "allowSyntheticDefaultImports": true
-    },
-    "include": ["src/**/*.mts","scripts/**/*.mts", "eslint.config.mts", "main.mts", "set.mts"]
+     "compilerOptions": {
+          "target": "ESNext",
+          "module": "NodeNext",
+          "moduleResolution": "nodenext",
+          "rootDir": ".",
+          "strictNullChecks": true,
+          "skipLibCheck": true,
+          "noImplicitThis": true,
+          "resolveJsonModule": true,
+          "forceConsistentCasingInFileNames": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "paths": {
+               "*": ["./node_modules/*", "./src/*"]
+          },
+          "allowSyntheticDefaultImports": true
+     }
 }

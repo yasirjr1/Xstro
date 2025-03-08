@@ -1,4 +1,4 @@
-import { getDb } from './database.mjs';
+import { getDb } from './database.mts';
 import type { StatementSync } from 'node:sqlite';
 
 function Antilink(): void {

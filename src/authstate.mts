@@ -1,18 +1,16 @@
 import type { DatabaseSync } from 'node:sqlite';
 import type { AuthenticationCreds, AuthenticationState, SignalDataTypeMap } from 'baileys';
-import { initAuthCreds, BufferJSON, WAProto } from 'baileys';
-
-interface SqliteAuthStateConfig {
-  /**
-   * Enable WAL mode for better concurrent performance
-   * @default true
-   */
-  enableWAL?: boolean;
-}
+import { initAuthCreds, BufferJSON, WAProto as proto } from 'baileys';
 
 export const useSqliteAuthState = (
   database: DatabaseSync,
-  config: SqliteAuthStateConfig = {},
+  config = {
+    /**
+     * Enable WAL mode for better concurrent performance
+     * @default true
+     */
+    enableWAL: true,
+  },
 ): { state: AuthenticationState; saveCreds: () => void } => {
   database.exec(`
         CREATE TABLE IF NOT EXISTS session (
@@ -56,7 +54,7 @@ export const useSqliteAuthState = (
           for (const row of rows) {
             let value = JSON.parse(row.value, BufferJSON.reviver);
             if (type === 'app-state-sync-key' && value) {
-              value = WAProto.Message.AppStateSyncKeyData.fromObject(value);
+              value = proto.Message.AppStateSyncKeyData.fromObject(value);
             }
             data[row.id] = value;
           }

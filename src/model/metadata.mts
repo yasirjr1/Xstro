@@ -1,5 +1,5 @@
 import type { DatabaseSync, StatementSync } from 'node:sqlite';
-import { getDb } from './database.mjs';
+import { getDb } from './database.mts';
 import type { GroupMetadata } from 'baileys';
 
 function initMetadataDb(): void {

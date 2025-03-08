@@ -5,7 +5,7 @@ import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 
 const eslintConfig: FlatConfig.Config = {
   files: ['**/*.{ts,mts,tsx}'],
-  ignores: ['node_modules/**', 'dist/**', 'build/**', 'release/**', '*.min.*'],
+  ignores: ['node_modules/**'],
   languageOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',

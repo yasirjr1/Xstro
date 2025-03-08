@@ -1,5 +1,5 @@
 import type { WASocket, WAMessage } from 'baileys';
-import type { XMsg } from './message.mjs';
+import type { XMsg } from './message.mts';
 
 export type Client = WASocket;
 

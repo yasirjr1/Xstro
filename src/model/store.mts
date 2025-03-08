@@ -1,4 +1,4 @@
-import { getDb } from './database.mjs';
+import { getDb } from './database.mts';
 import type { StatementSync, SupportedValueType } from 'node:sqlite';
 import type {
   Contact,
@@ -7,7 +7,7 @@ import type {
   GroupMetadata,
   GroupParticipant,
 } from 'baileys';
-import { groupMetadata } from './metadata.mjs';
+import { groupMetadata } from './metadata.mts';
 
 export function Store(): void {
   const db = getDb();

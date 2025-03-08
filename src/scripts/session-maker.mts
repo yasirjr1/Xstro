@@ -1,7 +1,7 @@
 import * as crypto from 'node:crypto';
 import * as fs from 'node:fs';
 import * as P from 'node:path';
-import { fetchJson } from '../src/index.mjs';
+import { fetchJson } from '../index.mts';
 
 /**
  * Custom server url where you have your save session, I use postgre to save my own session for my use, lol if you used my server to save your own session, I will delete it all the data from the postgre after 2 months

@@ -1,4 +1,4 @@
-import { Module, numToJid } from '../../src/index.mjs';
+import { Module, numToJid } from '../index.mts';
 
 Module({
   name: 'newgc',

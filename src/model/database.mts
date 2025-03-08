@@ -1,4 +1,4 @@
-// database.mjs
+// database.mts
 import { DatabaseSync } from 'node:sqlite';
 
 let database: DatabaseSync | null = null;

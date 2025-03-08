@@ -1,4 +1,4 @@
-import { editConfig, getConfig, Module } from '../../src/index.mjs';
+import { editConfig, getConfig, Module } from '../index.mts';
 
 Module({
   name: 'setprefix',

@@ -1,4 +1,4 @@
-import { isMediaMessage, Module } from '../../src/index.mjs';
+import { isMediaMessage, Module } from '../index.mts';
 
 Module({
   name: 'bio',

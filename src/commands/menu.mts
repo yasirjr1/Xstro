@@ -1,4 +1,4 @@
-import { Module, commands, formatBytes, runtime } from '../../src/index.mjs';
+import { Module, commands, formatBytes, runtime } from '../index.mts';
 import { platform, totalmem, freemem } from 'os';
 
 Module({

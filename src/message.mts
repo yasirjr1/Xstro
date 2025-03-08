@@ -1,6 +1,5 @@
 import { writeFile } from 'fs/promises';
 import { Boom } from '@hapi/boom';
-import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
 import {
   downloadMediaMessage,
   getContentType,
@@ -8,9 +7,10 @@ import {
   isJidGroup,
   normalizeMessageContent,
 } from 'baileys';
-import { extractTextFromMessage, getDataType, numToJid } from './constants.mjs';
-import { getConfig } from './model/index.mjs';
-import type { Client, MessageMisc } from './types.mjs';
+import { extractTextFromMessage, getDataType, numToJid } from './constants.mts';
+import { getConfig } from './model/index.mts';
+import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
+import type { Client, MessageMisc } from './types.mts';
 
 /** Message repack to simplfy over all bot message handling */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

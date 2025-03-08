@@ -1,4 +1,4 @@
-import { Module, runtime } from '../../src/index.mjs';
+import { Module, runtime } from '../index.mts';
 import pm2 from 'pm2';
 
 Module({

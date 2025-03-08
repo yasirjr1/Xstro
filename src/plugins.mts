@@ -1,5 +1,5 @@
 import { Boom } from '@hapi/boom';
-import type { Command, XMessage } from './types.mjs';
+import type { Command, XMessage } from './types.mts';
 
 export const commands: Command[] = [];
 

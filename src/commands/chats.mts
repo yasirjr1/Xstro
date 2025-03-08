@@ -1,4 +1,4 @@
-import { Module } from '../../src/index.mjs';
+import { Module } from '../index.mts';
 
 Module({
   name: 'pin',

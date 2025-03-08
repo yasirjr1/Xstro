@@ -5,7 +5,7 @@ import {
   Module,
   setAntilink,
   setAntiword,
-} from '../../src/index.mjs';
+} from '../index.mts';
 
 Module({
   name: 'antilink',
