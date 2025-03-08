@@ -83,3 +83,21 @@ Module({
     return message.send('Group Description Updated');
   },
 });
+
+Module({
+  name: 'mute',
+  fromMe: false,
+  isGroup: true,
+  desc: 'Allow only Admins to send messages.',
+  type: 'group',
+  function: async (message) => {
+    if (!(await message.isAdmin())) {
+      return message.send('You are not Admin');
+    }
+    if (!(await message.isBotAdmin())) {
+      return message.send('I am not Admin');
+    }
+    await message.groupSettingUpdate(message.jid, 'not_announcement');
+    return await message.send('Group muted, only admins can send messages.');
+  },
+});
