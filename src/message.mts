@@ -137,10 +137,8 @@ export async function XMsg(client: Client, messages: WAMessage) {
       });
       return XMsg(client, msg!);
     },
-    downloadM: async function (
-      message: WAMessage,
-      shouldSaveasFile?: boolean,
-    ): Promise<Buffer<ArrayBufferLike> | void> {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    downloadM: async function (message: WAMessage, shouldSaveasFile?: boolean) {
       const media = await downloadMediaMessage(message, 'buffer', {});
       if (shouldSaveasFile) {
         return await writeFile(message.key.id!, media);

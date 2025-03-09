@@ -12,7 +12,8 @@ export type cmdCategories =
   | 'group'
   | 'news'
   | 'chats'
-  | 'download';
+  | 'download'
+  | 'media';
 
 export interface Command {
   /** Name of function */

@@ -77,63 +77,43 @@ Module({
 Module({
   name: 'vv',
   fromMe: true,
-  desc: 'Forwards a viewonce message',
+  desc: 'Forwards a view-once message',
   type: 'whatsapp',
   function: async (message) => {
+    const quoted = message.quoted;
     if (
-      !message.quoted ||
-      (!message.quoted.message.imageMessage?.viewOnce &&
-        !message.quoted.message.videoMessage?.viewOnce &&
-        !message.quoted.message.audioMessage?.viewOnce)
-    ) {
-      return message.send('Reply a viewonce message');
-    }
-    const msgTypes = ['imageMessage', 'videoMessage', 'audioMessage'];
-    const quotedMsg = message.quoted.message;
-
-    for (const type of msgTypes) {
-      if (quotedMsg[type]?.viewOnce) {
-        quotedMsg[type].viewOnce = false;
-        await message.forward(message.owner, message.quoted, {
-          quoted: message.quoted,
-        });
-        break;
+      !quoted ||
+      !['imageMessage', 'videoMessage', 'audioMessage'].some((t) => quoted.message[t]?.viewOnce)
+    )
+      return message.send('Reply a view-once message');
+    const msg = quoted.message;
+    for (const type of ['imageMessage', 'videoMessage', 'audioMessage']) {
+      if (msg[type]?.viewOnce) {
+        msg[type].viewOnce = false;
+        await message.forward(message.owner, quoted, { quoted });
+        return message.send('View-once message forwarded!');
       }
     }
-
-    return message.send('View once message forwarded!');
   },
 });
 
 Module({
   name: 'tovv',
   fromMe: true,
-  desc: 'Converts a message to viewonce',
+  desc: 'Converts a message to view-once',
   type: 'whatsapp',
   function: async (message) => {
-    if (
-      !message.quoted ||
-      (!message.quoted.message.imageMessage &&
-        !message.quoted.message.videoMessage &&
-        !message.quoted.message.audioMessage)
-    ) {
+    const quoted = message.quoted;
+    if (!quoted || !['imageMessage', 'videoMessage', 'audioMessage'].some((t) => quoted.message[t]))
       return message.send('Reply to an image, video, or audio message');
-    }
-
-    const msgTypes = ['imageMessage', 'videoMessage', 'audioMessage'];
-    const quotedMsg = message.quoted.message;
-
-    for (const type of msgTypes) {
-      if (quotedMsg[type]) {
-        quotedMsg[type].viewOnce = true;
-        await message.forward(message.owner, message.quoted, {
-          quoted: message.quoted,
-        });
-        break;
+    const msg = quoted.message;
+    for (const type of ['imageMessage', 'videoMessage', 'audioMessage']) {
+      if (msg[type]) {
+        msg[type].viewOnce = true;
+        await message.forward(message.owner, quoted, { quoted });
+        return message.send('Message converted to view-once');
       }
     }
-
-    return message.send('Message converted to view-once');
   },
 });
 
@@ -159,28 +139,25 @@ Module({
 Module({
   name: 'dlt',
   fromMe: false,
-  desc: 'Delete a message for ourselves and from other participants if the bot is an admin',
+  desc: 'Delete a message for us and others if bot is admin',
   type: 'whatsapp',
   function: async (message) => {
-    if (!message.quoted) {
-      return message.send('Reply a message');
-    }
-
+    if (!message.quoted) return message.send('Reply a message');
     const quoted = message.quoted;
-    const notfromMe = {
-      deleteMedia: isMediaMessage(quoted),
-      key: quoted.key,
-      timestamp: Date.now(),
-    };
-
     const fromMe = message.isGroup
-      ? (await message.isBotAdmin()) || quoted.key.fromMe === true
+      ? (await message.isBotAdmin()) || quoted.key.fromMe
       : quoted.key.fromMe;
-
-    if (fromMe) {
-      await message.delete(quoted);
-    } else {
-      await message.chatModify({ deleteForMe: notfromMe }, message.jid);
-    }
+    await (fromMe
+      ? message.delete(quoted)
+      : message.chatModify(
+          {
+            deleteForMe: {
+              deleteMedia: isMediaMessage(quoted),
+              key: quoted.key,
+              timestamp: Date.now(),
+            },
+          },
+          message.jid,
+        ));
   },
 });

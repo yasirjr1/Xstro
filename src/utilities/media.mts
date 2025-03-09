@@ -184,7 +184,7 @@ export const cropToCircle = async (input: Buffer): Promise<Buffer> => {
   }
 };
 
-export const isAnimatedWebp = (filePath: string): Promise<boolean> => {
+export const isAnimatedWebp = (filePath: Buffer): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     sharp(filePath)
       .metadata()
@@ -200,22 +200,26 @@ export const isAnimatedWebp = (filePath: string): Promise<boolean> => {
 export async function convertWebPFile(media: Buffer): Promise<Buffer> {
   try {
     const tempDir = path.join('temp_frames');
-    const tempOutput = path.join(tempDir, 'output.mp4');
+    const tempOutput = path.join(tempDir, 'output.webm');
     await fs.promises.mkdir(tempDir, { recursive: true });
     const metadata = await sharp(media).metadata();
     if (!metadata.pages) throw new Error('Input file is not an animated WebP');
+    const fps = metadata.delay ? 1000 / metadata.delay[0] : 15;
     for (let i = 0; i < metadata.pages; i++) {
-      const frame = await sharp(media, { page: i }).jpeg({ quality: 90 }).toBuffer();
+      const frame = await sharp(media, { page: i }).png().toBuffer();
       await fs.promises.writeFile(
-        path.join(tempDir, `frame_${String(i).padStart(5, '0')}.jpg`),
+        path.join(tempDir, `frame_${String(i).padStart(5, '0')}.png`),
         frame,
       );
     }
-    const ffmpegCommand = `ffmpeg -framerate ${30} -i "${path.join(tempDir, 'frame_%05d.jpg')}" \
-            -c:v libx264 -pix_fmt yuv420p -y "${tempOutput}"`;
+    const ffmpegCommand = `ffmpeg -r ${fps} -i "${path.join(tempDir, 'frame_%05d.png')}" \
+        -c:v libvpx-vp9 -pix_fmt yuva420p -b:v 500k -y "${tempOutput}"`;
+
     await execAsync(ffmpegCommand);
+
     const buffer = await fs.promises.readFile(tempOutput);
     await fs.promises.rm(tempDir, { recursive: true });
+
     return buffer;
   } catch (error) {
     try {
@@ -269,7 +273,7 @@ async function videoToWebp(media: Buffer): Promise<Buffer> {
 
   fs.writeFileSync(tmpFileIn, media);
 
-  const ffmpegCommand = `ffmpeg -i "${tmpFileIn}" -vf "scale=512:512:force_original_aspect_ratio=decrease,fps=15" -c:v libwebp -loop 0 -preset picture -t 00:00:05 -quality 60 "${tmpFileOut}"`;
+  const ffmpegCommand = `ffmpeg -i "${tmpFileIn}" -vf "scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=0x00000000,fps=15" -c:v libwebp -loop 0 -preset default -t 00:00:10 -q:v 40 -fs 500k -pix_fmt yuva420p "${tmpFileOut}"`;
 
   try {
     const { stderr } = await execAsync(ffmpegCommand);
@@ -393,6 +397,11 @@ export const createSticker = async (
     packname: packname || 'Xstro',
     author: author || 'Astro',
   };
+
+  if ((await fileTypeFromBuffer(buffer))?.mime !== 'video/mp4' && (await isAnimatedWebp(buffer))) {
+    const media = await convertWebPFile(buffer);
+    return await writeExifVid(media, options);
+  }
 
   try {
     if (mime?.mime.startsWith('image/')) {
