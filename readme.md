@@ -1,4 +1,4 @@
-# `Xstro WA Bot`
+# `xstro-md - typescript`
 
 > [!IMPORTANT]  
 > This is an open-source WhatsApp bot released under the MIT License — free to use, modify, and distribute; it is not built to violate WhatsApp’s Terms of Service, and any misuse is entirely the user's responsibility — I will not be held responsible if your WhatsApp account is banned; any related projects are also open-source for users to run independently — you can choose to use my products, but if you use my pairing service to generate a session, I will not access or use your data, and your data will be automatically deleted after 2 months — I do not support storing your session on my database and strongly urge you to manage your own sessions; never share your credentials or sensitive data with anyone — this software is provided as-is, with no warranties or guarantees — use at your own risk.
