@@ -7,7 +7,7 @@ import {
   isJidGroup,
   normalizeMessageContent,
 } from 'baileys';
-import { extractTextFromMessage, getDataType, numToJid } from './constants.mts';
+import { extractTextFromMessage, getDataType, numToJid } from './utilities/constants.mts';
 import { getConfig } from './model/index.mts';
 import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
 import type { Client, MessageMisc } from './types.mts';

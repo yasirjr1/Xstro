@@ -1,5 +1,5 @@
 import util from 'util';
-import { isUrl } from './constants.mts';
+import { isUrl } from './utilities/index.mts';
 import { getAntiword, getAntilink } from './model/index.mts';
 import type { XMessage } from './types.mts';
 

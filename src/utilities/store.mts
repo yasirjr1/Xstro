@@ -55,4 +55,4 @@ class CacheStore {
   }
 }
 
-export default CacheStore;
+export { CacheStore };

@@ -5,8 +5,7 @@ import { EventEmitter } from 'events';
 import { DatabaseSync } from 'node:sqlite';
 import * as Logger from 'pino';
 
-import * as CacheStore from './store.mts';
-import { useSqliteAuthState } from './authstate.mts';
+import { useSqliteAuthState, CacheStore } from './utilities/index.mts';
 import { XMsg } from './message.mts';
 import { groupMetadata, Store, saveContact, upsertM, groupSave } from './model/index.mts';
 import { upsertsM } from './upserts.mts';
@@ -31,7 +30,7 @@ export const client = async (database?: string): Promise<WASocket> => {
   const conn = makeWASocket({
     auth: {
       creds: state.creds,
-      keys: makeCacheableSignalKeyStore(state.keys, logger, new CacheStore.default()),
+      keys: makeCacheableSignalKeyStore(state.keys, logger, new CacheStore()),
     },
     printQRInTerminal: true,
     logger,
@@ -91,8 +90,6 @@ export const client = async (database?: string): Promise<WASocket> => {
 
   setInterval(async () => {
     try {
-      if (!conn.authState?.creds?.registered) return;
-
       const groups = await conn.groupFetchAllParticipating();
 
       for (const [id, metadata] of Object.entries(groups)) groupSave(id, metadata);
