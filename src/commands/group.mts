@@ -97,6 +97,30 @@ Module({
     if (!(await message.isBotAdmin())) {
       return message.send('I am not Admin');
     }
+    const metadata = await message.groupMetadata(message.jid);
+    if (metadata.announce)
+      return message.send('Group settings already allowed only Admins to send messages.');
+    await message.groupSettingUpdate(message.jid, 'announcement');
+    return await message.send('Group muted, only admins can send messages.');
+  },
+});
+
+Module({
+  name: 'unmute',
+  fromMe: false,
+  isGroup: true,
+  desc: 'Allow only Admins to send messages.',
+  type: 'group',
+  function: async (message) => {
+    if (!(await message.isAdmin())) {
+      return message.send('You are not Admin');
+    }
+    if (!(await message.isBotAdmin())) {
+      return message.send('I am not Admin');
+    }
+    const metadata = await message.groupMetadata(message.jid);
+    if (!metadata.announce)
+      return message.send('Group settings already allowed all members to send messages.');
     await message.groupSettingUpdate(message.jid, 'not_announcement');
     return await message.send('Group muted, only admins can send messages.');
   },
