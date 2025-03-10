@@ -417,3 +417,31 @@ export const createSticker = async (
     throw new Error(`Sticker creation failed: ${error.message}`);
   }
 };
+
+export async function trimVideo(
+  input: Buffer,
+  startTime: string,
+  endTime: string,
+): Promise<Buffer> {
+  const inputFile = await saveInputFile(input);
+  const outputVideo = temp('mp4');
+
+  try {
+    // The -ss parameter specifies the start time
+    // The -to parameter specifies the end time
+    // Using these parameters before -i would be faster (seeking) but less accurate
+    // Using them after -i is slower but more accurate for frame-exact cutting
+    await execAsync(
+      `ffmpeg -i "${inputFile}" -ss ${startTime} -to ${endTime} -c:v libx264 -c:a aac -strict experimental -b:a 128k "${outputVideo}"`,
+    );
+
+    const buffer = readFileSync(outputVideo);
+    fs.unlinkSync(outputVideo);
+    fs.unlinkSync(inputFile);
+    return buffer;
+  } catch (error) {
+    if (existsSync(outputVideo)) fs.unlinkSync(outputVideo);
+    if (existsSync(inputFile)) fs.unlinkSync(inputFile);
+    throw error;
+  }
+}

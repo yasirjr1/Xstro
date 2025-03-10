@@ -7,6 +7,7 @@ import {
   flipMedia,
   cropToCircle,
   createSticker,
+  trimVideo,
 } from '../index.mts';
 
 Module({
@@ -143,5 +144,23 @@ Module({
       sticker: sticker,
       mimetype: 'image/webp',
     });
+  },
+});
+
+Module({
+  name: 'trim',
+  fromMe: false,
+  desc: 'Trim a video message, by providing a new start and end time',
+  type: 'media',
+  function: async (message, match) => {
+    if (!message.quoted || !message.quoted?.message?.videoMessage)
+      return message.send('Reply to a video Message');
+    if (!match) return message.send(`Usage:\n${message.prefix}trim 00:00:05|00:01:08`);
+    const videotoTrim = await message.downloadM(message.quoted);
+    const [startTime, endTime] = match.split('|');
+    if (!startTime || !endTime)
+      return message.send(`Usage:\n${message.prefix}trim 00:00:05|00:01:08`);
+    const trimmedVideo = await trimVideo(videotoTrim, startTime, endTime);
+    return await message.send(trimmedVideo);
   },
 });
