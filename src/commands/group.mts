@@ -203,3 +203,23 @@ Module({
     return await message.send(`Group link reset\n\nhttps://chat.whatsapp.com/${code!}`);
   },
 });
+
+Module({
+  name: 'approval',
+  fromMe: false,
+  isGroup: true,
+  desc: 'Turn on or off settings for GroupJoinApproval',
+  type: 'group',
+  function: async (message, match) => {
+    if (!match) return message.send(`Usage: ${message.prefix}approval on | off`);
+    match = match.toLowerCase().trim();
+    if (match === 'on') {
+      await message.groupJoinApprovalMode(message.jid, 'on');
+      return message.send(`Approval Mode Turned On`);
+    }
+    if (match === 'off') {
+      await message.groupJoinApprovalMode(message.jid, 'off');
+      return message.send(`Approval Mode Turned Off`);
+    }
+  },
+});

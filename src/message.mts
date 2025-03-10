@@ -1,4 +1,5 @@
-import { writeFile } from 'fs/promises';
+import { promises as fs } from 'fs';
+import { join } from 'path';
 import { Boom } from '@hapi/boom';
 import {
   downloadMediaMessage,
@@ -59,6 +60,7 @@ export async function XMsg(client: Client, messages: WAMessage) {
       } else {
         if (this.quoted && this.quoted.sender) return this.quoted.sender;
         if (match) return numToJid(match);
+        if (!match) return this.jid;
       }
       return undefined;
     },
@@ -137,13 +139,22 @@ export async function XMsg(client: Client, messages: WAMessage) {
       });
       return XMsg(client, msg!);
     },
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    downloadM: async function (message: WAMessage, shouldSaveasFile?: boolean) {
-      const media = await downloadMediaMessage(message, 'buffer', {});
-      if (shouldSaveasFile) {
-        return await writeFile(message.key.id!, media);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async downloadM(message: WAMessage, shouldSaveasFile?: boolean): Promise<Buffer | any> {
+      try {
+        const media = await downloadMediaMessage(message, 'buffer', {});
+        if (shouldSaveasFile) {
+          const saves = './downloads';
+          const fileName = `${message.key.id}_${Date.now()}.bin`;
+          const savePath = join(saves, fileName);
+          await fs.mkdir(saves, { recursive: true });
+          await fs.writeFile(savePath, media);
+          return savePath;
+        }
+        return media;
+      } catch (error) {
+        throw new Error(error);
       }
-      return media;
     },
     forward: async function (
       jid: string,

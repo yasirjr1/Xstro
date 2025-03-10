@@ -4,3 +4,4 @@ database.db-wal
 test.js
 *.db
 session
+downloads

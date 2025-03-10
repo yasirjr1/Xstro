@@ -62,7 +62,7 @@ Module({
 });
 
 Module({
-  name: 'audiovideo',
+  name: 'black',
   fromMe: false,
   desc: 'Convert audio to video with black background',
   type: 'media',

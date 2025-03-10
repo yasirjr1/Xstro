@@ -161,3 +161,20 @@ Module({
         ));
   },
 });
+
+Module({
+  name: 'blocklist',
+  fromMe: true,
+  desc: 'Get all the list of numbers you have blocked',
+  type: 'whatsapp',
+  function: async (message) => {
+    const list = await message.fetchBlocklist();
+    if (!list) return message.send('No blocked numbers found!');
+    return await message.send(
+      `Blocked Users:\n${list.map((nums) => `\n@${nums.split('@')[0]}`).join('')}`,
+      {
+        mentions: [...list],
+      },
+    );
+  },
+});
