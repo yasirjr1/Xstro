@@ -4,6 +4,7 @@ import type { Options as gotOps } from 'got';
 import got from 'got';
 import type { WAMessage, WAMessageContent } from 'baileys';
 import { getContentType, jidNormalizedUser } from 'baileys';
+import FormData from 'form-data';
 
 export function isUrl(text: string): boolean {
   const urlRegex = /\bhttps?:\/\/[^\s/$.?#].[^\s]*|www\.[^\s/$.?#].[^\s]*\b/gi;
@@ -197,8 +198,59 @@ export const fetchJson = async function (url: string, options?: gotOps): Promise
   }
 };
 
-/** TO DO create post Json function */
-// export const postJson = async function (url: string) {};
+export const postJson = async function (
+  url: string,
+  options?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    formData?: Record<string, any>;
+    headers?: Record<string, string>;
+  },
+): Promise<string> {
+  try {
+    const defaultHeaders = {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      Accept: 'application/json, text/plain, */*',
+      'Accept-Language': 'en-US,en;q=0.5',
+      'Accept-Encoding': 'gzip, deflate, br',
+      Connection: 'keep-alive',
+      'Upgrade-Insecure-Requests': '1',
+      DNT: '1',
+    };
+
+    // Create FormData instance
+    const form = new FormData();
+    if (options?.formData) {
+      for (const [key, value] of Object.entries(options.formData)) {
+        form.append(key, value);
+      }
+    }
+
+    console.log('Sending request to:', url);
+    console.log('Form data fields:', Object.keys(options?.formData || {}));
+
+    const response = await got.post(url, {
+      headers: {
+        ...defaultHeaders,
+        ...options?.headers,
+        ...form.getHeaders(),
+      },
+      body: form,
+      throwHttpErrors: true,
+    });
+
+    try {
+      return JSON.parse(response.body);
+    } catch (jsonError) {
+      return response.body;
+    }
+  } catch (error) {
+    throw new Boom(error.message, {
+      statusCode: error.response?.statusCode || 500,
+      data: error.response?.body || null,
+    });
+  }
+};
 
 export const isMediaMessage = (message: WAMessage): boolean => {
   const mediaMessageTypes = [
