@@ -18,7 +18,7 @@ export type cmdCategories =
 
 export interface Command {
   /** Name of function */
-  name: string;
+  name: string | RegExp;
   /** Should the command always run when it recieves a messgae */
   on?: string | undefined;
   /** Function of the command, must be async */
