@@ -1,5 +1,4 @@
-import { Boom } from '@hapi/boom';
-import type { Command, XMessage } from './types.mts';
+import type { Command } from './types.mts';
 
 export const commands: Command[] = [];
 
@@ -15,31 +14,4 @@ export function Module(cmd: Partial<Command>): Command {
   };
   commands.push(fullCmd);
   return fullCmd;
-}
-
-export async function runCommand(message: XMessage): Promise<void> {
-  if (!message.text) return;
-
-  for (const cmd of commands) {
-    const handler = message.prefix.find((p) => message?.text?.startsWith(p));
-    const match = message.text.slice(handler?.length || 0).match(cmd.name);
-    try {
-      if (handler && match) {
-        if (!message.sudo && (message.mode || cmd.fromMe)) return;
-        if (cmd.isGroup && !message.isGroup) return;
-        const args = match[2] ?? '';
-        await message.react('⏳');
-        await cmd.function!(message, args);
-      }
-    } catch (err) {
-      const cmdName = cmd.name.toString().toLowerCase().split(/\W+/)[2];
-      await message.send(
-        `\`\`\`─━❲ ERROR REPORT ❳━─\n\nFrom: ${cmdName}\nDetails: ${err.message}\`\`\``,
-        {
-          jid: message.owner,
-        },
-      );
-      console.error(new Boom(err));
-    }
-  }
 }

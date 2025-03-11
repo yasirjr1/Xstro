@@ -6,10 +6,8 @@ import { DatabaseSync } from 'node:sqlite';
 import * as Logger from 'pino';
 
 import { useSqliteAuthState, CacheStore } from './utilities/index.mts';
-import { XMsg } from './message.mts';
-import { groupMetadata, Store, saveContact, upsertM, groupSave } from './model/index.mts';
-import { upsertsM } from './upserts.mts';
-import { runCommand } from './plugins.mts';
+import { groupMetadata, Store, saveContact, groupSave } from './model/index.mts';
+import { MessagesUpsert } from './index.mts';
 
 EventEmitter.defaultMaxListeners = 10000;
 process.setMaxListeners(10000);
@@ -67,16 +65,7 @@ export const client = async (database?: string): Promise<WASocket> => {
       if (event['creds.update']) saveCreds();
 
       if (event['messages.upsert']) {
-        const { messages, type, requestId } = event['messages.upsert'];
-        upsertM({ messages, type, requestId });
-
-        if (type === 'notify') {
-          for (const upserts of messages) {
-            const msg = await XMsg(conn, upserts);
-
-            Promise.all([runCommand(msg), upsertsM(msg)]);
-          }
-        }
+        new MessagesUpsert(conn, event['messages.upsert']);
       }
 
       if (event['contacts.update']) {
