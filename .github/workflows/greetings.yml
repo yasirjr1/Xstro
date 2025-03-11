@@ -1,0 +1,25 @@
+name: Greetings
+
+on: 
+  pull_request_target:
+    types: [opened, synchronize, reopened]  # Trigger when PR is opened, updated, or reopened
+  issues:
+    types: [opened]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Greet PR authors
+        run: |
+          echo "👋 Hello @${{ github.actor }}! Thank you for submitting a pull request!"
+          echo "We appreciate your time and effort. Your contribution is important to us!"
+          echo "If you need any help or have questions, feel free to reach out. Let's collaborate and improve this project together!"
+          
+      - name: Clone the forked repository using Git
+        run: |
+          AUTHOR=${{ github.actor }}
+          git clone https://github.com/${AUTHOR}/Xstro.git
