@@ -23,9 +23,7 @@
         "eslint-config-prettier": "^10.0.2",
         "eslint-plugin-prettier": "^5.2.3",
         "jiti": "^2.4.2",
-        "prettier": "^3.5.3",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.9.0-dev.20250303"
+        "prettier": "^3.5.3"
     },
     "dependencies": {
         "@hapi/boom": "^10.0.1",
@@ -39,7 +37,9 @@
         "pino": "^9.6.0",
         "pm2": "^5.4.3",
         "qrcode-terminal": "^0.12.0",
-        "sharp": "^0.33.5"
+        "sharp": "^0.33.5",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.0-dev.20250303"
     },
     "packageManager": "yarn@1.22.22"
 }
