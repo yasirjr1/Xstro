@@ -6,6 +6,7 @@
     "main": "start.mts",
     "scripts": {
         "start": "pm2 start start.mts --name xstro --attach",
+        "restart": "yarn stop && yarn start",
         "dev": "ts-node --esm start.mts",
         "stop": "pm2 stop xstro",
         "lint": "yarn run eslint . --fix"
