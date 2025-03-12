@@ -60,11 +60,26 @@ Module({
     if (!user) return message.send('Provide a user number to get their info');
     const bio_details = await message.fetchStatus(user).catch(() => null);
     const profile_image = await message.profilePictureUrl(user, 'image').catch(() => null);
-    const bio_text =
-      typeof bio_details?.[0]?.status === 'string' ? bio_details[0].status : 'No bio available';
 
+    const Info = (bio_details as unknown as { status: { status: string; setAt: string } }[])?.[0];
+    const bio_text = Info?.status?.status ?? 'No bio available';
+    const date = Info?.status?.setAt ? new Date(Info.status.setAt) : null;
+
+    const setBio =
+      date instanceof Date && !isNaN(date.getTime())
+        ? new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          }).format(date)
+        : 'Unknown';
+
+    const caption = `Bio: ${bio_text}\nSet At: ${setBio}`;
     return profile_image
-      ? await message.send(await urlBuffer(profile_image), { caption: bio_text })
-      : await message.send(bio_text);
+      ? await message.send(await urlBuffer(profile_image), { caption })
+      : await message.send(caption);
   },
 });
