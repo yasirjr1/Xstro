@@ -31,7 +31,11 @@ Module({
   type: 'system',
   function: async (message) => {
     await message.send('Restarting...');
-    return process.exit();
+    pm2.restart('xstro', async (err: Error) => {
+      if (err) {
+        await message.send('Failed to restart process');
+      }
+    });
   },
 });
 
@@ -42,7 +46,7 @@ Module({
   type: 'system',
   function: async (message) => {
     await message.send('Goodbye....');
-    return pm2.stop('xstro', async (err) => {
+    return pm2.stop('xstro', async (err: Error) => {
       pm2.disconnect();
       if (err) {
         await message.send('Failed to shutdown');
