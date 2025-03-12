@@ -1,13 +1,12 @@
-import { Boom } from '@hapi/boom';
 import type { WASocket } from 'baileys';
-import { makeWASocket, makeCacheableSignalKeyStore, DisconnectReason, Browsers } from 'baileys';
+import { makeWASocket, makeCacheableSignalKeyStore, Browsers } from 'baileys';
 import { EventEmitter } from 'events';
 import { DatabaseSync } from 'node:sqlite';
 import * as Logger from 'pino';
 
+import { groupMetadata } from './model/index.mts';
 import { useSqliteAuthState, CacheStore } from './utilities/index.mts';
-import { groupMetadata, SqliteMemoryStore, groupSave, GroupMetaCache } from './model/index.mts';
-import { MessagesUpsert } from './index.mts';
+import { ConnectionUpdate, GroupSync, MessagesUpsert } from './classes/index.mts';
 
 EventEmitter.defaultMaxListeners = 10000;
 process.setMaxListeners(10000);
@@ -16,11 +15,8 @@ export const logger = Logger.pino({
   level: process.env.DEBUG ? 'info' : 'silent',
 });
 
-export const client = async (database?: string): Promise<WASocket> => {
-  const { state, saveCreds } = useSqliteAuthState(
-    new DatabaseSync(database ? database : 'database.db'),
-  );
-  SqliteMemoryStore();
+export const client = async (): Promise<WASocket> => {
+  const { state, saveCreds } = useSqliteAuthState(new DatabaseSync('database.db'));
   const conn = makeWASocket({
     auth: {
       creds: state.creds,
@@ -33,49 +29,19 @@ export const client = async (database?: string): Promise<WASocket> => {
     cachedGroupMetadata: async (jid) => groupMetadata(jid),
   });
 
-  conn.ev.process(
-    /** Event buffers **/
+  conn.ev.process(async (events) => {
+    const event = events;
 
-    async (events) => {
-      const event = events;
+    if (event['connection.update']) new ConnectionUpdate(conn, event['connection.update']);
 
-      if (event['connection.update']) {
-        const { connection, lastDisconnect } = event['connection.update'];
+    if (event['creds.update']) saveCreds();
 
-        if (connection === 'connecting') {
-          console.log('connecting...');
-        }
+    if (event['messages.upsert']) new MessagesUpsert(conn, event['messages.upsert']);
+  });
 
-        if (connection === 'close')
-          (lastDisconnect?.error as Boom)?.output?.statusCode === DisconnectReason.loggedOut
-            ? process.exit(1)
-            : client(database);
+  /** Save Group Metadata and avoid reduant requests to WA Servers */
+  const groupSync = new GroupSync(conn);
+  groupSync.start();
 
-        if (connection === 'open') {
-          await conn.sendMessage(conn?.user?.id!, { text: '```Bot is online now!```' });
-
-          console.log(`Connected!`);
-        }
-      }
-
-      if (event['creds.update']) saveCreds();
-
-      if (event['messages.upsert']) {
-        new MessagesUpsert(conn, event['messages.upsert']);
-      }
-    },
-  );
-
-  setInterval(async () => {
-    try {
-      GroupMetaCache();
-      const groups = await conn.groupFetchAllParticipating();
-
-      for (const [id, metadata] of Object.entries(groups)) groupSave(id, metadata);
-    } catch (error) {
-      throw new Boom(error.message as Error);
-    }
-  }, 300 * 1000);
-  conn.ev.flush();
   return conn;
 };

@@ -1,8 +1,8 @@
 import { getDb } from './database.mts';
-import type { StatementSync, SupportedValueType } from 'node:sqlite';
-import type { WAMessage, MessageUpsertType } from 'baileys';
+import type { StatementSync, SupportedValueType, DatabaseSync } from 'node:sqlite';
+import type { WAMessage, MessageUpsertType, GroupMetadata } from 'baileys';
 
-export function SqliteMemoryStore(): void {
+function SqliteMemoryStore(): void {
   const db = getDb();
   db.exec(`
         CREATE TABLE IF NOT EXISTS messages (
@@ -20,11 +20,32 @@ export function SqliteMemoryStore(): void {
     `);
 }
 
+function GroupMetaCache(): void {
+  const db: DatabaseSync = getDb();
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS group_metadata (
+      jid TEXT PRIMARY KEY,
+      metadata JSON
+    );
+  `);
+}
+
+export const groupMetadata = (jid: string): GroupMetadata | undefined => {
+  GroupMetaCache();
+  const db: DatabaseSync = getDb();
+
+  const stmt: StatementSync = db.prepare(`SELECT metadata FROM group_metadata WHERE jid = ?;`);
+  const result = stmt.get(jid) as { metadata: string } | undefined;
+
+  return result && result.metadata ? JSON.parse(result.metadata) : undefined;
+};
+
 export function upsertM(upsert: {
   messages: WAMessage[];
   type: MessageUpsertType;
   requestId?: string;
 }): void {
+  SqliteMemoryStore();
   const db = getDb();
   const stmt: StatementSync = db.prepare(`
         INSERT OR REPLACE INTO messages (
