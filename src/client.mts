@@ -6,7 +6,7 @@ import { DatabaseSync } from 'node:sqlite';
 import * as Logger from 'pino';
 
 import { useSqliteAuthState, CacheStore } from './utilities/index.mts';
-import { groupMetadata, Store, saveContact, groupSave } from './model/index.mts';
+import { groupMetadata, SqliteMemoryStore, groupSave, GroupMetaCache } from './model/index.mts';
 import { MessagesUpsert } from './index.mts';
 
 EventEmitter.defaultMaxListeners = 10000;
@@ -17,14 +17,10 @@ export const logger = Logger.pino({
 });
 
 export const client = async (database?: string): Promise<WASocket> => {
-  Store();
   const { state, saveCreds } = useSqliteAuthState(
     new DatabaseSync(database ? database : 'database.db'),
-    {
-      enableWAL: true,
-    },
   );
-
+  SqliteMemoryStore();
   const conn = makeWASocket({
     auth: {
       creds: state.creds,
@@ -67,18 +63,12 @@ export const client = async (database?: string): Promise<WASocket> => {
       if (event['messages.upsert']) {
         new MessagesUpsert(conn, event['messages.upsert']);
       }
-
-      if (event['contacts.update']) {
-        const update = event['contacts.update'];
-        if (update) {
-          saveContact(update);
-        }
-      }
     },
   );
 
   setInterval(async () => {
     try {
+      GroupMetaCache();
       const groups = await conn.groupFetchAllParticipating();
 
       for (const [id, metadata] of Object.entries(groups)) groupSave(id, metadata);

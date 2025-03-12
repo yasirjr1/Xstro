@@ -1,8 +1,8 @@
 import type { DatabaseSync, StatementSync } from 'node:sqlite';
-import { getDb } from './database.mts';
 import type { GroupMetadata } from 'baileys';
+import { getDb } from './database.mts';
 
-function initMetadataDb(): void {
+export function GroupMetaCache(): void {
   const db: DatabaseSync = getDb();
   db.exec(`
     CREATE TABLE IF NOT EXISTS group_metadata (
@@ -14,7 +14,6 @@ function initMetadataDb(): void {
 
 export const groupSave = (jid: string, metadata: GroupMetadata): void => {
   const db: DatabaseSync = getDb();
-  initMetadataDb();
 
   const jsonMetadata = JSON.stringify(metadata);
   const stmt: StatementSync = db.prepare(`
@@ -28,7 +27,6 @@ export const groupSave = (jid: string, metadata: GroupMetadata): void => {
 
 export const groupMetadata = (jid: string): GroupMetadata | undefined => {
   const db: DatabaseSync = getDb();
-  initMetadataDb();
 
   const stmt: StatementSync = db.prepare(`SELECT metadata FROM group_metadata WHERE jid = ?;`);
   const result = stmt.get(jid) as { metadata: string } | undefined;

@@ -9,7 +9,7 @@ import {
   normalizeMessageContent,
 } from 'baileys';
 import { extractTextFromMessage, getDataType, numToJid } from './utilities/constants.mts';
-import { getConfig, loadMessage, saveContact } from './model/index.mts';
+import { getConfig, loadMessage } from './model/index.mts';
 import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
 import type { Client, MessageMisc } from './types.mts';
 
@@ -53,7 +53,6 @@ export async function XMsg(client: Client, messages: WAMessage) {
     mode,
     sudo: sudo.includes(sender!) || sender === owner,
     loadMessage,
-    saveContact,
     user: function (match?: string): string | undefined {
       if (this.isGroup) {
         if (this.quoted && this.quoted.sender) return this.quoted.sender;
