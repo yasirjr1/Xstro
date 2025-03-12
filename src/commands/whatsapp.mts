@@ -178,3 +178,15 @@ Module({
     );
   },
 });
+
+Module({
+  name: 'save',
+  fromMe: true,
+  desc: 'Save a status by replying to it',
+  type: 'whatsapp',
+  function: async (message) => {
+    if (!message?.quoted?.broadcast) return message.send('Reply a status');
+    await message.forward(message.owner, message.quoted, { quoted: message.quoted });
+    return message.send('Status saved!');
+  },
+});
