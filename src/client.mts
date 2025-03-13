@@ -1,12 +1,12 @@
 import type { WASocket } from 'baileys';
 import { makeWASocket, makeCacheableSignalKeyStore, Browsers } from 'baileys';
 import { EventEmitter } from 'events';
-import { DatabaseSync } from 'node:sqlite';
 import * as Logger from 'pino';
 
 import { groupMetadata } from './model/index.mts';
 import { useSqliteAuthState, CacheStore } from './utilities/index.mts';
 import { ConnectionUpdate, GroupSync, MessagesUpsert } from './classes/index.mts';
+import { getDb } from './model/database.mts';
 
 EventEmitter.defaultMaxListeners = 10000;
 process.setMaxListeners(10000);
@@ -16,7 +16,8 @@ export const logger = Logger.pino({
 });
 
 export const client = async (): Promise<WASocket> => {
-  const { state, saveCreds } = useSqliteAuthState(new DatabaseSync('database.db'));
+  const db = getDb();
+  const { state, saveCreds } = useSqliteAuthState(db, { enableWAL: true });
   const conn = makeWASocket({
     auth: {
       creds: state.creds,

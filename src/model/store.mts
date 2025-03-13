@@ -1,5 +1,6 @@
 import { getDb } from './database.mts';
-import type { StatementSync, SupportedValueType, DatabaseSync } from 'node:sqlite';
+import type Database from 'better-sqlite3';
+import type { Statement } from 'better-sqlite3';
 import type { WAMessage, MessageUpsertType, GroupMetadata } from 'baileys';
 
 function SqliteMemoryStore(): void {
@@ -21,20 +22,20 @@ function SqliteMemoryStore(): void {
 }
 
 function GroupMetaCache(): void {
-  const db: DatabaseSync = getDb();
+  const db: Database.Database = getDb();
   db.exec(`
     CREATE TABLE IF NOT EXISTS group_metadata (
       jid TEXT PRIMARY KEY,
       metadata JSON
-    );
+    )
   `);
 }
 
 export const groupMetadata = (jid: string): GroupMetadata | undefined => {
   GroupMetaCache();
-  const db: DatabaseSync = getDb();
+  const db: Database.Database = getDb();
 
-  const stmt: StatementSync = db.prepare(`SELECT metadata FROM group_metadata WHERE jid = ?;`);
+  const stmt: Statement = db.prepare(`SELECT metadata FROM group_metadata WHERE jid = ?`);
   const result = stmt.get(jid) as { metadata: string } | undefined;
 
   return result && result.metadata ? JSON.parse(result.metadata) : undefined;
@@ -47,7 +48,7 @@ export function upsertM(upsert: {
 }): void {
   SqliteMemoryStore();
   const db = getDb();
-  const stmt: StatementSync = db.prepare(`
+  const stmt: Statement = db.prepare(`
         INSERT OR REPLACE INTO messages (
             remoteJid, 
             id, 
@@ -64,7 +65,7 @@ export function upsertM(upsert: {
   for (const message of upsert.messages) {
     const timestamp =
       typeof message.messageTimestamp === 'number' ? message.messageTimestamp : Date.now();
-    const params: SupportedValueType[] = [
+    const params = [
       message.key.remoteJid ?? null,
       message.key.id ?? null,
       message.key.fromMe ? 1 : 0,
@@ -75,7 +76,7 @@ export function upsertM(upsert: {
       upsert.requestId ?? null,
       upsert.type,
     ];
-    stmt.run(...params);
+    stmt.run(params); // better-sqlite3 uses run() without spread operator
   }
 }
 
@@ -83,7 +84,7 @@ export function loadMessage(
   id: string,
 ): { [key: string]: string | number | Long | null | undefined } | null {
   const db = getDb();
-  const stmt: StatementSync = db.prepare(`
+  const stmt: Statement = db.prepare(`
         SELECT data 
         FROM messages 
         WHERE id = ?

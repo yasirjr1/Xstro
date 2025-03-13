@@ -1,5 +1,5 @@
 import { getDb } from './database.mts';
-import type { StatementSync } from 'node:sqlite';
+import type { Statement } from 'better-sqlite3';
 import type { Config } from '../index.mts';
 
 function initConfigDb(): void {
@@ -13,7 +13,7 @@ function initConfigDb(): void {
         )
     `);
 
-  const stmtCheck: StatementSync = db.prepare('SELECT id FROM config LIMIT 1');
+  const stmtCheck: Statement = db.prepare('SELECT id FROM config LIMIT 1');
   const exists = stmtCheck.get() as { id: number } | undefined;
   if (!exists) {
     const defaultConfig = [
@@ -32,10 +32,13 @@ function initConfigDb(): void {
       { key: 'banned', value: '[]' },
     ];
 
-    const stmtInsert: StatementSync = db.prepare('INSERT INTO config (key, value) VALUES (?, ?)');
-    for (const config of defaultConfig) {
-      stmtInsert.run(config.key, config.value);
-    }
+    const stmtInsert: Statement = db.prepare('INSERT INTO config (key, value) VALUES (?, ?)');
+    const transaction = db.transaction((configs) => {
+      for (const config of configs) {
+        stmtInsert.run([config.key, config.value]);
+      }
+    });
+    transaction(defaultConfig);
   }
 }
 
@@ -43,7 +46,7 @@ export function getConfig(): Config {
   const db = getDb();
   initConfigDb();
 
-  const stmt: StatementSync = db.prepare('SELECT key, value FROM config');
+  const stmt: Statement = db.prepare('SELECT key, value FROM config');
   const rows = stmt.all() as { key: string; value: string }[];
   const configMap = Object.fromEntries(rows.map((row) => [row.key, row.value]));
 
@@ -87,23 +90,24 @@ export function editConfig(updates: Partial<Config>): Config | null {
   const keys = Object.keys(updates).filter((key) => allowedKeys.includes(key as keyof Config));
   if (!keys.length) return null;
 
-  const stmt: StatementSync = db.prepare(
-    'INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)',
-  );
-  for (const key of keys) {
-    const value = updates[key as keyof Config];
-    let dbValue: string;
+  const stmt: Statement = db.prepare('INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)');
+  const transaction = db.transaction((updateKeys) => {
+    for (const key of updateKeys) {
+      const value = updates[key as keyof Config];
+      let dbValue: string;
 
-    if (typeof value === 'boolean') {
-      dbValue = value ? '1' : '0';
-    } else if (Array.isArray(value)) {
-      dbValue = JSON.stringify(value);
-    } else {
-      dbValue = String(value);
+      if (typeof value === 'boolean') {
+        dbValue = value ? '1' : '0';
+      } else if (Array.isArray(value)) {
+        dbValue = JSON.stringify(value);
+      } else {
+        dbValue = String(value);
+      }
+
+      stmt.run([key, dbValue]);
     }
+  });
 
-    stmt.run(key, dbValue);
-  }
-
+  transaction(keys);
   return getConfig();
 }

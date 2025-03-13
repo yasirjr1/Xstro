@@ -1,9 +1,10 @@
-import type { DatabaseSync } from 'node:sqlite';
+import type { Database } from 'better-sqlite3';
+import type { Statement } from 'better-sqlite3';
 import type { AuthenticationCreds, AuthenticationState, SignalDataTypeMap } from 'baileys';
 import { initAuthCreds, BufferJSON, WAProto as proto } from 'baileys';
 
 export const useSqliteAuthState = (
-  database: DatabaseSync,
+  database: Database,
   config = {
     /**
      * Enable WAL mode for better concurrent performance
@@ -13,27 +14,31 @@ export const useSqliteAuthState = (
   },
 ): { state: AuthenticationState; saveCreds: () => void } => {
   database.exec(`
-        CREATE TABLE IF NOT EXISTS session (
-            name TEXT NOT NULL,  -- 'creds' or key type (e.g., 'app-state-sync-key')
-            id TEXT NOT NULL,    -- Unique identifier for the data (e.g., key ID or 'default' for creds)
-            value TEXT NOT NULL, -- JSON-encoded data
-            PRIMARY KEY (name, id)
-        ) WITHOUT ROWID;
-    `);
+    CREATE TABLE IF NOT EXISTS session (
+      name TEXT NOT NULL,
+      id TEXT NOT NULL,
+      value TEXT NOT NULL,
+      PRIMARY KEY (name, id)
+    ) WITHOUT ROWID;
+  `);
 
   if (config.enableWAL ?? true) {
     database.exec('PRAGMA journal_mode = WAL;');
   }
 
   let creds: AuthenticationCreds;
-  const credsStmt = database.prepare('SELECT value FROM session WHERE name = ? AND id = ?');
+  const credsStmt: Statement = database.prepare(
+    'SELECT value FROM session WHERE name = ? AND id = ?',
+  );
   const credsRow = credsStmt.get('creds', 'default') as { value: string } | undefined;
 
   if (credsRow) {
-    creds = JSON.parse(credsRow.value, BufferJSON.reviver);
+    creds = JSON.parse(credsRow.value, BufferJSON.reviver) as AuthenticationCreds;
   } else {
     creds = initAuthCreds();
-    const insertCreds = database.prepare('INSERT INTO session (name, id, value) VALUES (?, ?, ?)');
+    const insertCreds: Statement = database.prepare(
+      'INSERT INTO session (name, id, value) VALUES (?, ?, ?)',
+    );
     insertCreds.run('creds', 'default', JSON.stringify(creds, BufferJSON.replacer));
   }
 
@@ -42,13 +47,11 @@ export const useSqliteAuthState = (
       creds,
       keys: {
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        get: (type, ids) => {
+        get: (type, ids: string[]) => {
           const data: { [id: string]: SignalDataTypeMap[typeof type] } = {};
-          const stmt = database.prepare(
-            `SELECT id, value FROM session 
-                         WHERE name = ? AND id IN (${ids.map(() => '?').join(',')})`,
+          const stmt: Statement = database.prepare(
+            `SELECT id, value FROM session WHERE name = ? AND id IN (${ids.map(() => '?').join(',')})`,
           );
-
           const rows = stmt.all(type, ...ids) as Array<{ id: string; value: string }>;
 
           for (const row of rows) {
@@ -58,23 +61,24 @@ export const useSqliteAuthState = (
             }
             data[row.id] = value;
           }
-
           return data;
         },
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        set: (data) => {
+        set: (data: {
+          [key: string]: { [id: string]: SignalDataTypeMap[keyof SignalDataTypeMap] | null };
+        }) => {
           database.exec('BEGIN TRANSACTION');
           try {
-            const insertStmt = database.prepare(
+            const insertStmt: Statement = database.prepare(
               'INSERT OR REPLACE INTO session (name, id, value) VALUES (?, ?, ?)',
             );
-
-            const deleteStmt = database.prepare('DELETE FROM session WHERE name = ? AND id = ?');
+            const deleteStmt: Statement = database.prepare(
+              'DELETE FROM session WHERE name = ? AND id = ?',
+            );
 
             for (const category of Object.keys(data)) {
               for (const id of Object.keys(data[category])) {
                 const value = data[category][id];
-
                 if (value) {
                   insertStmt.run(category, id, JSON.stringify(value, BufferJSON.replacer));
                 } else {
@@ -92,7 +96,7 @@ export const useSqliteAuthState = (
     },
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     saveCreds: () => {
-      const stmt = database.prepare(
+      const stmt: Statement = database.prepare(
         'INSERT OR REPLACE INTO session (name, id, value) VALUES (?, ?, ?)',
       );
       stmt.run('creds', 'default', JSON.stringify(creds, BufferJSON.replacer));

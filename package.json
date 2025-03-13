@@ -19,6 +19,7 @@
     "homepage": "https://github.com/AstroX11/xstro#readme",
     "author": "AstroX11 <danielfx0012@gmail.com>",
     "devDependencies": {
+        "@types/better-sqlite3": "^7.6.12",
         "@types/cheerio": "^0.22.35",
         "eslint": "^9.18.0",
         "eslint-config-prettier": "^10.0.2",
@@ -29,6 +30,7 @@
     "dependencies": {
         "@hapi/boom": "^10.0.1",
         "baileys": "^6.7.16",
+        "better-sqlite3": "^11.8.1",
         "cheerio": "^1.0.0",
         "dotenv": "^16.4.7",
         "file-type": "20.4.0",
