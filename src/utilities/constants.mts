@@ -288,24 +288,3 @@ export const isMediaMessage = (message: WAMessage): boolean => {
     mediaMessageTypes.includes(content as (typeof mediaMessageTypes)[number])
   );
 };
-
-export async function streamToBuffer(stream: ReadableStream<Uint8Array>): Promise<Buffer> {
-  const chunks: Uint8Array[] = [];
-  const reader = stream.getReader();
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    if (value) chunks.push(value);
-  }
-
-  const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
-  const result = new Uint8Array(totalLength);
-  let offset = 0;
-  for (const chunk of chunks) {
-    result.set(chunk, offset);
-    offset += chunk.length;
-  }
-
-  return Buffer.from(result);
-}

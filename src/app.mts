@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import { checkNodeVersion, loadPlugins, client } from './index.mts';
 dotenv.config();
 
-const startBot = async (): Promise<void> => {
+const startApp = async (): Promise<void> => {
   await checkNodeVersion();
   await loadPlugins();
   await client();
@@ -13,4 +13,4 @@ const startBot = async (): Promise<void> => {
   }).listen(8000);
 };
 
-await startBot();
+await startApp();
