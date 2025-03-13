@@ -3,10 +3,10 @@ import { makeWASocket, makeCacheableSignalKeyStore, Browsers } from 'baileys';
 import { EventEmitter } from 'events';
 import * as Logger from 'pino';
 
+import { getDb } from './model/database.mts';
 import { groupMetadata } from './model/index.mts';
 import { useSqliteAuthState, CacheStore } from './utilities/index.mts';
 import { ConnectionUpdate, GroupSync, MessagesUpsert } from './classes/index.mts';
-import { getDb } from './model/database.mts';
 
 EventEmitter.defaultMaxListeners = 10000;
 process.setMaxListeners(10000);

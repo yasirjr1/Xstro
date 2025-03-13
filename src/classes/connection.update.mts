@@ -51,7 +51,7 @@ export class ConnectionUpdate {
       /** Pm2 restarts only works for productions */
       pm2.restart('xstro', async (error: Error) => {
         if (error) {
-          console.error('Issue occured while rebooting');
+          console.error('Issue occured while rebooting into a pm2 process');
         }
       });
     }

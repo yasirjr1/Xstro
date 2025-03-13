@@ -1,6 +1,6 @@
-import { Boom } from '@hapi/boom';
 import type { BaileysEventMap, WASocket } from 'baileys';
 import type { XMessage } from '../index.mts';
+import { Boom } from '@hapi/boom';
 import { XMsg, commands, getAntilink, getAntiword, isUrl, upsertM } from '../index.mts';
 
 export class MessagesUpsert {
