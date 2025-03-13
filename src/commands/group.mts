@@ -36,9 +36,6 @@ Module({
     if (!(await message.isBotAdmin())) {
       return message.send('I am not an Admin.');
     }
-    if (!match) {
-      return message.send('Provide a participant to kick.');
-    }
     const jid = message.user(match);
     if (!jid) return message.send('tag, reply or provide the user number');
     await message.groupParticipantsUpdate(message.jid, [jid], 'remove');
