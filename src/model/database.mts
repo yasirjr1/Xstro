@@ -1,15 +1,16 @@
-// database.mts
 import Database from 'better-sqlite3';
+import { logger } from '../client.mts';
 
 let database: Database.Database | null = null;
 
-/** Function that allows other functions to manage data in our Sqlite3 DataBase */
 export const getDb = (): Database.Database => {
   if (!database) {
     database = new Database('database.db', {
-      // better-sqlite3 options
-      verbose: console.log, // optional: for debugging
-      // foreign key constraints are enabled by default in better-sqlite3
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+      verbose: (message?: unknown, ...Args: unknown[]) => {
+        const msgs = String(message ?? 'No message');
+        logger.info(msgs, ...Args);
+      },
     });
   }
   return database;

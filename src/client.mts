@@ -12,7 +12,7 @@ EventEmitter.defaultMaxListeners = 10000;
 process.setMaxListeners(10000);
 
 export const logger = Logger.pino({
-  level: process.env.DEBUG ? 'info' : 'silent',
+  level: 'info',
 });
 
 export const client = async (): Promise<WASocket> => {
