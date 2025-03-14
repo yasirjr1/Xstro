@@ -9,7 +9,8 @@
         "restart": "yarn stop && yarn start",
         "dev": "ts-node --esm src/main.mts",
         "stop": "pm2 stop xstro",
-        "lint": "yarn run eslint . --fix"
+        "lint": "yarn run eslint . --fix",
+        "test": "ts-node --esm src/test/tests.mts"
     },
     "license": "MIT",
     "repository": {

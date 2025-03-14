@@ -220,3 +220,52 @@ Module({
     }
   },
 });
+
+Module({
+  name: 'tag',
+  fromMe: false,
+  isGroup: true,
+  desc: 'Mention everyone in a group without seeing the mentions',
+  type: 'group',
+  function: async (message, match) => {
+    const allmemebers = (await message.groupMetadata(message.jid)).participants;
+    const participants = allmemebers
+      .filter((participant) => participant.id)
+      .map((participant) => participant.id);
+
+    if (!match && !message.quoted) return message.send('Reply or type anything to tag with');
+
+    if (match || message.quoted?.text) {
+      return await message.send(message!?.quoted!?.text! ?? match, {
+        mentions: [...participants],
+      });
+    }
+
+    if (message.quoted) {
+      return await message.sendMessage(message.jid, {
+        forward: message.quoted,
+        mentions: [...participants],
+      });
+    }
+  },
+});
+
+Module({
+  name: 'tagall',
+  fromMe: false,
+  isGroup: true,
+  desc: 'Mention everyone in group',
+  type: 'group',
+  function: async (message, match) => {
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need admin');
+
+    const { participants } = await message.groupMetadata(message.jid);
+    if (!participants?.length) return message.send('No participants');
+
+    const ids = participants.filter((p) => p.id).map((p) => p.id);
+    const text = `${match?.trim() ? `Message: ${match}\n` : ''}${ids.map((id) => `\n@${id.split('@')[0]}`).join('')}`;
+
+    return message.send(text, { mentions: ids });
+  },
+});

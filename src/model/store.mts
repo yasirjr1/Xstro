@@ -1,7 +1,7 @@
 import { getDb } from './database.mts';
 import type Database from 'better-sqlite3';
 import type { Statement } from 'better-sqlite3';
-import type { WAMessage, MessageUpsertType, GroupMetadata } from 'baileys';
+import { type WAMessage, type MessageUpsertType, type GroupMetadata, WAProto } from 'baileys';
 
 function SqliteMemoryStore(): void {
   const db = getDb();
@@ -27,6 +27,19 @@ function GroupMetaCache(): void {
     CREATE TABLE IF NOT EXISTS group_metadata (
       jid TEXT PRIMARY KEY,
       metadata JSON
+    )
+  `);
+}
+
+function ContactStore(): void {
+  const db: Database.Database = getDb();
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS contacts (
+      jid TEXT PRIMARY KEY,
+      pushName TEXT,
+      verifiedName TEXT,
+      lid TEXT,
+      bio TEXT
     )
   `);
 }
@@ -76,19 +89,50 @@ export function upsertM(upsert: {
       upsert.requestId ?? null,
       upsert.type,
     ];
-    stmt.run(params); // better-sqlite3 uses run() without spread operator
+    stmt.run(params);
   }
 }
 
-export function loadMessage(
-  id: string,
-): { [key: string]: string | number | Long | null | undefined } | null {
+export function loadMessage(id: string): WAMessage | null {
   const db = getDb();
   const stmt: Statement = db.prepare(`
-        SELECT data 
-        FROM messages 
-        WHERE id = ?
-    `);
+      SELECT data 
+      FROM messages 
+      WHERE id = ?
+  `);
   const message = stmt.get(id) as { data: string } | undefined;
-  return message ? JSON.parse(message.data) : null;
+
+  return message
+    ? WAProto.WebMessageInfo.fromObject(JSON.parse(message.data) as { [k: string]: unknown })
+    : null;
+}
+
+export function saveContact(contact: {
+  jid: string;
+  pushName?: string | null | undefined;
+  verifiedName?: string | null | undefined;
+  lid?: string | null | undefined;
+  bio?: string | null | undefined;
+}): void {
+  ContactStore();
+  const db = getDb();
+  const stmt: Statement = db.prepare(`
+    INSERT OR REPLACE INTO contacts (
+      jid,
+      pushName,
+      verifiedName,
+      lid,
+      bio
+    ) VALUES (?, ?, ?, ?, ?)
+  `);
+
+  const params = [
+    contact.jid,
+    contact.pushName ?? null,
+    contact.verifiedName ?? null,
+    contact.lid ?? null,
+    contact.bio ?? null,
+  ];
+
+  stmt.run(params);
 }

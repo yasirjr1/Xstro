@@ -1,7 +1,15 @@
 import type { BaileysEventMap, WASocket } from 'baileys';
 import type { XMessage } from '../index.mts';
 import { Boom } from '@hapi/boom';
-import { XMsg, commands, getAntilink, getAntiword, isUrl, upsertM } from '../index.mts';
+import {
+  XMsg,
+  commands,
+  getAntilink,
+  getAntiword,
+  isUrl,
+  saveContact,
+  upsertM,
+} from '../index.mts';
 
 export class MessagesUpsert {
   constructor(client: WASocket, upserts: BaileysEventMap['messages.upsert']) {
@@ -22,11 +30,13 @@ export class MessagesUpsert {
     await Promise.all(
       messages.map(async (msg) => {
         const xMsg = await XMsg(this.client, msg);
+        console.log(xMsg.message?.imageMessage?.contextInfo?.mentionedJid);
         await Promise.all([
           this.executeCommand(xMsg),
           this.evaluator(xMsg),
           this.Antilink(xMsg),
           this.Antiword(xMsg),
+          this.saveContacts(xMsg),
         ]);
       }),
     );
@@ -64,7 +74,8 @@ export class MessagesUpsert {
 
     try {
       const result = await eval(`(async () => { ${message.text.slice(2)} })()`);
-      await message.send(String(result));
+      const util = await import('util');
+      await message.send(util.inspect(result, { depth: 5 }));
     } catch (error) {
       await message.send('Error: ' + (error instanceof Error ? error.message : String(error)));
     }
@@ -107,5 +118,17 @@ export class MessagesUpsert {
         mentions: [message.sender!],
       });
     }
+  }
+  private async saveContacts(message: XMessage): Promise<void> {
+    const bio_details = await message.fetchStatus(message.sender!).catch(() => null);
+    const Info = (bio_details as unknown as { status: { status: string; setAt: string } }[])?.[0];
+    const bio_text = Info?.status?.status ?? null;
+    saveContact({
+      jid: message.sender!,
+      pushName: message.pushName,
+      verifiedName: message.verifiedBizName,
+      lid: null,
+      bio: bio_text,
+    });
   }
 }
