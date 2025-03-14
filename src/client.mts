@@ -31,13 +31,17 @@ export const client = async (): Promise<WASocket> => {
   });
 
   conn.ev.process(async (events) => {
-    const event = events;
+    if (events['creds.update']) {
+      saveCreds();
+    }
 
-    if (event['connection.update']) new ConnectionUpdate(conn, event['connection.update']);
+    if (events['connection.update']) {
+      new ConnectionUpdate(conn, events['connection.update']);
+    }
 
-    if (event['creds.update']) saveCreds();
-
-    if (event['messages.upsert']) new MessagesUpsert(conn, event['messages.upsert']);
+    if (events['messages.upsert']) {
+      new MessagesUpsert(conn, events['messages.upsert']);
+    }
   });
 
   /** Save Group Metadata and avoid reduant requests to WA Servers */
