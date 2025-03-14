@@ -838,10 +838,10 @@ basic-ftp@^5.0.2:
   resolved "https://registry.npmjs.org/basic-ftp/-/basic-ftp-5.0.5.tgz#14a474f5fffecca1f4f406f1c26b18f800225ac0"
   integrity sha512-4Bcg1P8xhUuqcii/S0Z9wiHIrQVPMermM1any+MX5GeGD7faD3/msQUDGLol9wOcz4/jbg/WJnGqoJF6LiBdtg==
 
-better-sqlite3@^11.8.1:
-  version "11.8.1"
-  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-11.8.1.tgz#bcb1c494984065a7ed76a5df5ecbcb0f068d47fa"
-  integrity sha512-9BxNaBkblMjhJW8sMRZxnxVTRgbRmssZW0Oxc1MPBTfiR+WW21e2Mk4qu8CzrcZb1LwPCnFsfDEzq+SNcBU8eg==
+better-sqlite3@^11.9.0:
+  version "11.9.0"
+  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-11.9.0.tgz#465eb9f382ce1c1d1bde7ad7a5e5618c2056437c"
+  integrity sha512-4b9xYnoaskj8eIkke9ZCB42p5bOPabptSku8Rl4Yww70Jf+aHeLvrIjXDJrKQxUEjdppsFb+fdJSjoH4TklROA==
   dependencies:
     bindings "^1.5.0"
     prebuild-install "^7.1.1"
@@ -1589,10 +1589,10 @@ file-entry-cache@^8.0.0:
   dependencies:
     flat-cache "^4.0.0"
 
-file-type@20.4.0:
-  version "20.4.0"
-  resolved "https://registry.npmjs.org/file-type/-/file-type-20.4.0.tgz#76efc24eca5c36e0abcb9bf86676b633e7838c71"
-  integrity sha512-+NZeExsi4G6EWaMbSmvBeCoqsj9EqNvOj1o/0uPVPW4O51FSCmxFlNEp/PitsqBMCbax4cGoaYmnUK5FLTuG4g==
+file-type@20.4.1:
+  version "20.4.1"
+  resolved "https://registry.yarnpkg.com/file-type/-/file-type-20.4.1.tgz#8a58cf0922c6098af0ca5d84d5cf859c0c0f56a5"
+  integrity sha512-hw9gNZXUfZ02Jo0uafWLaFVPter5/k2rfcrjFJJHX/77xtSDOfJuEFb6oKlFV86FLP1SuyHMW1PSk0U9M5tKkQ==
   dependencies:
     "@tokenizer/inflate" "^0.2.6"
     strtok3 "^10.2.0"

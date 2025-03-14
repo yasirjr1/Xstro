@@ -31,10 +31,10 @@
     "dependencies": {
         "@hapi/boom": "^10.0.1",
         "baileys": "^6.7.16",
-        "better-sqlite3": "^11.8.1",
+        "better-sqlite3": "^11.9.0",
         "cheerio": "^1.0.0",
         "dotenv": "^16.4.7",
-        "file-type": "20.4.0",
+        "file-type": "20.4.1",
         "got": "^14.4.6",
         "link-preview-js": "^3.0.14",
         "node-webpmux": "^3.2.0",
