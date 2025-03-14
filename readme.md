@@ -3,10 +3,6 @@
 > [!IMPORTANT]  
 > This open-source WhatsApp bot, under the MIT License, is free to use, modify, and distribute. It’s not designed to violate WhatsApp’s Terms of Service, but misuse is your responsibility—I’m not liable for bans. Related projects are also open-source for independent use. If you use my pairing service, I won’t access your data, and it’s deleted after 2 months. I don’t support storing sessions in my database; manage your own and never share sensitive info. This software is provided as-is, with no warranties—use at your own risk.
 
-## SETUP
-
-[![Tap Here](https://img.shields.io/badge/TAP_HERE-black?style=for-the-badge&logo=rocket)](https://github.com/AstroX11/xstro-bot)
-
 ### MIT License
 
 Copyright (c) 2024 AstroX10
