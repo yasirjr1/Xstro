@@ -59,11 +59,6 @@ export class MessagesUpsert {
         await message.react('⏳');
         await cmd.function!(message, args);
       } catch (err) {
-        const cmdName = cmd.name.toString().toLowerCase().split(/\W+/)[2];
-        await message.send(
-          `\`\`\`─━❲ ERROR REPORT ❳━─\n\n@${message.sender?.split('@')[0]}\nFrom: ${cmdName}\nDetails: ${err.message}\`\`\``,
-          { jid: message.owner, mentions: [message?.sender!] },
-        );
         console.error(new Boom(err));
       }
     }

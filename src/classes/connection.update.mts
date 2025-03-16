@@ -2,6 +2,7 @@ import type { BaileysEventMap, WASocket } from 'baileys';
 import type { Boom } from '@hapi/boom';
 import { DisconnectReason } from 'baileys';
 import pm2 from 'pm2';
+import { commands } from '../plugins.mts';
 
 export class ConnectionUpdate {
   private client: WASocket;
@@ -58,10 +59,17 @@ export class ConnectionUpdate {
   }
 
   private async handleOpen(): Promise<void> {
-    /** TO DO add more features once the connection is successsfully opened */
+    const botCommands = commands.filter(
+      (cmd) => cmd.name && !cmd.dontAddCommandList && !cmd.name.toString().includes('undefined'),
+    ).length;
+
+    const info =
+      `\`\`\`Bot is online!\nOwner: ${this.client.user?.name ?? 'Unknown'}\nPlugins: ${botCommands}\`\`\``.trim();
+
     await this.client.sendMessage(this.client?.user?.id!, {
-      text: '```Bot is online now!```',
+      text: info,
     });
+
     console.log(`Connected!`);
   }
 }
