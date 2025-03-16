@@ -1,4 +1,4 @@
-import { fetchJson, isUrl, Module, uploadFile, urlBuffer } from '../index.mts';
+import { fetchJson, isUrl, Module, numToJid, uploadFile, urlBuffer } from '../index.mts';
 
 Module({
   name: 'url',
@@ -81,5 +81,21 @@ Module({
     return profile_image
       ? await message.send(await urlBuffer(profile_image), { caption })
       : await message.send(caption);
+  },
+});
+
+Module({
+  name: 'forward',
+  fromMe: true,
+  desc: 'Forward any message to someone',
+  type: 'utilities',
+  function: async (message, match) => {
+    if (!match) return message.send('Please provide a user number to forward the message to!');
+    const jid = numToJid(match.trim());
+    if (!(await message.onWhatsApp(jid))?.[0]?.exists)
+      return message.send('The provided WhatsApp number seems to be invalid');
+    if (!message.quoted) return message.send('Please reply to a message to forward it!');
+    await message.forward(jid, message.quoted, { quoted: message.quoted });
+    return message.send('Message forwarded successfully');
   },
 });
