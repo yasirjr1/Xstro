@@ -3,7 +3,7 @@
     "version": "6.0.0",
     "description": "Simple WA bot in typescript.",
     "type": "module",
-    "main": "start.mts",
+    "main": "./src/main.mts",
     "scripts": {
         "start": "pm2 start src/main.mts --name xstro --attach",
         "restart": "yarn stop && yarn start",
