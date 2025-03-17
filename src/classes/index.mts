@@ -1,3 +1,3 @@
-export * from './message.upsert.mts';
-export * from './connection.update.mts';
-export * from './group.cache.mts';
+export * from './messageUpsert.mts';
+export * from './connectionSync.mts';
+export * from './groupSync.mts';
