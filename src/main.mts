@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import { checkNodeVersion, loadPlugins, client } from './index.mts';
+import { checkNodeVersion, getSession, loadPlugins, client } from './index.mts';
 
 dotenv.config();
 
 const startApp = async (): Promise<void> => {
   await checkNodeVersion();
+  await getSession();
   await loadPlugins();
   await client();
 
