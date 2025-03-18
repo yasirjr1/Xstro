@@ -15,6 +15,6 @@ export const getSession = async (
     sessionId,
     server ?? 'https://xstrosession.koyeb.app/session?session=',
   );
-  const serverIDR = await cipher.fetchCipherSession();
-  return cipher.decodeAndSaveCipher(serverIDR);
+  const IDR = await cipher.fetchCipherSession();
+  return cipher.decodeAndSaveCipher(IDR);
 };
