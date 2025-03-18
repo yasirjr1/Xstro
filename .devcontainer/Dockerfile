@@ -1,6 +1,5 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
-# Install additional media processing tools and dependencies
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libavcodec-dev \
@@ -17,13 +16,4 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install additional Python packages for media processing
-RUN pip3 install \
-    Pillow \
-    moviepy \
-    opencv-python \
-    numpy \
-    pydub
-
-# Set working directory
 WORKDIR /workspaces
