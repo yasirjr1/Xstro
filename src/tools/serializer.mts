@@ -8,15 +8,15 @@ import {
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import { Boom } from '@hapi/boom';
-import { extractTextFromMessage, numToJid } from './utilities/constants.mts';
-import { getConfig, loadMessage } from './model/index.mts';
+import { extractTextFromMessage, numToJid } from '../utilities/constants.mts';
+import { getConfig, loadMessage } from '../model/index.mts';
 import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
-import type { Client, MessageMisc } from './types.mts';
-import { sendClientMessage } from './tools/message-send.mts';
+import type { Client, MessageMisc } from '../types.mts';
+import { sendClientMessage } from './message-send.mts';
 
 /** Message repack to simplfy over all bot message handling */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export async function XMsg(client: Client, messages: WAMessage) {
+export async function serialize(client: Client, messages: WAMessage) {
   const normalizedMessages = {
     ...messages,
     message: normalizeMessageContent(messages?.message),
@@ -106,7 +106,12 @@ export async function XMsg(client: Client, messages: WAMessage) {
     ) {
       const jid = options?.jid ?? this.jid;
       const updatedOptions = { ...options, jid };
-      return sendClientMessage(async (c, m) => await XMsg(c, m), client, content, updatedOptions);
+      return sendClientMessage(
+        async (c, m) => await serialize(c, m),
+        client,
+        content,
+        updatedOptions,
+      );
     },
     edit: async function (text: string): Promise<WAMessage | undefined> {
       return await client.sendMessage(this.jid, {

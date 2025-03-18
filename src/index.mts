@@ -1,5 +1,5 @@
 export * from './client.mts';
-export * from './message.mts';
+export * from './tools/serializer.mts';
 export * from './model/index.mts';
 export * from './plugins.mts';
 export * from './types.mts';

@@ -1,5 +1,5 @@
 import type { WASocket, WAMessage } from 'baileys';
-import type { XMsg } from './message.mts';
+import type { serialize } from './tools/serializer.mts';
 
 export type Client = WASocket;
 
@@ -75,4 +75,4 @@ export type MessageMisc = {
   quoted?: WAMessage;
 };
 
-export type XMessage = ReturnType<typeof XMsg> extends Promise<infer T> ? T : undefined;
+export type XMessage = ReturnType<typeof serialize> extends Promise<infer T> ? T : undefined;

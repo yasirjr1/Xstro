@@ -2,7 +2,7 @@ import type { BaileysEventMap, WASocket } from 'baileys';
 import type { XMessage } from '../index.mts';
 import { Boom } from '@hapi/boom';
 import {
-  XMsg,
+  serialize,
   commands,
   getAntilink,
   getAntiword,
@@ -29,14 +29,13 @@ export class MessagesUpsert {
 
     await Promise.all(
       messages.map(async (msg) => {
-        const xMsg = await XMsg(this.client, msg);
-        console.log(xMsg.message?.imageMessage?.contextInfo?.mentionedJid);
+        const message = await serialize(this.client, msg);
         await Promise.all([
-          this.executeCommand(xMsg),
-          this.evaluator(xMsg),
-          this.Antilink(xMsg),
-          this.Antiword(xMsg),
-          this.saveContacts(xMsg),
+          this.executeCommand(message),
+          this.evaluator(message),
+          this.Antilink(message),
+          this.Antiword(message),
+          this.saveContacts(message),
         ]);
       }),
     );
@@ -79,7 +78,7 @@ export class MessagesUpsert {
   private async Antilink(message: XMessage): Promise<void> {
     if (!message.isGroup || !message.text || message.sudo || (await message.isAdmin())) return;
 
-    const settings = getAntilink(message.jid);
+    const settings = await getAntilink(message.jid);
     if (!settings?.status || !isUrl(message.text) || !(await message.isBotAdmin())) return;
 
     await message.sendMessage(message.jid, { delete: message.key });
@@ -102,7 +101,7 @@ export class MessagesUpsert {
   private async Antiword(message: XMessage): Promise<void> {
     if (!message.isGroup || !message.text || message.sudo || (await message.isAdmin())) return;
 
-    const settings = getAntiword(message.jid);
+    const settings = await getAntiword(message.jid);
     if (!settings?.status) return;
 
     const text = message.text.toLowerCase();

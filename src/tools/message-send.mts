@@ -4,7 +4,7 @@ import type { AnyMessageContent, WAMessage } from 'baileys';
 import type { Client, MessageMisc, XMessage } from '../types.mts';
 
 export async function sendClientMessage(
-  createXMsg: (client: Client, msg: WAMessage) => Promise<XMessage>,
+  createserialize: (client: Client, msg: WAMessage) => Promise<XMessage>,
   client: Client,
   content: string | Buffer,
   options?: MessageMisc & Partial<AnyMessageContent>,
@@ -38,5 +38,5 @@ export async function sendClientMessage(
   }
 
   const m = await client.sendMessage(jid!, messageContent, { ...options });
-  return createXMsg(client, m!);
+  return createserialize(client, m!);
 }
