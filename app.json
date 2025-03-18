@@ -1,23 +1,34 @@
 {
     "name": "xstro",
-    "description": "OpenSource WhatsApp Bot",
+    "description": "Simple, free, open-source WhatsApp bot.",
     "logo": "https://avatars.githubusercontent.com/u/188756392?v=4",
     "repository": "https://github.com/AstroX11/Xstro",
     "stack": "container",
     "success_url": "/",
     "env": {
         "SESSION_ID": {
-            "description": "SESSION HERE",
+            "description": "Session id goes here",
             "required": true
         },
-        "BOT_INFO": {
-            "description": "BOT OWNER AND BOT NAME",
-            "value": "αѕтяσχ11;χѕтяσ м∂",
+        "SESSION_URL": {
+            "description": "Server URL for the custom session ID",
             "required": false
         },
+        "DATABASE_URL": {
+            "description": "Custom database path for SQLite",
+            "required": false
+        },
+        "META_DATA": {
+            "description": "Metadata such as sticker data and bot name",
+            "required": false
+        },
+        "WARN_COUNT": {
+            "description": "Number of warnings before action is taken",
+            "required": false,
+            "value": 3
+        },
         "TIME_ZONE": {
-            "description": "TIMEZONE",
-            "value": "Asia/Kolkata",
+            "description": "Time zone of the bot",
             "required": false
         }
     }
