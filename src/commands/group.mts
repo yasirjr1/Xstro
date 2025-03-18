@@ -259,13 +259,20 @@ Module({
   function: async (message, match) => {
     if (!(await message.isAdmin())) return message.send('Admin only');
     if (!(await message.isBotAdmin())) return message.send('I need admin');
-
     const { participants } = await message.groupMetadata(message.jid);
     if (!participants?.length) return message.send('No participants');
-
-    const ids = participants.filter((p) => p.id).map((p) => p.id);
-    const text = `${match?.trim() ? `Message: ${match}\n` : ''}${ids.map((id) => `\n@${id.split('@')[0]}`).join('')}`;
-
-    return message.send(text, { mentions: ids });
+    return message.relayMessage(
+      message.jid,
+      {
+        extendedTextMessage: {
+          text: `@${message.jid} ${match ?? ''}`,
+          contextInfo: {
+            mentionedJid: participants.filter((p) => p.id).map((p) => p.id),
+            groupMentions: [{ groupJid: message.jid, groupSubject: 'everyone' }],
+          },
+        },
+      },
+      {},
+    );
   },
 });
