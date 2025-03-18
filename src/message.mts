@@ -8,17 +8,18 @@ import {
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import { Boom } from '@hapi/boom';
-import { extractTextFromMessage, getDataType, numToJid } from './utilities/constants.mts';
+import { extractTextFromMessage, numToJid } from './utilities/constants.mts';
 import { getConfig, loadMessage } from './model/index.mts';
 import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
 import type { Client, MessageMisc } from './types.mts';
+import { sendClientMessage } from './tools/message-send.mts';
 
 /** Message repack to simplfy over all bot message handling */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function XMsg(client: Client, messages: WAMessage) {
   const normalizedMessages = {
     ...messages,
-    message: normalizeMessageContent(messages.message),
+    message: normalizeMessageContent(messages?.message),
   };
   const { key, message, ...msg } = normalizedMessages;
   const { user, sendMessage } = client;
@@ -33,11 +34,13 @@ export async function XMsg(client: Client, messages: WAMessage) {
   const mtype = getContentType(message);
   function hasContextInfo(msg: unknown): msg is { contextInfo: WAContextInfo } {
     if (!msg || typeof msg !== 'object' || msg === null) return false;
-    return 'contextInfo' in msg && msg.contextInfo !== null && typeof msg.contextInfo === 'object';
+    return (
+      'contextInfo' in msg && msg?.contextInfo !== null && typeof msg?.contextInfo === 'object'
+    );
   }
   const messageContent = message?.[mtype!];
-  const Quoted = hasContextInfo(messageContent) ? messageContent.contextInfo : undefined;
-  const quotedM = Quoted ? normalizeMessageContent(Quoted!.quotedMessage) : undefined;
+  const Quoted = hasContextInfo(messageContent) ? messageContent!?.contextInfo : undefined;
+  const quotedM = Quoted ? normalizeMessageContent(Quoted!?.quotedMessage) : undefined;
 
   return {
     key,
@@ -102,46 +105,19 @@ export async function XMsg(client: Client, messages: WAMessage) {
       options?: MessageMisc & Partial<AnyMessageContent>,
     ) {
       const jid = options?.jid ?? this.jid;
-      const explicitType = options?.type;
-      const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
-      let messageContent: AnyMessageContent;
-
-      const type = explicitType || (await getDataType(content)).contentType;
-      const mimeType = explicitType ? options?.mimetype : (await getDataType(content)).mimeType;
-
-      if (type === 'text') {
-        messageContent = { text: content.toString(), ...options };
-      } else if (type === 'image') {
-        messageContent = { image: buffer, ...options };
-      } else if (type === 'audio') {
-        messageContent = { audio: buffer, ...options };
-      } else if (type === 'video') {
-        messageContent = { video: buffer, ...options };
-      } else if (type === 'sticker') {
-        messageContent = { sticker: buffer, ...options };
-      } else if (type === 'document') {
-        messageContent = {
-          document: buffer,
-          mimetype: mimeType || 'application/octet-stream',
-          ...options,
-        };
-      } else {
-        throw new Boom('Unknown content type');
-      }
-
-      const m = await sendMessage(jid!, messageContent, { ...options });
-      return XMsg(client, m!);
+      const updatedOptions = { ...options, jid };
+      return sendClientMessage(async (c, m) => await XMsg(c, m), client, content, updatedOptions);
     },
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    edit: async function (text: string) {
-      const msg = await client.sendMessage(this.jid, {
+    edit: async function (text: string): Promise<WAMessage | undefined> {
+      return await client.sendMessage(this.jid, {
         text: text,
         edit: this.quoted ? this.quoted.key : this.key,
       });
-      return XMsg(client, msg!);
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async downloadM(message: WAMessage, shouldSaveasFile?: boolean): Promise<Buffer | any> {
+    async downloadM(
+      message: WAMessage,
+      shouldSaveasFile?: boolean,
+    ): Promise<string | Buffer<ArrayBufferLike>> {
       try {
         const media = await downloadMediaMessage(message, 'buffer', {});
         if (shouldSaveasFile) {
@@ -161,28 +137,21 @@ export async function XMsg(client: Client, messages: WAMessage) {
       jid: string,
       message: WAMessage,
       opts?: { quoted: WAMessage },
-    ): Promise<void | unknown> {
+    ): Promise<WAMessage | undefined> {
       if (!message || !jid) {
         throw new Boom('Illegal there must be a Vaild Web Message and a Jid');
       }
-      const m = await sendMessage(jid, { forward: message, ...opts }, { ...opts });
-      return XMsg(client, m!);
+      return await sendMessage(jid, { forward: message, ...opts }, { ...opts });
     },
-    react: async function (emoji: string, message?: WAMessage): Promise<void | unknown> {
-      const emojiRegex = /\p{Emoji}/u;
-      if (!emoji || !emojiRegex.test(emoji)) {
-        throw new Boom('Illegal, there must be an emoji');
-      }
-      const m = await sendMessage(this.jid, {
+    react: async function (emoji: string, message?: WAMessage): Promise<WAMessage | undefined> {
+      return await sendMessage(this.jid, {
         react: { text: emoji, key: message?.key ? this.quoted?.key : this.key },
       });
-      return XMsg(client, m!);
     },
-    delete: async function (message?: WAMessage): Promise<unknown | void> {
-      const m = await sendMessage(this.jid, {
+    delete: async function (message?: WAMessage): Promise<WAMessage | undefined> {
+      return await sendMessage(this.jid, {
         delete: message!.key ? this.quoted!.key : this!.key,
       });
-      return XMsg(client, m!);
     },
     ...msg,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type
