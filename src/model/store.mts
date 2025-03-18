@@ -3,8 +3,8 @@ import type Database from 'better-sqlite3';
 import type { Statement } from 'better-sqlite3';
 import { type WAMessage, type MessageUpsertType, type GroupMetadata, WAProto } from 'baileys';
 
-function SqliteMemoryStore(): void {
-  const db = getDb();
+async function SqliteMemoryStore(): Promise<void> {
+  const db = await getDb();
   db.exec(`
         CREATE TABLE IF NOT EXISTS messages (
             remoteJid TEXT,
@@ -21,8 +21,8 @@ function SqliteMemoryStore(): void {
     `);
 }
 
-function GroupMetaCache(): void {
-  const db: Database.Database = getDb();
+async function GroupMetaCache(): Promise<void> {
+  const db: Database.Database = await getDb();
   db.exec(`
     CREATE TABLE IF NOT EXISTS group_metadata (
       jid TEXT PRIMARY KEY,
@@ -31,8 +31,8 @@ function GroupMetaCache(): void {
   `);
 }
 
-function ContactStore(): void {
-  const db: Database.Database = getDb();
+async function ContactStore(): Promise<void> {
+  const db: Database.Database = await getDb();
   db.exec(`
     CREATE TABLE IF NOT EXISTS contacts (
       jid TEXT PRIMARY KEY,
@@ -44,23 +44,23 @@ function ContactStore(): void {
   `);
 }
 
-export const groupMetadata = (jid: string): GroupMetadata | undefined => {
-  GroupMetaCache();
-  const db: Database.Database = getDb();
+export async function groupMetadata(jid: string): Promise<GroupMetadata | undefined> {
+  await GroupMetaCache();
+  const db: Database.Database = await getDb();
 
   const stmt: Statement = db.prepare(`SELECT metadata FROM group_metadata WHERE jid = ?`);
   const result = stmt.get(jid) as { metadata: string } | undefined;
 
   return result && result.metadata ? JSON.parse(result.metadata) : undefined;
-};
+}
 
-export function upsertM(upsert: {
+export async function upsertM(upsert: {
   messages: WAMessage[];
   type: MessageUpsertType;
   requestId?: string;
-}): void {
-  SqliteMemoryStore();
-  const db = getDb();
+}): Promise<void> {
+  await SqliteMemoryStore();
+  const db = await getDb();
   const stmt: Statement = db.prepare(`
         INSERT OR REPLACE INTO messages (
             remoteJid, 
@@ -93,8 +93,8 @@ export function upsertM(upsert: {
   }
 }
 
-export function loadMessage(id: string): WAMessage | null {
-  const db = getDb();
+export async function loadMessage(id: string): Promise<WAMessage | null> {
+  const db = await getDb();
   const stmt: Statement = db.prepare(`
       SELECT data 
       FROM messages 
@@ -107,15 +107,15 @@ export function loadMessage(id: string): WAMessage | null {
     : null;
 }
 
-export function saveContact(contact: {
+export async function saveContact(contact: {
   jid: string;
   pushName?: string | null | undefined;
   verifiedName?: string | null | undefined;
   lid?: string | null | undefined;
   bio?: string | null | undefined;
-}): void {
-  ContactStore();
-  const db = getDb();
+}): Promise<void> {
+  await ContactStore();
+  const db = await getDb();
   const stmt: Statement = db.prepare(`
     INSERT OR REPLACE INTO contacts (
       jid,

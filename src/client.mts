@@ -4,8 +4,8 @@ import { EventEmitter } from 'events';
 import * as Logger from 'pino';
 
 import { getDb } from './model/database.mts';
-import { groupMetadata } from './model/index.mts';
-import { useSqliteAuthState, CacheStore } from './utilities/index.mts';
+import { groupMetadata, useSqliteAuthState } from './model/index.mts';
+import { CacheStore } from './utilities/index.mts';
 import { ConnectionUpdate, GroupSync, MessagesUpsert } from './classes/index.mts';
 
 EventEmitter.defaultMaxListeners = 10000;
@@ -16,8 +16,8 @@ export const logger = Logger.pino({
 });
 
 export const client = async (): Promise<WASocket> => {
-  const db = getDb();
-  const { state, saveCreds } = useSqliteAuthState(db, { enableWAL: true });
+  const db = await getDb();
+  const { state, saveCreds } = await useSqliteAuthState(db);
   const conn = makeWASocket({
     auth: {
       creds: state.creds,
@@ -32,7 +32,7 @@ export const client = async (): Promise<WASocket> => {
 
   conn.ev.process(async (events) => {
     if (events['creds.update']) {
-      saveCreds();
+      await saveCreds();
     }
 
     if (events['connection.update']) {
@@ -42,11 +42,15 @@ export const client = async (): Promise<WASocket> => {
     if (events['messages.upsert']) {
       new MessagesUpsert(conn, events['messages.upsert']);
     }
+
+    if (events['message-receipt.update']) {
+      logger.info(events['message-receipt.update'][0]);
+    }
   });
 
-  /** Save Group Metadata and avoid reduant requests to WA Servers */
+  // Saves Group Metadata for super fast Group Processing
   const groupSync = new GroupSync(conn);
-  groupSync.start();
+  await groupSync.start();
 
   return conn;
 };

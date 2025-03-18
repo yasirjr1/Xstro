@@ -9,7 +9,7 @@ Module({
     if (!match) {
       return message.send(`Usage: ${message.prefix}setprefix .,/*`);
     }
-    editConfig({ prefix: Array.from(match) });
+    await editConfig({ prefix: Array.from(match) });
     return message.send('Prefix Updated');
   },
 });
@@ -24,10 +24,10 @@ Module({
       return message.send(`Usage: ${message.prefix}setmode private | public`);
     }
     if (match.includes('private')) {
-      editConfig({ mode: true });
+      await editConfig({ mode: true });
       return message.send('Bot is now private.');
     } else if (match.includes('public')) {
-      editConfig({ mode: false });
+      await editConfig({ mode: false });
       return message.send('Bot is now public.');
     }
     return message.send(`Usage: ${message.prefix}setmode private | public`);
@@ -42,7 +42,7 @@ Module({
   function: async (message, match) => {
     const jid = message.user(match);
     if (!jid) return message.send('tag, reply or provide the user number');
-    const config = getConfig();
+    const config = await getConfig();
     if (config.sudo.includes(jid)) return message.send('Already a sudo');
 
     const updatedSudos = [...config.sudo, jid];
@@ -60,7 +60,7 @@ Module({
   function: async (message, match) => {
     const jid = message.user(match);
     if (!jid) return message.send('tag, reply or provide the user number');
-    const config = getConfig();
+    const config = await getConfig();
     if (!config.sudo.includes(jid)) return message.send('User is not a sudo');
 
     const updatedSudos = config.sudo.filter((sudo) => sudo !== jid);
@@ -76,7 +76,7 @@ Module({
   desc: 'List all sudo users',
   type: 'settings',
   function: async (message) => {
-    const config = getConfig();
+    const config = await getConfig();
     if (!config.sudo || config.sudo.length === 0) {
       return message.send('No sudo users found');
     }
@@ -93,12 +93,12 @@ Module({
   function: async (message, match) => {
     const jid = message.user(match);
     if (!jid) return message.send('tag, reply or provide a number');
-    const db = getConfig();
+    const db = await getConfig();
     if (db.sudo.includes(jid) || jid === message.owner)
       return message.send('You cannot ban a sudo user.');
     if (db.banned.includes(jid)) return message.send('Already banned from using bot.');
     const users = new Set([...db.banned, jid]);
-    editConfig({ banned: Array.from(users) });
+    await editConfig({ banned: Array.from(users) });
     return message.send(
       `@${jid.split('@')[0]} has been banned from using bot commands, indefinetly`,
       {
@@ -116,7 +116,7 @@ Module({
   function: async (message, match) => {
     const jid = message.user(match);
     if (!jid) return message.send('tag, reply or provide a number');
-    const db = getConfig();
+    const db = await getConfig();
     if (!db.banned.includes(jid)) return message.send('User is not banned');
 
     const updatedBanned = db.banned.filter((bannedJid) => bannedJid !== jid);
@@ -134,7 +134,7 @@ Module({
   desc: 'List all banned users',
   type: 'settings',
   function: async (message) => {
-    const db = getConfig();
+    const db = await getConfig();
     if (!db.banned || db.banned.length === 0) {
       return message.send('No banned users found');
     }

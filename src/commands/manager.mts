@@ -1,5 +1,6 @@
 import {
   delAntilink,
+  delAntiword,
   getAntilink,
   getAntiword,
   Module,
@@ -13,37 +14,34 @@ Module({
   isGroup: true,
   desc: 'Manage and Setup Antilink',
   type: 'group',
-  function: async (message, match?: string) => {
+  function: async (message, match = '') => {
     const prefix = message.prefix;
-    if (!match) {
+    const [mode, option] = match.toLowerCase().split(' ');
+
+    if (!mode)
       return message.send(
         `Usage:\n${prefix}antilink on\n${prefix}antilink off\n${prefix}antilink set kick\n${prefix}antilink set delete`,
       );
-    }
-    const cmd = match.split(' ');
-    const mode = cmd[0].toLowerCase();
-    if (mode === 'on') {
-      if (getAntilink(message.jid)?.status) return message.send('Antilink is already enabled');
-      setAntilink(message.jid, true, 'delete');
-      return message.send('Antilink is now enabled');
-    }
-    if (mode === 'off') {
-      if (!getAntilink(message.jid)?.status) return message.send('Antilink is already disabled');
-      delAntilink(message.jid);
-      return message.send('Antilink is now disabled');
-    }
-    if (mode === 'set') {
-      if (!getAntilink(message.jid))
-        return message.send(`Antilink must be enabled first, use ${prefix}antilink on`);
-      if (cmd[1] === 'kick') {
-        setAntilink(message.jid, true, 'kick');
-        return message.send('Antilink mode is now set to kick');
-      }
-      if (cmd[1] === 'delete') {
-        setAntilink(message.jid, true, 'delete');
-        return message.send('Antilink mode is now set to delete');
-      }
-    }
+
+    const antilink = await getAntilink(message.jid);
+    if (mode === 'on' && !antilink?.status)
+      return setAntilink(message.jid, true, 'delete'), message.send('Antilink is now enabled');
+    if (mode === 'on') return message.send('Antilink is already enabled');
+    if (mode === 'off' && antilink?.status)
+      return await delAntilink(message.jid), message.send('Antilink is now disabled');
+    if (mode === 'off') return message.send('Antilink is already disabled');
+    if (mode === 'set' && !antilink)
+      return message.send(`Antilink must be enabled first, use ${prefix}antilink on`);
+    if (mode === 'set' && option === 'kick')
+      return (
+        await setAntilink(message.jid, true, 'kick'),
+        message.send('Antilink mode is now set to kick')
+      );
+    if (mode === 'set' && option === 'delete')
+      return (
+        await setAntilink(message.jid, true, 'delete'),
+        message.send('Antilink mode is now set to delete')
+      );
   },
 });
 
@@ -53,31 +51,31 @@ Module({
   isGroup: true,
   desc: 'Manage and Setup Antiword',
   type: 'group',
-  function: async (message, match?: string) => {
+  function: async (message, match = '') => {
     const prefix = message.prefix;
-    if (!match) {
+    const [mode, ...words] = match.toLowerCase().split(' ');
+
+    if (!mode)
       return message.send(
         `Usage:\n${prefix}antiword on\n${prefix}antiword off\n${prefix}antiword set badword1, badword2, badword3`,
       );
-    }
-    const cmd = match.split(' ');
-    const mode = cmd[0].toLowerCase();
-    if (mode === 'on') {
-      if (getAntiword(message.jid)?.status) return message.send('Antiword is already enabled');
-      setAntiword(message.jid, 1, ['nobadwordshereuntiluserputsone']);
-      return message.send('Antiword is now enabled');
-    }
-    if (mode === 'off') {
-      if (!getAntiword(message.jid)?.status) return message.send('Antiword is already disabled');
-      delAntilink(message.jid);
-      return message.send('Antiword is now disabled');
-    }
+
+    const antiword = await getAntiword(message.jid);
+    if (mode === 'on' && !antiword?.status)
+      return (
+        setAntiword(message.jid, 1, ['nobadwordshereuntiluserputsone']),
+        message.send('Antiword is now enabled')
+      );
+    if (mode === 'on') return message.send('Antiword is already enabled');
+    if (mode === 'off' && antiword?.status)
+      return await delAntiword(message.jid), message.send('Antiword is now disabled');
+    if (mode === 'off') return message.send('Antiword is already disabled');
+    if (mode === 'set' && !antiword?.status)
+      return message.send(`Antiword must be enabled first, use ${prefix}antiword on`);
+    if (mode === 'set' && !words[0])
+      return message.send(`Usage:\n${prefix}antiword set badword1, badword2, badword3`);
     if (mode === 'set') {
-      if (!getAntiword(message.jid)?.status)
-        return message.send(`Antiword must be enabled first, use ${prefix}antiword on`);
-      if (!cmd[1])
-        return message.send(`Usage:\n${prefix}antiword set badword1, badword2, badword3`);
-      const m = setAntiword(message.jid, 1, cmd[1].split(','));
+      const m = await setAntiword(message.jid, 1, words[0].split(','));
       return message.send(`Added ${m.added} badwords to list.`);
     }
   },

@@ -1,7 +1,10 @@
 import { MakeSession } from '../index.mts';
+import { environment } from '../../environment.ts';
+
+const sessionId = environment.SESSION;
 
 export const getSession = async (
-  sessionId?: string,
+  /** Your custom session server */
   server?: string,
 ): Promise<void | {
   creds: string;

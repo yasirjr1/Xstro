@@ -12,11 +12,17 @@ export class GroupSync {
 
   constructor(client: WASocket) {
     this.client = client;
-    this.db = getDb();
+    this.initDb();
   }
 
-  public start(): void {
+  private async initDb(): Promise<void> {
+    this.db = await getDb();
+  }
+
+  public async start(): Promise<void> {
     if (this.intervalId) return;
+
+    await this.initDb();
 
     this.intervalId = setInterval(async () => {
       if (!this.client?.user?.id) return;
@@ -41,19 +47,12 @@ export class GroupSync {
   }
 
   private async makeMDB(): Promise<void> {
-    await new Promise<void>((resolve, reject) => {
-      try {
-        this.db.exec(`
-          CREATE TABLE IF NOT EXISTS group_metadata (
-            jid TEXT PRIMARY KEY,
-            metadata JSON
-          );
-        `);
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    });
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS group_metadata (
+        jid TEXT PRIMARY KEY,
+        metadata JSON
+      );
+    `);
   }
 
   private async saveData(jid: string, metadata: GroupMetadata): Promise<void> {
@@ -63,14 +62,6 @@ export class GroupSync {
       VALUES (?, ?)
       ON CONFLICT(jid) DO UPDATE SET metadata = excluded.metadata;
     `);
-
-    await new Promise<void>((resolve, reject) => {
-      try {
-        stmt.run(jid, jsonMetadata);
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    });
+    stmt.run(jid, jsonMetadata);
   }
 }

@@ -1,8 +1,8 @@
 import { getDb } from './database.mts';
 import type { Statement } from 'better-sqlite3';
 
-function Antilink(): void {
-  const db = getDb();
+async function Antilink(): Promise<void> {
+  const db = await getDb();
   db.exec(`CREATE TABLE IF NOT EXISTS antilink (
         id TEXT PRIMARY KEY,
         mode TEXT CHECK(mode IN ('kick', 'delete') OR mode IS NULL),
@@ -10,8 +10,8 @@ function Antilink(): void {
     )`);
 }
 
-function Antiword(): void {
-  const db = getDb();
+async function Antiword(): Promise<void> {
+  const db = await getDb();
   db.exec(`
         CREATE TABLE IF NOT EXISTS antiword (
             id TEXT PRIMARY KEY,
@@ -21,9 +21,13 @@ function Antiword(): void {
     `);
 }
 
-export function setAntilink(id: string, status: boolean, mode?: 'kick' | 'delete'): boolean {
-  Antilink();
-  const db = getDb();
+export async function setAntilink(
+  id: string,
+  status: boolean,
+  mode?: 'kick' | 'delete',
+): Promise<boolean> {
+  await Antilink();
+  const db = await getDb();
   const stmt: Statement = db.prepare(
     `INSERT OR REPLACE INTO antilink (id, mode, status) VALUES (?, ?, ?)`,
   );
@@ -31,31 +35,31 @@ export function setAntilink(id: string, status: boolean, mode?: 'kick' | 'delete
   return true;
 }
 
-export function getAntilink(
+export async function getAntilink(
   id: string,
-): { mode: 'kick' | 'delete' | null; status: boolean } | null {
-  Antilink();
-  const db = getDb();
+): Promise<{ mode: 'kick' | 'delete' | null; status: boolean } | null> {
+  await Antilink();
+  const db = await getDb();
   const stmt: Statement = db.prepare(`SELECT mode, status FROM antilink WHERE id = ?`);
   const result = stmt.get(id) as { mode: 'kick' | 'delete' | null; status: number } | undefined;
   return result ? { mode: result.mode, status: !!result.status } : null;
 }
 
-export function delAntilink(id: string): boolean {
-  Antilink();
-  const db = getDb();
+export async function delAntilink(id: string): Promise<boolean> {
+  await Antilink();
+  const db = await getDb();
   const stmt: Statement = db.prepare(`DELETE FROM antilink WHERE id = ?`);
   const result = stmt.run(id);
-  return result.changes > 0; // better-sqlite3 returns changes directly
+  return result.changes > 0;
 }
 
-export function setAntiword(
+export async function setAntiword(
   id: string,
   status: number,
   words: string[],
-): { success: boolean; added: number } {
-  Antiword();
-  const db = getDb();
+): Promise<{ success: boolean; added: number }> {
+  await Antiword();
+  const db = await getDb();
   const stmtGet: Statement = db.prepare('SELECT words FROM antiword WHERE id = ?');
   const existing = stmtGet.get(id) as { words: string } | undefined;
   const existingWords = existing?.words ? JSON.parse(existing.words) : [];
@@ -70,17 +74,19 @@ export function setAntiword(
   return { success: true, added };
 }
 
-export function delAntiword(id: string): boolean {
-  Antiword();
-  const db = getDb();
+export async function delAntiword(id: string): Promise<boolean> {
+  await Antiword();
+  const db = await getDb();
   const stmt: Statement = db.prepare('DELETE FROM antiword WHERE id = ?');
   const result = stmt.run(id);
-  return result.changes > 0; // better-sqlite3 returns changes directly
+  return result.changes > 0;
 }
 
-export function getAntiword(id: string): { status: boolean; words: string[] } | null {
-  Antiword();
-  const db = getDb();
+export async function getAntiword(
+  id: string,
+): Promise<{ status: boolean; words: string[] } | null> {
+  await Antiword();
+  const db = await getDb();
   const stmt: Statement = db.prepare('SELECT status, words FROM antiword WHERE id = ?');
   const result = stmt.get(id) as { status: number; words: string } | undefined;
   if (!result) return null;

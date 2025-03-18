@@ -2,8 +2,8 @@ import { getDb } from './database.mts';
 import type { Statement } from 'better-sqlite3';
 import type { Config } from '../index.mts';
 
-function initConfigDb(): void {
-  const db = getDb();
+async function ConfigDB(): Promise<void> {
+  const db = await getDb();
   db.exec(`
         CREATE TABLE IF NOT EXISTS config (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,9 +42,9 @@ function initConfigDb(): void {
   }
 }
 
-export function getConfig(): Config {
-  const db = getDb();
-  initConfigDb();
+export async function getConfig(): Promise<Config> {
+  const db = await getDb();
+  await ConfigDB();
 
   const stmt: Statement = db.prepare('SELECT key, value FROM config');
   const rows = stmt.all() as { key: string; value: string }[];
@@ -67,9 +67,9 @@ export function getConfig(): Config {
   };
 }
 
-export function editConfig(updates: Partial<Config>): Config | null {
-  const db = getDb();
-  initConfigDb();
+export async function editConfig(updates: Partial<Config>): Promise<Config | null> {
+  const db = await getDb();
+  await ConfigDB();
 
   const allowedKeys: (keyof Config)[] = [
     'prefix',
@@ -109,5 +109,5 @@ export function editConfig(updates: Partial<Config>): Config | null {
   });
 
   transaction(keys);
-  return getConfig();
+  return await getConfig();
 }

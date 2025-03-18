@@ -3,16 +3,9 @@ import type { Statement } from 'better-sqlite3';
 import type { AuthenticationCreds, AuthenticationState, SignalDataTypeMap } from 'baileys';
 import { initAuthCreds, BufferJSON, WAProto as proto } from 'baileys';
 
-export const useSqliteAuthState = (
+export const useSqliteAuthState = async (
   database: Database,
-  config = {
-    /**
-     * Enable WAL mode for better concurrent performance
-     * @default true
-     */
-    enableWAL: true,
-  },
-): { state: AuthenticationState; saveCreds: () => void } => {
+): Promise<{ state: AuthenticationState; saveCreds: () => Promise<void> }> => {
   database.exec(`
     CREATE TABLE IF NOT EXISTS session (
       name TEXT NOT NULL,
@@ -22,9 +15,11 @@ export const useSqliteAuthState = (
     ) WITHOUT ROWID;
   `);
 
-  if (config.enableWAL ?? true) {
-    database.exec('PRAGMA journal_mode = WAL;');
-  }
+  database.exec('PRAGMA journal_mode = WAL;');
+  database.exec('PRAGMA synchronous = OFF;'); // Maximum write speed, minimal durability
+  database.exec('PRAGMA cache_size = -100000;'); // 40MB cache
+  database.exec('PRAGMA temp_store = MEMORY;'); // Temp tables in RAM
+  database.exec('PRAGMA mmap_size = 536870912;'); // 512MB memory mapping
 
   let creds: AuthenticationCreds;
   const credsStmt: Statement = database.prepare(
@@ -46,9 +41,13 @@ export const useSqliteAuthState = (
     state: {
       creds,
       keys: {
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        get: (type, ids: string[]) => {
-          const data: { [id: string]: SignalDataTypeMap[typeof type] } = {};
+        get: async <T extends keyof SignalDataTypeMap>(
+          type: T,
+          ids: string[],
+        ): Promise<{
+          [id: string]: SignalDataTypeMap[T];
+        }> => {
+          const data: { [id: string]: SignalDataTypeMap[T] } = {};
           const stmt: Statement = database.prepare(
             `SELECT id, value FROM session WHERE name = ? AND id IN (${ids.map(() => '?').join(',')})`,
           );
@@ -63,10 +62,9 @@ export const useSqliteAuthState = (
           }
           return data;
         },
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        set: (data: {
+        set: async (data: {
           [key: string]: { [id: string]: SignalDataTypeMap[keyof SignalDataTypeMap] | null };
-        }) => {
+        }): Promise<void> => {
           database.exec('BEGIN TRANSACTION');
           try {
             const insertStmt: Statement = database.prepare(
@@ -94,8 +92,7 @@ export const useSqliteAuthState = (
         },
       },
     },
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    saveCreds: () => {
+    saveCreds: async (): Promise<void> => {
       const stmt: Statement = database.prepare(
         'INSERT OR REPLACE INTO session (name, id, value) VALUES (?, ?, ?)',
       );

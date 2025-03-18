@@ -22,7 +22,7 @@ export async function XMsg(client: Client, messages: WAMessage) {
   };
   const { key, message, ...msg } = normalizedMessages;
   const { user, sendMessage } = client;
-  const { prefix, mode, sudo } = getConfig();
+  const { prefix, mode, sudo } = await getConfig();
   const owner = numToJid(user!.id);
   const sender =
     isJidGroup(key.remoteJid!) || isJidBroadcast(key.remoteJid!)
