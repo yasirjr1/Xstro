@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import { checkNodeVersion, getSession, loadPlugins, client } from './index.mts';
+import { checkNodeVersion, getSession, loadPlugins } from './index.mts';
+import { client } from './functions/index.mts';
 
 dotenv.config();
 

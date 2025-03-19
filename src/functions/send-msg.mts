@@ -1,7 +1,6 @@
 import { Boom } from '@hapi/boom';
-import { getDataType } from '../utilities/constants.mts';
 import type { AnyMessageContent, WAMessage } from 'baileys';
-import type { Client, MessageMisc, XMessage } from '../types.mts';
+import { getDataType, type Client, type MessageMisc, type XMessage } from '../index.mts';
 
 export async function sendClientMessage(
   createserialize: (client: Client, msg: WAMessage) => Promise<XMessage>,

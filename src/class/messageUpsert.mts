@@ -1,5 +1,4 @@
 import type { BaileysEventMap, WASocket } from 'baileys';
-import type { XMessage } from '../index.mts';
 import { Boom } from '@hapi/boom';
 import {
   serialize,
@@ -10,6 +9,7 @@ import {
   saveContact,
   upsertM,
   getAntidelete,
+  type XMessage,
 } from '../index.mts';
 
 export class MessagesUpsert {

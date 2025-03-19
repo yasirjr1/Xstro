@@ -1,6 +1,6 @@
-import { Module } from '../index.mts';
+import { registerCommand } from './_registers.mts';
 
-Module({
+registerCommand({
   name: 'pin',
   fromMe: true,
   desc: 'Pin a chat',
@@ -11,7 +11,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'unpin',
   fromMe: true,
   desc: 'Unpin a chat',
@@ -22,7 +22,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'archive',
   fromMe: true,
   desc: 'Archive a chat',
@@ -39,7 +39,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'unarchive',
   fromMe: true,
   desc: 'Unarchive a chat',
@@ -56,7 +56,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'clear',
   fromMe: true,
   desc: 'Clear a chat',
@@ -73,7 +73,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'delete',
   fromMe: true,
   desc: 'Delete a chat',
@@ -89,7 +89,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'star',
   fromMe: true,
   desc: 'Star a message',
@@ -108,7 +108,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'unstar',
   fromMe: true,
   desc: 'Unstar a message',
@@ -127,7 +127,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'pinm',
   fromMe: false,
   desc: 'Pin a message',
@@ -144,7 +144,7 @@ Module({
   },
 });
 
-Module({
+registerCommand({
   name: 'unpinm',
   fromMe: false,
   desc: 'Unpin a message',

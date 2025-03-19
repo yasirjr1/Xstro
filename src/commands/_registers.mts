@@ -1,8 +1,8 @@
-import type { Command } from './types.mts';
+import type { Command } from '../index.mts';
 
 export const commands: Command[] = [];
 
-export function Module(cmd: Partial<Command>): Command {
+export function registerCommand(cmd: Command): Command {
   const fullCmd: Command = {
     name: new RegExp(`^\\s*(${cmd.name})(?:\\s+([\\s\\S]+))?$`, 'i'),
     function: cmd.function,

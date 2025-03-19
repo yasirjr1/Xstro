@@ -2,7 +2,7 @@ import type { BaileysEventMap, WASocket } from 'baileys';
 import type { Boom } from '@hapi/boom';
 import { DisconnectReason } from 'baileys';
 import pm2 from 'pm2';
-import { commands } from '../plugins.mts';
+import { commands } from '../commands/_registers.mts';
 
 export class ConnectionUpdate {
   private client: WASocket;

@@ -3,11 +3,11 @@
     "version": "6.0.0",
     "description": "Simple WA bot in typescript.",
     "type": "module",
-    "main": "./src/app.mts",
+    "main": "./src/bot.mts",
     "scripts": {
-        "start": "pm2 start src/app.mts --name xstro --attach",
+        "start": "pm2 start src/bot.mts --name xstro --attach",
         "restart": "yarn stop && yarn start",
-        "dev": "ts-node --esm src/app.mts",
+        "dev": "ts-node --esm src/bot.mts",
         "stop": "pm2 stop xstro",
         "lint": "yarn run eslint . --fix"
     },

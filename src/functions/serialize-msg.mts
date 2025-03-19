@@ -11,8 +11,8 @@ import { Boom } from '@hapi/boom';
 import { extractTextFromMessage, numToJid } from '../utilities/constants.mts';
 import { getConfig, loadMessage } from '../model/index.mts';
 import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
-import type { Client, MessageMisc } from '../types.mts';
-import { sendClientMessage } from './message-send.mts';
+import type { Client, MessageMisc } from '../index.mts';
+import { sendClientMessage } from './send-msg.mts';
 
 /** Message repack to simplfy over all bot message handling */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

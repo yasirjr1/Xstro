@@ -1,7 +1,6 @@
-export * from './client.mts';
-export * from './tools/serializer.mts';
 export * from './model/index.mts';
-export * from './plugins.mts';
-export * from './types.mts';
 export * from './utilities/index.mts';
-export * from './classes/index.mts';
+export * from './class/index.mts';
+export * from './functions/index.mts';
+export * from './commands/_registers.mts';
+export type * from './types/index.mts';

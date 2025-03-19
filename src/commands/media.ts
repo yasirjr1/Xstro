@@ -19,7 +19,7 @@ registerCommand({
     if (!message?.quoted?.message?.audioMessage && !message?.quoted?.message?.videoMessage)
       return message.send('Reply a video or audio message');
     const media = await message.downloadM(message.quoted!, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media && !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const newAudio = await toPTT(media);
     return await message.sendMessage(message.jid, {
       audio: newAudio,
