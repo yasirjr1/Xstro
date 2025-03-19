@@ -1,8 +1,11 @@
-import { Boom } from '@hapi/boom/lib/index.js';
+import { Boom } from '@hapi/boom';
 import { fetchJson } from '../index.mts';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { createDecipheriv } from 'node:crypto';
 import { join } from 'node:path';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { getDb } from '../model/database.mts';
 
 export class MakeSession {
   private sessionId: string;
@@ -55,5 +58,59 @@ export class MakeSession {
       writeFileSync(join(saveTo, filename), JSON.stringify(syncKeyData));
     }
     return data;
+  }
+
+  async migrateSessionSqlite(sessionPath: string): Promise<void> {
+    const db = await getDb();
+
+    try {
+      db.exec(`
+            CREATE TABLE IF NOT EXISTS session (
+                name TEXT,
+                id TEXT,
+                value TEXT
+            )
+        `);
+
+      const insert = db.prepare('INSERT INTO session (name, id, value) VALUES (?, ?, ?)');
+
+      const files = await fs.readdir(sessionPath);
+
+      for (const fileName of files) {
+        if (!fileName.endsWith('.json')) continue;
+
+        const baseName = fileName.replace('.json', '');
+        const fullPath = path.join(sessionPath, fileName);
+        const fileContent = await fs.readFile(fullPath, 'utf-8');
+        JSON.parse(fileContent);
+
+        if (baseName === 'creds') {
+          insert.run('creds', 'default', fileContent);
+        } else {
+          const parts = baseName.split('-');
+
+          if (parts[0] === 'app' && parts[1] === 'state' && parts[2] === 'sync') {
+            let name = '';
+            let id = '';
+
+            if (parts[3] === 'key' && parts.length > 4) {
+              name = 'app-state-sync-key';
+              id = parts[4];
+            } else if (parts[3] === 'version') {
+              name = 'app-state-sync-version';
+              id = parts[4];
+            } else {
+              name = parts[3];
+              id = parts.length > 4 ? parts[4] : 'default';
+            }
+
+            insert.run(name, id, fileContent);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error migrating session:', error);
+      throw error;
+    }
   }
 }

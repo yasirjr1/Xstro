@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import { logger } from '../functions/connection.mts';
+import { logger } from '../client/connection.mts';
 
 let database: Database.Database | null = null;
 
