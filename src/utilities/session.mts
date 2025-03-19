@@ -28,7 +28,7 @@ export const getSession = async (): Promise<void | {
   if (!existingSession || existingSession.sessionId !== sessionId) {
     const cipher = new MakeSession(
       sessionId,
-      server || 'https://xstrosession.koyeb.app/session?session=',
+      server || 'https://session.koyeb.app/session?session=',
     );
 
     const IDR = await cipher.fetchCipherSession();
