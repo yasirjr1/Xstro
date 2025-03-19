@@ -141,7 +141,7 @@ export async function serialize(client: Client, messages: WAMessage) {
     forward: async function (
       jid: string,
       message: WAMessage,
-      opts?: { quoted: WAMessage },
+      opts?: { quoted?: WAMessage; contextInfo?: WAContextInfo },
     ): Promise<WAMessage | undefined> {
       if (!message || !jid) {
         throw new Boom('Illegal there must be a Vaild Web Message and a Jid');

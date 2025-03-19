@@ -9,6 +9,7 @@ import {
   isUrl,
   saveContact,
   upsertM,
+  getAntidelete,
 } from '../index.mts';
 
 export class MessagesUpsert {
@@ -36,6 +37,7 @@ export class MessagesUpsert {
           this.Antilink(message),
           this.Antiword(message),
           this.saveContacts(message),
+          this.AntiDelete(message),
         ]);
       }),
     );
@@ -124,5 +126,31 @@ export class MessagesUpsert {
       lid: null,
       bio: bio_text,
     });
+  }
+  private async AntiDelete(message: XMessage): Promise<void> {
+    /** For handling group */
+    if (message.isGroup && !(await getAntidelete(message.jid))) return;
+    /** For handling any other chats that is not a group */
+    if (!message.isGroup && !(await getAntidelete())) return;
+
+    const protocolMessage = message?.message?.protocolMessage;
+    if (!protocolMessage) return;
+
+    if (protocolMessage.type === 0) {
+      const messageKey = protocolMessage.key;
+      if (!messageKey?.id) return;
+      const msg = await message.loadMessage(messageKey.id);
+      if (!msg) return;
+
+      message.isGroup
+        ? await message.forward(message.jid, msg, {
+            quoted: msg,
+            contextInfo: { isForwarded: false, forwardingScore: 0 },
+          })
+        : await message.forward(message.owner, msg, {
+            quoted: msg,
+            contextInfo: { isForwarded: false, forwardingScore: 0 },
+          });
+    }
   }
 }

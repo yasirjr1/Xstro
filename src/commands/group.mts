@@ -52,12 +52,8 @@ Module({
     if (!match) {
       return message.send('Provide A New Group Name');
     }
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not Admin');
-    }
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     await message.groupUpdateSubject(message.jid, match);
     return message.send('Group Name Update');
   },
@@ -70,12 +66,8 @@ Module({
   desc: 'Update Group Description',
   type: 'group',
   function: async (message, match?: string) => {
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not Admin');
-    }
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     await message.groupUpdateDescription(message.jid, match);
     return message.send('Group Description Updated');
   },
@@ -88,12 +80,8 @@ Module({
   desc: 'Allow only Admins to send messages.',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not Admin');
-    }
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     const metadata = await message.groupMetadata(message.jid);
     if (metadata.announce)
       return message.send('Group settings already allowed only Admins to send messages.');
@@ -109,12 +97,8 @@ Module({
   desc: 'Allow only Admins to send messages.',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not Admin');
-    }
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     const metadata = await message.groupMetadata(message.jid);
     if (!metadata.announce)
       return message.send('Group settings already allowed all members to send messages.');
@@ -130,12 +114,8 @@ Module({
   desc: 'Lock groups setting to be managed by only admins',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not Admin');
-    }
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     const metadata = await message.groupMetadata(message.jid);
     if (metadata.restrict)
       return message.send('Group has already been set to only allow admins manage settings');
@@ -151,12 +131,8 @@ Module({
   desc: 'Unlock groups setting to allow all members to manage settings',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not Admin');
-    }
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     const metadata = await message.groupMetadata(message.jid);
     if (!metadata.restrict)
       return message.send('Group is already set to allow all members manage settings');
@@ -172,12 +148,8 @@ Module({
   desc: 'Get a group invite link',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not Admin');
-    }
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     const code = await message.groupInviteCode(message.jid);
     return await message.send(`https://chat.whatsapp.com/${code}`);
   },
@@ -190,12 +162,8 @@ Module({
   desc: 'Revoke group invite code',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not Admin');
-    }
+    if (!(await message.isAdmin())) return message.send('Admin only');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     const code = await message.groupRevokeInvite(message.jid);
     return await message.send(`Group link reset\n\nhttps://chat.whatsapp.com/${code!}`);
   },
@@ -258,7 +226,7 @@ Module({
   type: 'group',
   function: async (message, match) => {
     if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need admin');
+    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
     const { participants } = await message.groupMetadata(message.jid);
     if (!participants?.length) return message.send('No participants');
     return message.relayMessage(

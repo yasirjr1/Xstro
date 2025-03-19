@@ -1,4 +1,13 @@
-import { fetchJson, isUrl, Module, numToJid, uploadFile, urlBuffer } from '../index.mts';
+import {
+  fetchJson,
+  getAntidelete,
+  isUrl,
+  Module,
+  numToJid,
+  setAntidelete,
+  uploadFile,
+  urlBuffer,
+} from '../index.mts';
 
 Module({
   name: 'url',
@@ -27,7 +36,7 @@ Module({
     )
       return message.send('Reply an image, video or audio message.');
     const media = await message.downloadM(message.quoted, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const url = await uploadFile(media);
     return await message.send(url!);
   },
@@ -97,5 +106,48 @@ Module({
     if (!message.quoted) return message.send('Please reply to a message to forward it!');
     await message.forward(jid, message.quoted, { quoted: message.quoted });
     return message.send('Message forwarded successfully');
+  },
+});
+
+Module({
+  name: 'antidelete',
+  fromMe: true,
+  desc: 'Setup Antidelete to get deleted messages',
+  type: 'utilities',
+  function: async (message, match) => {
+    if (!match)
+      return message.send(`Usage: ${message.prefix[0]}antidelete on | off | dmon | dmoff`);
+
+    const command = match.toLowerCase().trim();
+
+    if (message.isGroup) {
+      if (command === 'on') {
+        const status = await getAntidelete(message.jid);
+        if (status) return message.send('Antidelete is already on');
+        await setAntidelete(message.jid, 1);
+        return await message.send('Antidelete enabled for this Group');
+      } else if (command === 'off') {
+        const status = await getAntidelete(message.jid);
+        if (!status) return message.send('Antidelete is already off');
+        await setAntidelete(message.jid, 0);
+        return await message.send('Antidelete disabled for this Group');
+      }
+    }
+
+    if (command === 'on') {
+      const dmStatus = await getAntidelete();
+      if (dmStatus) return message.send('Antidelete is already on for DMs');
+      await setAntidelete(undefined, undefined, 1);
+      return await message.send('Antidelete enabled for DMs');
+    } else if (command === 'off') {
+      const dmStatus = await getAntidelete();
+      if (!dmStatus) return message.send('Antidelete is already off for DMs');
+      await setAntidelete(undefined, undefined, 0);
+      return await message.send('Antidelete disabled for DMs');
+    }
+
+    return message.send(
+      `Invalid command. Usage: ${message.prefix[0]}antidelete on | off | dmon | dmoff`,
+    );
   },
 });
