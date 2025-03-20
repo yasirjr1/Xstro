@@ -9,4 +9,5 @@ export type cmdCategories =
   | 'chats'
   | 'download'
   | 'media'
-  | 'utilities';
+  | 'utilities'
+  | 'user';

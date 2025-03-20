@@ -68,11 +68,13 @@ export class MakeSession {
             CREATE TABLE IF NOT EXISTS session (
                 name TEXT,
                 id TEXT,
-                value TEXT
+                value TEXT,
+                UNIQUE(name, id)
             )
         `);
 
-      const insert = db.prepare('INSERT INTO session (name, id, value) VALUES (?, ?, ?)');
+      const insert = db.prepare('INSERT OR IGNORE INTO session (name, id, value) VALUES (?, ?, ?)');
+      const seen = new Set<string>();
 
       const files = await fs.readdir(sessionPath);
 
@@ -84,15 +86,16 @@ export class MakeSession {
         const fileContent = await fs.readFile(fullPath, 'utf-8');
         JSON.parse(fileContent);
 
+        let name = '';
+        let id = '';
+
         if (baseName === 'creds') {
-          insert.run('creds', 'default', fileContent);
+          name = 'creds';
+          id = 'default';
         } else {
           const parts = baseName.split('-');
 
           if (parts[0] === 'app' && parts[1] === 'state' && parts[2] === 'sync') {
-            let name = '';
-            let id = '';
-
             if (parts[3] === 'key' && parts.length > 4) {
               name = 'app-state-sync-key';
               id = parts[4];
@@ -103,9 +106,13 @@ export class MakeSession {
               name = parts[3];
               id = parts.length > 4 ? parts[4] : 'default';
             }
-
-            insert.run(name, id, fileContent);
           }
+        }
+
+        const key = `${name}:${id}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          insert.run(name, id, fileContent);
         }
       }
     } catch (error) {

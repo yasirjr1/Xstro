@@ -37,7 +37,7 @@ registerCommand({
     const jid = message.user(match);
     if (!jid) return message.send('tag, reply or provide the user number');
     await message.groupParticipantsUpdate(message.jid, [jid], 'remove');
-    return message.send(`@${jid.split('@')[0]} kicked`, {mentions: [jid]})
+    return message.send(`@${jid.split('@')[0]} kicked`, { mentions: [jid] });
   },
 });
 
