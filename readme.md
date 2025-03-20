@@ -1,9 +1,9 @@
-## `Xstro: Open-Source WhatsApp Bot in TypeScript`
+### `Xstro, Open-Source WABOT Project`
 
 > [!IMPORTANT]  
 > Open-source WhatsApp bot (MIT License) in TypeScript—free to use, modify, distribute. Not built to break WhatsApp’s rules; misuse is on you—I’m not responsible for bans. Related projects are open-source too. Pairing service: no data access, deleted after 2 months. Self-manage sessions; don’t share sensitive info. No warranties—use at your risk.
 
-## [`Get Started`](https://xstro-web.vercel.app/)
+### [`Get Started`](https://xstro-web.vercel.app/)
 
 ### MIT License
 
