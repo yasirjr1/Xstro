@@ -6,7 +6,7 @@
     "stack": "container",
     "success_url": "/",
     "env": {
-        "SESSION_ID": {
+        "SESSION": {
             "description": "Session id goes here",
             "required": true
         },
