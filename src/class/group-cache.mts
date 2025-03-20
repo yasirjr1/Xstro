@@ -4,7 +4,7 @@ import type { Database } from 'better-sqlite3';
 import type { Statement } from 'better-sqlite3';
 import type { WASocket, GroupMetadata } from 'baileys';
 
-export class GroupSync {
+export class GroupCache {
   private client: WASocket;
   private db: Database;
   private intervalId?: NodeJS.Timeout;

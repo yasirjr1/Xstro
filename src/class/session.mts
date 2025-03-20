@@ -109,8 +109,7 @@ export class MakeSession {
         }
       }
     } catch (error) {
-      console.error('Error migrating session:', error);
-      throw error;
+      throw new Error(error);
     }
   }
 }

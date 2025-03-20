@@ -99,14 +99,13 @@ export async function serialize(client: Client, messages: WAMessage) {
       const allAdmins = metadata.participants.filter((v) => v.admin !== null).map((v) => v.id);
       return !Array.isArray(allAdmins) ? Array.from(allAdmins) : allAdmins.includes(this.owner);
     },
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     send: async function (
       content: string | Buffer,
       options?: MessageMisc & Partial<AnyMessageContent>,
     ) {
       const jid = options?.jid ?? this.jid;
       const updatedOptions = { ...options, jid };
-      return sendClientMessage(
+      return await sendClientMessage(
         async (c, m) => await serialize(c, m),
         client,
         content,

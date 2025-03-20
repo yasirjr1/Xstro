@@ -10,6 +10,7 @@ import {
   upsertM,
   getAntidelete,
   type XMessage,
+  lang,
 } from '../index.mts';
 
 export class MessagesUpsert {
@@ -54,7 +55,10 @@ export class MessagesUpsert {
 
       try {
         if (!message.sudo && (message.mode || cmd.fromMe)) return;
-        if (cmd.isGroup && !message.isGroup) return;
+        if (cmd.isGroup && !message.isGroup) {
+          await message.send(lang.groups_only);
+          return;
+        }
 
         const args = match[2] ?? '';
         await message.react('⏳');

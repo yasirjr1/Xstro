@@ -1,5 +1,5 @@
 import { registerCommand } from './_registers.mts';
-import { numToJid } from '../index.mts';
+import { lang, numToJid } from '../index.mts';
 
 registerCommand({
   name: 'newgc',
@@ -31,12 +31,9 @@ registerCommand({
   desc: 'Remove a participant from Group',
   type: 'group',
   function: async (message, match) => {
-    if (!(await message.isAdmin())) {
-      return message.send('You are not Admin.');
-    }
-    if (!(await message.isBotAdmin())) {
-      return message.send('I am not an Admin.');
-    }
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
+
     const jid = message.user(match);
     if (!jid) return message.send('tag, reply or provide the user number');
     await message.groupParticipantsUpdate(message.jid, [jid], 'remove');
@@ -53,8 +50,8 @@ registerCommand({
     if (!match) {
       return message.send('Provide A New Group Name');
     }
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     await message.groupUpdateSubject(message.jid, match);
     return message.send('Group Name Update');
   },
@@ -67,8 +64,8 @@ registerCommand({
   desc: 'Update Group Description',
   type: 'group',
   function: async (message, match?: string) => {
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     await message.groupUpdateDescription(message.jid, match);
     return message.send('Group Description Updated');
   },
@@ -81,8 +78,8 @@ registerCommand({
   desc: 'Allow only Admins to send messages.',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     const metadata = await message.groupMetadata(message.jid);
     if (metadata.announce)
       return message.send('Group settings already allowed only Admins to send messages.');
@@ -98,8 +95,8 @@ registerCommand({
   desc: 'Allow only Admins to send messages.',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     const metadata = await message.groupMetadata(message.jid);
     if (!metadata.announce)
       return message.send('Group settings already allowed all members to send messages.');
@@ -115,8 +112,8 @@ registerCommand({
   desc: 'Lock groups setting to be managed by only admins',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     const metadata = await message.groupMetadata(message.jid);
     if (metadata.restrict)
       return message.send('Group has already been set to only allow admins manage settings');
@@ -132,8 +129,8 @@ registerCommand({
   desc: 'Unlock groups setting to allow all members to manage settings',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     const metadata = await message.groupMetadata(message.jid);
     if (!metadata.restrict)
       return message.send('Group is already set to allow all members manage settings');
@@ -149,8 +146,8 @@ registerCommand({
   desc: 'Get a group invite link',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     const code = await message.groupInviteCode(message.jid);
     return await message.send(`https://chat.whatsapp.com/${code}`);
   },
@@ -163,8 +160,8 @@ registerCommand({
   desc: 'Revoke group invite code',
   type: 'group',
   function: async (message) => {
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     const code = await message.groupRevokeInvite(message.jid);
     return await message.send(`Group link reset\n\nhttps://chat.whatsapp.com/${code!}`);
   },
@@ -226,8 +223,8 @@ registerCommand({
   desc: 'Mention everyone in group',
   type: 'group',
   function: async (message, match) => {
-    if (!(await message.isAdmin())) return message.send('Admin only');
-    if (!(await message.isBotAdmin())) return message.send('I need to be admin');
+    if (!(await message.isAdmin())) return message.send(lang.isAdmin);
+    if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     const { participants } = await message.groupMetadata(message.jid);
     if (!participants?.length) return message.send('No participants');
     return message.relayMessage(

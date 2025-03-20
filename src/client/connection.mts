@@ -5,7 +5,7 @@ import * as Logger from 'pino';
 import { getDb } from '../model/database.mts';
 import {
   ConnectionUpdate,
-  GroupSync,
+  GroupCache,
   MessagesUpsert,
   CacheStore,
   groupMetadata,
@@ -54,8 +54,8 @@ export const client = async (): Promise<Client> => {
   });
 
   // Saves Group Metadata for super fast Group Processing
-  const groupSync = new GroupSync(conn);
-  await groupSync.start();
+  const cache = new GroupCache(conn);
+  await cache.start();
 
   return conn;
 };
