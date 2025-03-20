@@ -1,7 +1,7 @@
 {
     "name": "xstro",
-    "version": "6.0.0",
-    "description": "Simple WA bot in typescript.",
+    "version": "7.0.0",
+    "description": "Simple WA bot.",
     "type": "module",
     "main": "./src/bot.mts",
     "scripts": {
@@ -43,6 +43,9 @@
         "sharp": "^0.33.5",
         "ts-node": "^10.9.2",
         "typescript": "^5.9.0-dev.20250303"
+    },
+    "engines": {
+        "node": ">=23"
     },
     "packageManager": "yarn@1.22.22"
 }
