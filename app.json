@@ -24,8 +24,7 @@
         },
         "WARN_COUNT": {
             "description": "Number of warnings before action is taken",
-            "required": false,
-            "value": 3
+            "required": false
         },
         "TIME_ZONE": {
             "description": "Time zone of the bot",
