@@ -37,6 +37,7 @@ registerCommand({
     const jid = message.user(match);
     if (!jid) return message.send('tag, reply or provide the user number');
     await message.groupParticipantsUpdate(message.jid, [jid], 'remove');
+    return message.send(`@${jid.split('@')[0]} kicked`, {mentions: [jid]})
   },
 });
 
@@ -53,7 +54,7 @@ registerCommand({
     if (!(await message.isAdmin())) return message.send(lang.isAdmin);
     if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     await message.groupUpdateSubject(message.jid, match);
-    return message.send('Group Name Update');
+    return message.send('Successfully Updated Group Name');
   },
 });
 
@@ -226,7 +227,6 @@ registerCommand({
     if (!(await message.isAdmin())) return message.send(lang.isAdmin);
     if (!(await message.isBotAdmin())) return message.send(lang.isBotAdmin);
     const { participants } = await message.groupMetadata(message.jid);
-    if (!participants?.length) return message.send('No participants');
     return message.relayMessage(
       message.jid,
       {
