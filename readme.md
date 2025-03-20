@@ -1,7 +1,7 @@
 ### `Xstro, Open-Source WABOT Project`
 
 > [!IMPORTANT]  
-> An Open-source WhatsApp bot free to use, modify, distribute. Not built to break WhatsApp’s rules; misuse is on you—I’m not responsible for bans. Related projects are open-source too. Pairing service: no data access, deleted after 2 months. Self-manage sessions; don’t share sensitive info. No warranties—use at your risk.
+> An open-source WhatsApp bot, free to use, modify, and distribute. Designed to comply with WhatsApp’s rules; any misuse leading to bans is your responsibility—I’m not liable. Related projects are also open-source. Pairing service: no data access, data deleted after 2 months. Self-manage sessions and avoid sharing sensitive info. Provided "as is" with no warranties—use at your own risk.
 
 ### [`Get Started`](https://xstro-web.vercel.app/)
 
