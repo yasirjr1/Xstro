@@ -141,7 +141,15 @@ export async function serialize(client: Client, messages: WAMessage) {
       if (!message || !jid) {
         throw new Boom('Illegal there must be a Vaild Web Message and a Jid');
       }
-      return await client.sendMessage(jid, { forward: message, ...opts }, { ...opts });
+      return await client.sendMessage(
+        jid,
+        {
+          forward: message,
+          ...opts,
+          contextInfo: { isForwarded: false, forwardingScore: 0, ...opts },
+        },
+        { ...opts },
+      );
     },
     react: async function (emoji: string, message?: WAMessage): Promise<WAMessage | undefined> {
       return await client.sendMessage(this.jid, {

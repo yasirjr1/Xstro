@@ -156,17 +156,8 @@ export class MessagesUpsert {
       const messageKey = protocolMessage.key;
       if (!messageKey?.id) return;
       const msg = await message.loadMessage(messageKey.id);
-      if (!msg) return;
 
-      message.isGroup
-        ? await message.forward(message.jid, msg, {
-            quoted: msg,
-            contextInfo: { isForwarded: false, forwardingScore: 0 },
-          })
-        : await message.forward(message.owner, msg, {
-            quoted: msg,
-            contextInfo: { isForwarded: false, forwardingScore: 0 },
-          });
+      await message.forward(message.isGroup ? message.jid : message.owner, msg!, { quoted: msg! });
     }
   }
 }
