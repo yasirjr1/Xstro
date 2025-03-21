@@ -9,13 +9,11 @@ services:
         sync: false
       - key: WARN_COUNT
         sync: false
-      - key: STICKER_PACK
-        sync: false
-      - key: BOT_INFO
+      - key: META_DATA
         sync: false
       - key: SUDO
         sync: false
-      - key: SESSION_ID
+      - key: SESSION
         sync: false
     region: oregon
     dockerContext: .

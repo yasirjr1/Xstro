@@ -18,10 +18,6 @@
             "description": "Please Put your hugging face Api key inorder to use Ai commands",
             "required": false
         },
-        "DATABASE_URL": {
-            "description": "Custom database path for SQLite",
-            "required": false
-        },
         "META_DATA": {
             "description": "Metadata such as sticker data and bot name",
             "required": false
