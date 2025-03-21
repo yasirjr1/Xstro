@@ -7,3 +7,4 @@ export * from './node-v.mts';
 export * from './scraper.mts';
 export * from './session.mts';
 export * from './lang.mts';
+export * from './fonts.mts';

@@ -1,6 +1,10 @@
 import { registerCommand, commands } from './_registers.mts';
-import { formatBytes, runtime } from '../index.mts';
+import { formatBytes, runtime, toFancyFont } from '../index.mts';
 import { platform, totalmem, freemem } from 'os';
+import { environment } from '../../environment.ts';
+
+const BOT_INFO = environment.META_DATA;
+const TIME_ZONE = environment.TIME_ZONE;
 
 registerCommand({
   name: 'menu',
@@ -13,21 +17,21 @@ registerCommand({
       (cmd) => cmd.name && !cmd.dontAddCommandList && !cmd.name.toString().includes('undefined'),
     ).length;
     let menuInfo = `\`\`\`
-╭─── ${process.env.BOT_INFO?.split(';')[0] ?? `χѕтяσ м∂`} ────
+╭─── ${BOT_INFO?.split(';')?.[1] ?? `χѕтяσ м∂`} ────
 │ User: ${message.pushName?.trim() ?? `Unknown`}
-│ Owner: ${process.env.BOT_INFO?.split(';')[0].trim() ?? `αѕтяσχ11`}		
+│ Owner: ${BOT_INFO?.split(';')[0].trim() ?? `αѕтяσχ11`}		
 │ Plugins: ${cmds}
 │ Mode: ${message.mode ? 'Private' : 'Public'}
 │ Uptime: ${runtime(process.uptime())}
 │ Platform: ${platform()}
-│ Ram: ${formatBytes(totalmem() - freemem())}
+│ Usage: ${formatBytes(totalmem() - freemem())}
 │ Day: ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
 │ Date: ${new Date().toLocaleDateString('en-US')}
-│ Time: ${new Date().toLocaleTimeString('en-US', { timeZone: process.env.TZ })}
+│ Time: ${new Date().toLocaleTimeString('en-US', { timeZone: TIME_ZONE })}
 │ Node: ${process.version}
 ╰─────────────\`\`\`\n`;
 
-    const commandsByType = commands
+    const cmdTypes = commands
       .filter((cmd) => cmd.name && !cmd.dontAddCommandList)
       .reduce((acc, cmd) => {
         const type = cmd.type || 'Misc';
@@ -38,16 +42,16 @@ registerCommand({
         return acc;
       }, {});
 
-    const sortedTypes = Object.keys(commandsByType).sort();
+    const sort = Object.keys(cmdTypes).sort();
 
-    let totalCommands = 1;
+    let cmdNumbers = 1;
 
-    sortedTypes.forEach((type) => {
-      const sortedCommands = commandsByType[type].sort();
-      menuInfo += `╭──── *${type}* ────\n`;
-      sortedCommands.forEach((cmd) => {
-        menuInfo += `│${totalCommands}· ${cmd}\n`;
-        totalCommands++;
+    sort.forEach((type) => {
+      const sortedCommands = cmdTypes[type].sort();
+      menuInfo += `╭──── *${toFancyFont(type)}* ────\n`;
+      sortedCommands.forEach((cmd: string) => {
+        menuInfo += `│${cmdNumbers}· ${toFancyFont(cmd)}\n`;
+        cmdNumbers++;
       });
       menuInfo += `╰────────────\n`;
     });

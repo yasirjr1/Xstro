@@ -10,4 +10,5 @@ export type cmdCategories =
   | 'download'
   | 'media'
   | 'utilities'
-  | 'user';
+  | 'user'
+  | 'privacy';

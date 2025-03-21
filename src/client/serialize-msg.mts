@@ -121,7 +121,7 @@ export async function serialize(client: Client, messages: WAMessage) {
     async downloadM(
       message: WAMessage,
       shouldSaveasFile?: boolean,
-    ): Promise<string | Buffer<ArrayBufferLike>> {
+    ): Promise<Buffer<ArrayBufferLike> | string> {
       try {
         const media = await downloadMediaMessage(message, 'buffer', {});
         if (shouldSaveasFile) {

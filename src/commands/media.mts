@@ -19,7 +19,7 @@ registerCommand({
     if (!message?.quoted?.message?.audioMessage && !message?.quoted?.message?.videoMessage)
       return message.send('Reply a video or audio message');
     const media = await message.downloadM(message.quoted!, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const newAudio = await toPTT(media);
     return await message.sendMessage(message.jid, {
       audio: newAudio,
@@ -38,7 +38,7 @@ registerCommand({
     if (!message?.quoted?.message?.audioMessage && !message?.quoted?.message?.videoMessage)
       return message.send('Reply a video or audio message');
     const media = await message.downloadM(message.quoted!, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const mp3 = await convertToMp3(media);
     return await message.sendMessage(message.jid, {
       audio: mp3,
@@ -56,7 +56,7 @@ registerCommand({
   function: async (message) => {
     if (!message?.quoted?.message?.videoMessage) return message.send('Reply a video message');
     const media = await message.downloadM(message.quoted!, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const video = await toVideo(media);
     return await message.sendMessage(message.jid, { video: video, mimetype: '	video/mp4' });
   },
@@ -70,7 +70,7 @@ registerCommand({
   function: async (message) => {
     if (!message?.quoted?.message?.audioMessage) return message.send('Reply to an audio message');
     const media = await message.downloadM(message.quoted!, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const video = await audioToBlackVideo(media);
     return await message.sendMessage(message.jid, {
       video: video,
@@ -92,7 +92,7 @@ registerCommand({
     if (!choice || !directions.includes(choice))
       return message.send('Specify direction: left, right, vertical, or horizontal');
     const media = await message.downloadM(message.quoted!, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const flipped = await flipMedia(media, choice);
     return await message.send(flipped);
   },
@@ -106,7 +106,7 @@ registerCommand({
   function: async (message) => {
     if (!message?.quoted?.message?.imageMessage) return message.send('Reply to an image message');
     const media = await message.downloadM(message.quoted!, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const circular = await cropToCircle(media);
     return await message.sendMessage(message.jid, {
       image: circular,
@@ -128,7 +128,7 @@ registerCommand({
     )
       return message.send('Reply to an image, video or sticker message');
     const media = await message.downloadM(message.quoted!, false);
-    if (!media) return message.send('Failed to download message');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
 
     let packname, author;
 
@@ -157,6 +157,7 @@ registerCommand({
       return message.send('Reply to a video Message');
     if (!match) return message.send(`Usage:\n${message.prefix}trim 00:00:05|00:01:08`);
     const videotoTrim = await message.downloadM(message.quoted);
+    if (!videotoTrim || !Buffer.isBuffer(videotoTrim)) return;
     const [startTime, endTime] = match.split('|');
     if (!startTime || !endTime)
       return message.send(`Usage:\n${message.prefix}trim 00:00:05|00:01:08`);

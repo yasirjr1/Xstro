@@ -35,7 +35,7 @@ registerCommand({
       !message.quoted?.message?.videoMessage
     )
       return message.send('Reply an image, video or audio message.');
-    const media = await message.downloadM(message.quoted, false);
+    const media = await message.downloadM(message.quoted);
     if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download message');
     const url = await uploadFile(media);
     return await message.send(url!);
