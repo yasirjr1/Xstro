@@ -5,18 +5,16 @@ import { client } from './client/index.mts';
 
 dotenv.config();
 
-const startApp = async (): Promise<void> => {
+(async (): Promise<void> => {
   await checkNodeVersion();
   await getSession();
   await loadPlugins();
   await client();
 
-  const http = createServer((req, res) => {
+  const http = createServer((_, res) => {
     res.writeHead(200);
     res.end();
   });
 
   http.listen(8000);
-};
-
-startApp();
+})();

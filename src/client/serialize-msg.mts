@@ -14,8 +14,6 @@ import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
 import type { Client, MessageMisc } from '../index.mts';
 import { sendClientMessage } from './send-msg.mts';
 
-/** Message repack to simplfy over all bot message handling */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function serialize(client: Client, messages: WAMessage) {
   const normalizedMessages = {
     ...messages,
