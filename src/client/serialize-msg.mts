@@ -10,7 +10,7 @@ import { join } from 'path';
 import { Boom } from '@hapi/boom';
 import { extractTextFromMessage, numToJid } from '../utilities/constants.mts';
 import { getConfig, loadMessage } from '../model/index.mts';
-import type { AnyMessageContent, WAContextInfo, WAMessage } from 'baileys';
+import type { AnyMessageContent, WAContextInfo, WAMessage, WAMessageKey } from 'baileys';
 import type { Client, MessageMisc } from '../index.mts';
 import { sendClientMessage } from './send-msg.mts';
 
@@ -20,11 +20,10 @@ export async function serialize(client: Client, messages: WAMessage) {
     message: normalizeMessageContent(messages?.message),
   };
   const { key, message, ...msg } = normalizedMessages;
-  const { user, sendMessage } = client;
   const { prefix, mode, sudo } = await getConfig();
-  const owner = numToJid(user!.id);
+  const owner = numToJid(client?.user!.id);
   const sender =
-    isJidGroup(key.remoteJid!) || isJidBroadcast(key.remoteJid!)
+    isJidGroup(key.remoteJid!) || msg.broadcast
       ? key.participant
       : key.fromMe
         ? owner
@@ -83,8 +82,7 @@ export async function serialize(client: Client, messages: WAMessage) {
             sender: Quoted.participant!,
             text: extractTextFromMessage(quotedM),
             broadcast: Boolean(Quoted.remoteJid!),
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type
-            ...(({ quotedMessage, stanzaId, remoteJid, ...rest }) => rest)(Quoted),
+            ...(({ quotedMessage, stanzaId, remoteJid, ...rest }): WAContextInfo => rest)(Quoted),
           }
         : undefined,
     isAdmin: async function (): Promise<boolean | unknown[]> {
@@ -110,10 +108,10 @@ export async function serialize(client: Client, messages: WAMessage) {
         updatedOptions,
       );
     },
-    edit: async function (text: string): Promise<WAMessage | undefined> {
+    edit: async function (text: string, key?: WAMessageKey): Promise<WAMessage | undefined> {
       return await client.sendMessage(this.jid, {
         text: text,
-        edit: this.quoted ? this.quoted.key : this.key,
+        edit: key || this.quoted?.key || this.key,
       });
     },
     async downloadM(
@@ -143,20 +141,19 @@ export async function serialize(client: Client, messages: WAMessage) {
       if (!message || !jid) {
         throw new Boom('Illegal there must be a Vaild Web Message and a Jid');
       }
-      return await sendMessage(jid, { forward: message, ...opts }, { ...opts });
+      return await client.sendMessage(jid, { forward: message, ...opts }, { ...opts });
     },
     react: async function (emoji: string, message?: WAMessage): Promise<WAMessage | undefined> {
-      return await sendMessage(this.jid, {
+      return await client.sendMessage(this.jid, {
         react: { text: emoji, key: message?.key ? this.quoted?.key : this.key },
       });
     },
     delete: async function (message?: WAMessage): Promise<WAMessage | undefined> {
-      return await sendMessage(this.jid, {
+      return await client.sendMessage(this.jid, {
         delete: message!.key ? this.quoted!.key : this!.key,
       });
     },
     ...msg,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type
     ...(({ logger, ws, authState, signalRepository, user, ...rest }) => rest)(client),
   };
 }

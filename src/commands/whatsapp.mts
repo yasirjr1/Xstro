@@ -69,7 +69,7 @@ registerCommand({
       return message.send('Reply an Image');
     }
     const media = await message.downloadM(message.quoted);
-    if (!media) return message.send('Failed to Process Image!');
+    if (!media || !Buffer.isBuffer(media)) return message.send('Failed to Process Image!');
     await message.updateProfilePicture(message.owner, media);
     return message.send('Profile Picture Updated!');
   },

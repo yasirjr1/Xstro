@@ -62,7 +62,7 @@ export const convertTo24Hour = (timeStr: string): string | null => {
   const timeRegex = /^(0?[1-9]|1[0-2]):([0-5][0-9])(am|pm)$/i;
   const match = timeStr.toLowerCase().match(timeRegex);
   if (!match) return null;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   let [_, hours, minutes, period] = match;
   let hour = parseInt(hours, 10);
   if (period === 'pm' && hour !== 12) hour += 12;
@@ -201,7 +201,6 @@ export const fetchJson = async function (url: string, options?: gotOps): Promise
 export const postJson = async function (
   url: string,
   options?: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     formData?: Record<string, any>;
     headers?: Record<string, string>;
   },

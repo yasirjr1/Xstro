@@ -144,3 +144,5 @@ registerCommand({
     return message.send(`Banned users:\n${banList}`, { mentions: db.banned });
   },
 });
+
+registerCommand;

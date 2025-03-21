@@ -4,7 +4,7 @@ import tsParser from '@typescript-eslint/parser';
 import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 
 const eslintConfig: FlatConfig.Config = {
-  files: ['**/*.{ts,mts,tsx}'],
+  files: ['**/*.{ts,mts}'],
   ignores: ['node_modules/**'],
   languageOptions: {
     ecmaVersion: 'latest',
@@ -12,7 +12,7 @@ const eslintConfig: FlatConfig.Config = {
     parser: tsParser,
     globals: {
       node: true,
-      es2021: true,
+      esnext: true,
     },
   },
   plugins: {
@@ -37,10 +37,6 @@ const eslintConfig: FlatConfig.Config = {
         proseWrap: 'preserve',
       },
     ],
-    '@typescript-eslint/explicit-function-return-type': 'warn',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    '@typescript-eslint/consistent-type-imports': 'error',
-    '@typescript-eslint/no-explicit-any': 'warn',
   },
 };
 

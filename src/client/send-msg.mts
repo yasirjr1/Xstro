@@ -7,7 +7,7 @@ export async function sendClientMessage(
   client: Client,
   content: string | Buffer,
   options?: MessageMisc & Partial<AnyMessageContent>,
-): Promise<void | XMessage> {
+): Promise<XMessage> {
   const jid = options?.jid;
   const explicitType = options?.type;
   const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);

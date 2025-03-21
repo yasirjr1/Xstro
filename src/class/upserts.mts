@@ -1,5 +1,4 @@
-import type { BaileysEventMap, WASocket } from 'baileys';
-import { Boom } from '@hapi/boom';
+import { isJidUser, type BaileysEventMap, type WAMessage, type WASocket } from 'baileys';
 import {
   serialize,
   commands,
@@ -9,8 +8,9 @@ import {
   saveContact,
   upsertM,
   getAntidelete,
-  type XMessage,
   lang,
+  getConfig,
+  type XMessage,
 } from '../index.mts';
 
 export class MessagesUpsert {
@@ -32,6 +32,8 @@ export class MessagesUpsert {
     await Promise.all(
       messages.map(async (msg) => {
         const message = await serialize(this.client, msg);
+        const db = await getConfig();
+        if (db.autoRead) await message.readMessages([message.key]);
         await Promise.all([
           this.executeCommand(message),
           this.evaluator(message),
@@ -44,27 +46,37 @@ export class MessagesUpsert {
     );
   }
 
-  private async executeCommand(message: XMessage): Promise<void> {
+  public async executeCommand(message: XMessage): Promise<void | WAMessage> {
     if (!message.text) return;
 
     for (const cmd of commands) {
       const handler = message.prefix.find((p) => message.text?.startsWith(p));
       const match = message.text.slice(handler?.length || 0).match(cmd.name);
+      const db = await getConfig();
 
       if (!handler || !match) continue;
 
       try {
         if (!message.sudo && (message.mode || cmd.fromMe)) return;
-        if (cmd.isGroup && !message.isGroup) {
-          await message.send(lang.groups_only);
-          return;
-        }
 
-        const args = match[2] ?? '';
-        await message.react('⏳');
-        await cmd.function!(message, args);
+        if (cmd.isGroup && !message.isGroup) return message.send(lang.groups_only);
+
+        if (db.banned.includes(message.sender!)) return message.send(lang.ban_msg);
+
+        if (db.disabledCmds.includes(cmd.name.toString().toLowerCase().split(/\W+/)[2]))
+          return message.send(lang.disablecmd);
+
+        if (db.disabledm && isJidUser(message.jid) && message.jid !== message.owner) return;
+
+        if (db.cmdReact) await message.react('⏳');
+
+        if (db.cmdRead) await message.readMessages([message.key]);
+
+        await cmd.function!(message, match[2] ?? '');
+        return await message.react('✅');
       } catch (err) {
-        console.error(new Boom(err));
+        await message.react('❌');
+        throw new Error(err);
       }
     }
   }
