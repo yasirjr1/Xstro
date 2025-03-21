@@ -1,6 +1,8 @@
 import * as cheerio from 'cheerio';
 import { Boom } from '@hapi/boom';
+import { InferenceClient } from '@huggingface/inference';
 import { fetchJson } from '../index.mts';
+import { environment } from '../../environment.ts';
 
 /** Under the permission of
  * https://www.vox.com/robots.txt
@@ -80,7 +82,7 @@ export const technews = async (): Promise<string> => {
     const $ = cheerio.load(html);
     const newsItems: NewsItem[] = [];
 
-    $('a.block').each((index: number, element: cheerio.TagElement) => {
+    $('a.block').each((_, element: cheerio.TagElement) => {
       const $article = $(element);
       const title: string = $article.find('h2.font-bold').text().trim();
       const description: string = $article.find('p.font-serif').text().trim();
@@ -104,3 +106,23 @@ export const technews = async (): Promise<string> => {
     throw new Error(error instanceof Error ? error.message : String(error));
   }
 };
+
+export async function deepSeek(content: string): Promise<string> {
+  if (!environment.HUGGING_FACE_KEY)
+    return `No Hugging Face API Key found, Please get on from\n\nhttps://huggingface.co/settings/tokens/new?ownUserPermissions=inference.endpoints.infer.write&globalPermissions=inference.serverless.write&tokenType=fineGrained`;
+  const client: InferenceClient = new InferenceClient(environment.HUGGING_FACE_KEY);
+
+  const chatCompletion = await client.chatCompletion({
+    provider: 'fireworks-ai',
+    model: 'deepseek-ai/DeepSeek-V3',
+    messages: [
+      {
+        role: 'user',
+        content: content,
+      },
+    ],
+    max_tokens: 500,
+  });
+
+  return chatCompletion.choices[0].message.content.replace(/[^a-zA-Z0-9\s]/g, '');
+}

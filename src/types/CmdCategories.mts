@@ -1,4 +1,5 @@
 export type cmdCategories =
+  | 'ai'
   | 'misc'
   | 'system'
   | 'settings'

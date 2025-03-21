@@ -27,7 +27,7 @@ registerCommand({
 │ Usage: ${formatBytes(totalmem() - freemem())}
 │ Day: ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
 │ Date: ${new Date().toLocaleDateString('en-US')}
-│ Time: ${new Date().toLocaleTimeString('en-US', { timeZone: TIME_ZONE })}
+│ Time: ${new Date().toLocaleTimeString('en-US', { timeZone: TIME_ZONE || process.env.TZ })}
 │ Node: ${process.version}
 ╰─────────────\`\`\`\n`;
 

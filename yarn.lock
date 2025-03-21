@@ -125,6 +125,24 @@
   resolved "https://registry.npmjs.org/@hapi/hoek/-/hoek-11.0.7.tgz#56a920793e0a42d10e530da9a64cc0d3919c4002"
   integrity sha512-HV5undWkKzcB4RZUusqOpcgxOaq6VOAH7zhhIr2g3G8NF/MlFO75SjOr2NfuSx0Mh40+1FqCkagKLJRykUWoFQ==
 
+"@huggingface/inference@^3.6.1":
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/@huggingface/inference/-/inference-3.6.1.tgz#0c1552aae117d34a12271afc9f5178b6a4c93d8e"
+  integrity sha512-EtQlbBqcZycPe+qiTEFI+wNHOMpG0gwNTaZSvYu1juN1p/1dEgqAb2GO31dxLgNev2PzH9d+9nm8GngOsIepJg==
+  dependencies:
+    "@huggingface/jinja" "^0.3.3"
+    "@huggingface/tasks" "^0.17.8"
+
+"@huggingface/jinja@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@huggingface/jinja/-/jinja-0.3.3.tgz#dd31635a19df5ae011d0e8d97eea8675bebbcda1"
+  integrity sha512-vQQr2JyWvVFba3Lj9es4q9vCl1sAc74fdgnEMoX8qHrXtswap9ge9uO3ONDzQB0cQ0PUyaKY2N6HaVbTBvSXvw==
+
+"@huggingface/tasks@^0.17.8":
+  version "0.17.9"
+  resolved "https://registry.yarnpkg.com/@huggingface/tasks/-/tasks-0.17.9.tgz#398ee74322eb75555ea88ed105114834c3225d66"
+  integrity sha512-lV6RgCJkqy3p93FFxP9H4SGJmFcHAwr1FO+Zk56q/JWsf7Tdsel1DEo1Xfd3An7ZPWpc2Y9ldRecGo9efDYghg==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.npmjs.org/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"
