@@ -14,6 +14,10 @@
             "description": "Server URL for the custom session ID",
             "required": false
         },
+        "HUGGING_FACE_KEY": {
+            "description": "Please Put your hugging face Api key inorder to use Ai commands",
+            "required": false
+        },
         "DATABASE_URL": {
             "description": "Custom database path for SQLite",
             "required": false

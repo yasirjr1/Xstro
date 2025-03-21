@@ -107,14 +107,17 @@ export const technews = async (): Promise<string> => {
   }
 };
 
-export async function deepSeek(content: string): Promise<string> {
+export async function AIResponse(
+  content: string,
+  model: 'Qwen/QwQ-32B' | 'deepseek-ai/DeepSeek-V3',
+): Promise<string> {
   if (!environment.HUGGING_FACE_KEY)
     return `No Hugging Face API Key found, Please get on from\n\nhttps://huggingface.co/settings/tokens/new?ownUserPermissions=inference.endpoints.infer.write&globalPermissions=inference.serverless.write&tokenType=fineGrained`;
   const client: InferenceClient = new InferenceClient(environment.HUGGING_FACE_KEY);
 
   const chatCompletion = await client.chatCompletion({
     provider: 'fireworks-ai',
-    model: 'deepseek-ai/DeepSeek-V3',
+    model: model,
     messages: [
       {
         role: 'user',
@@ -124,5 +127,8 @@ export async function deepSeek(content: string): Promise<string> {
     max_tokens: 500,
   });
 
-  return chatCompletion.choices[0].message.content.replace(/[^a-zA-Z0-9\s]/g, '');
+  return chatCompletion.choices[0].message.content
+    .replace(/[^a-zA-Z0-9\s]/g, '')
+    .replace(/[\s\S]*<\/think>/, '')
+    .trim();
 }
