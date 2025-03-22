@@ -68,6 +68,13 @@ export class MessagesUpsert {
 
         if (db.disabledm && isJidUser(message.jid) && message.jid !== message.owner) return;
 
+        if (
+          message.isGroup &&
+          db.disablegc &&
+          cmd.name.toString().toLowerCase().split(/\W+/)[2] !== 'enablegc'
+        )
+          return;
+
         if (db.cmdReact) await message.react('⏳');
 
         if (db.cmdRead) await message.readMessages([message.key]);

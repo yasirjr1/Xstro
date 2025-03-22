@@ -145,4 +145,28 @@ registerCommand({
   },
 });
 
-registerCommand;
+registerCommand({
+  name: 'enablegc',
+  fromMe: true,
+  desc: 'Enable bot to run in Group Chat',
+  type: 'settings',
+  function: async (message) => {
+    if (!(await getConfig()).disablegc)
+      return message.send(`_Bot is already enabled for group chats_`);
+    await editConfig({ disablegc: false });
+    return message.send(`_Bot is now enabled for Group Chats._`);
+  },
+});
+
+registerCommand({
+  name: 'disablegc',
+  fromMe: true,
+  desc: 'Disable bot from running in Group Chat',
+  type: 'settings',
+  function: async (message) => {
+    if ((await getConfig()).disablegc)
+      return message.send(`_Already disabled bot for group chats_`);
+    await editConfig({ disablegc: true });
+    return message.send(`_Bot is now disabled for Group Chats_`);
+  },
+});

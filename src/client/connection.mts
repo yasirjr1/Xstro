@@ -21,8 +21,8 @@ export const logger = Logger.pino({
 });
 
 export const client = async (): Promise<Client> => {
-  const db = await getDb();
-  const { state, saveCreds } = await useSqliteAuthState(db);
+  const database = await getDb();
+  const { state, saveCreds } = await useSqliteAuthState(database);
   const conn = makeWASocket({
     auth: {
       creds: state.creds,
