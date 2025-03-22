@@ -4,5 +4,6 @@ ENV PATH="/root/.bun/bin:$PATH"
 RUN git clone https://github.com/AstroX11/Xstro /Xstro
 WORKDIR /Xstro
 RUN yarn
+RUN npm install -g pm2
 EXPOSE 8000
-CMD ["yarn", "start"]
+CMD ["pm2-runtime", "start", "yarn", "--interpreter", "bash", "--name", "xstro", "--", "start"]
