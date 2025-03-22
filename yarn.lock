@@ -855,7 +855,7 @@ basic-ftp@^5.0.2:
   resolved "https://registry.yarnpkg.com/basic-ftp/-/basic-ftp-5.0.5.tgz#14a474f5fffecca1f4f406f1c26b18f800225ac0"
   integrity sha512-4Bcg1P8xhUuqcii/S0Z9wiHIrQVPMermM1any+MX5GeGD7faD3/msQUDGLol9wOcz4/jbg/WJnGqoJF6LiBdtg==
 
-better-sqlite3@^11.9.0:
+better-sqlite3@^11.9.1:
   version "11.9.1"
   resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-11.9.1.tgz#0540da2f2ce24cbd766bb35db412f4be2c75b8bb"
   integrity sha512-Ba0KR+Fzxh2jDRhdg6TSH0SJGzb8C0aBY4hR8w8madIdIzzC6Y1+kx5qR6eS1Z+Gy20h6ZU28aeyg0z1VIrShQ==

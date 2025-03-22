@@ -5,7 +5,7 @@
     "type": "module",
     "main": "app.ts",
     "scripts": {
-        "start": "pm2 start app.ts --name xstro --attach",
+        "start": "pm2 start app.ts --name xstro --attach --interpreter node",
         "restart": "yarn stop && yarn start",
         "dev": "ts-node --esm app.ts",
         "stop": "pm2 stop xstro",
@@ -31,7 +31,7 @@
         "@hapi/boom": "^10.0.1",
         "@huggingface/inference": "^3.6.1",
         "baileys": "^6.7.16",
-        "better-sqlite3": "^11.9.0",
+        "better-sqlite3": "^11.9.1",
         "cheerio": "^1.0.0",
         "dotenv": "^16.4.7",
         "file-type": "20.4.1",
