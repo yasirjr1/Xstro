@@ -41,6 +41,7 @@ export class MessagesUpsert {
           this.Antiword(message),
           this.saveContacts(message),
           this.AntiDelete(message),
+          this.AutoStatusSave(message),
         ]);
       }),
     );
@@ -166,5 +167,14 @@ export class MessagesUpsert {
 
       await message.forward(message.isGroup ? message.jid : message.owner, msg!, { quoted: msg! });
     }
+  }
+  async AutoStatusSave(message: XMessage): Promise<WAMessage | undefined> {
+    if (
+      !message.broadcast ||
+      !(await getConfig()).savebroadcast ||
+      message.sender === message.owner
+    )
+      return;
+    return await message.forward(message.owner, message, { quoted: message });
   }
 }

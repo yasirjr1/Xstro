@@ -170,3 +170,19 @@ registerCommand({
     return message.send(`_Bot is now disabled for Group Chats_`);
   },
 });
+
+registerCommand({
+  name: 'savestatus',
+  fromMe: true,
+  desc: 'Settings to automatically save status updates',
+  type: 'settings',
+  function: async (message, match: 'on' | 'off') => {
+    if (!match || (match?.toLowerCase()?.trim() !== 'on' && match?.toLowerCase()?.trim() !== 'off'))
+      return message.send(`_Usage: ${message.prefix[0]}autosavestatus on | off._`);
+    const db = (await getConfig()).savebroadcast;
+    if (match === 'on' && db) return message.send('_Autosave Status is Already on._');
+    if (match === 'off' && !db) return message.send('_Autosave Status is Already off._');
+    await editConfig({ savebroadcast: match === 'on' ? true : match === 'off' ? false : false });
+    return await message.send(`_AutoSave Status is now ${match}._`);
+  },
+});
