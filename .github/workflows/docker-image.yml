@@ -7,16 +7,12 @@ on:
     branches: [ "master" ]
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag xstro:$(date +%s)
-    - name: Run the Docker image
-      run: |
-        docker run -d --name xstro-container xstro:$(date +%s)
-        sleep 30
-        docker stop xstro-container
-        docker rm xstro-container
+      run: docker build . --file Dockerfile
