@@ -202,7 +202,7 @@ registerCommand({
 
     if (!match && !message.quoted) return message.send('Reply or type anything to tag with');
 
-    if (match || message.quoted?.text) {
+    if (match) {
       return await message.send(message!?.quoted!?.text! ?? match, {
         mentions: [...participants],
       });

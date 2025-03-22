@@ -186,3 +186,51 @@ registerCommand({
     return await message.send(`_AutoSave Status is now ${match}._`);
   },
 });
+
+registerCommand({
+  name: 'autoread',
+  fromMe: true,
+  desc: 'Settings to automatically read messages',
+  type: 'settings',
+  function: async (message, match: 'on' | 'off') => {
+    if (!match || (match?.toLowerCase()?.trim() !== 'on' && match?.toLowerCase()?.trim() !== 'off'))
+      return message.send(`_Usage: ${message.prefix[0]}autoread on | off._`);
+    const db = (await getConfig()).autoRead;
+    if (match === 'on' && db) return message.send('_AutoRead is Already on._');
+    if (match === 'off' && !db) return message.send('_AutoRead is Already off._');
+    await editConfig({ autoRead: match === 'on' ? true : match === 'off' ? false : false });
+    return await message.send(`_Autoread messages is now ${match}._`);
+  },
+});
+
+registerCommand({
+  name: 'cmdread',
+  fromMe: true,
+  desc: 'Settings to automatically read command messages',
+  type: 'settings',
+  function: async (message, match: 'on' | 'off') => {
+    if (!match || (match?.toLowerCase()?.trim() !== 'on' && match?.toLowerCase()?.trim() !== 'off'))
+      return message.send(`_Usage: ${message.prefix[0]}cmdread on | off._`);
+    const db = (await getConfig()).cmdRead;
+    if (match === 'on' && db) return message.send('_AutoReadCommand is Already on._');
+    if (match === 'off' && !db) return message.send('_AutoReadCommandis Already off._');
+    await editConfig({ cmdRead: match === 'on' ? true : match === 'off' ? false : false });
+    return await message.send(`_AutoReadCommand messages is now ${match}._`);
+  },
+});
+
+registerCommand({
+  name: 'cmdreact',
+  fromMe: true,
+  desc: 'Settings to automatically react to command messages',
+  type: 'settings',
+  function: async (message, match: 'on' | 'off') => {
+    if (!match || (match?.toLowerCase()?.trim() !== 'on' && match?.toLowerCase()?.trim() !== 'off'))
+      return message.send(`_Usage: ${message.prefix[0]}cmdreact on | off._`);
+    const db = (await getConfig()).cmdReact;
+    if (match === 'on' && db) return message.send('_AutoRead is Already on._');
+    if (match === 'off' && !db) return message.send('_AutoRead is Already off._');
+    await editConfig({ cmdReact: match === 'on' ? true : match === 'off' ? false : false });
+    return await message.send(`_AutoCommand React messages is now ${match}._`);
+  },
+});
