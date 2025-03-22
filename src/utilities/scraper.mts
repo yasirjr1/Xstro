@@ -2,7 +2,7 @@ import * as cheerio from 'cheerio';
 import { Boom } from '@hapi/boom';
 import { InferenceClient } from '@huggingface/inference';
 import { fetchJson } from '../index.mts';
-import { environment } from '../../environment.ts';
+import { environment } from '../../config.ts';
 
 /** Under the permission of
  * https://www.vox.com/robots.txt

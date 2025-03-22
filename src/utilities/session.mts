@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import { logger, MakeSession } from '../index.mts';
-import { environment } from '../../environment.ts';
+import { environment } from '../../config.ts';
 import { getDb } from '../model/database.mts';
 
 const sessionId = environment.SESSION;
