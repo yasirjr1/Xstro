@@ -81,7 +81,7 @@ export class MessagesUpsert {
         if (db.cmdRead) await message.readMessages([message.key]);
 
         await cmd.function!(message, match[2] ?? '');
-        
+
         if (db.cmdReact) return await message.react('✅');
       } catch (err) {
         if (db.cmdReact) await message.react('❌');

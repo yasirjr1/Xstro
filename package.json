@@ -3,11 +3,11 @@
     "version": "7.0.0",
     "description": "Simple WA bot.",
     "type": "module",
-    "main": "./src/start.ts",
+    "main": "app.ts",
     "scripts": {
-        "start": "pm2 start src/start.ts --name xstro --attach",
+        "start": "pm2 start app.ts --name xstro --attach",
         "restart": "yarn stop && yarn start",
-        "dev": "ts-node --esm src/start.ts",
+        "dev": "ts-node --esm app.ts",
         "stop": "pm2 stop xstro",
         "lint": "yarn run eslint . --fix"
     },
