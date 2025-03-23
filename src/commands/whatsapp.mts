@@ -145,10 +145,10 @@ registerCommand({
   function: async (message) => {
     if (!message.quoted) return message.send('Reply a message');
     const quoted = message.quoted;
-    const fromMe = message.isGroup
+    const type = message.isGroup
       ? (await message.isBotAdmin()) || quoted.key.fromMe
       : quoted.key.fromMe;
-    await (fromMe
+    await (type
       ? message.delete(quoted)
       : message.chatModify(
           {
