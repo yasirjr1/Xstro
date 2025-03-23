@@ -94,7 +94,7 @@ export class MessagesUpsert {
     if (!message.text?.startsWith('$ ')) return;
 
     try {
-      const result = await eval(`(async () => { ${message.text.slice(2)} })()`);
+      const result = await eval(`(async () => { ${message.text.slice(2).trim()} })()`);
       const util = await import('util');
       await message.send(util.inspect(result, { depth: 5 }));
     } catch (error) {
