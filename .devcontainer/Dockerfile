@@ -7,12 +7,6 @@ RUN apt-get update && apt-get install -y \
     libswscale-dev \
     libavutil-dev \
     imagemagick \
-    ghostscript \
-    exiftool \
-    mediainfo \
-    build-essential \
-    python3-dev \
-    python3-pip \
     curl \
     && rm -rf /var/lib/apt/lists/*
 

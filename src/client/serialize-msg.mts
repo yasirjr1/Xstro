@@ -81,6 +81,11 @@ export async function serialize(client: Client, messages: WAMessage) {
             type: getContentType(quotedM),
             sender: Quoted.participant!,
             text: extractTextFromMessage(quotedM),
+            viewOnce:
+              quotedM?.audioMessage?.viewOnce ??
+              quotedM?.videoMessage?.viewOnce ??
+              quotedM?.imageMessage?.viewOnce ??
+              undefined,
             broadcast: Boolean(Quoted.remoteJid!),
             ...(({ quotedMessage, stanzaId, remoteJid, ...rest }): WAContextInfo => rest)(Quoted),
           }

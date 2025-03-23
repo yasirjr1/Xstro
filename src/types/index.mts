@@ -4,3 +4,4 @@ export type * from './Command.mts';
 export type * from './Config.mts';
 export type * from './MessageMisc.mts';
 export type * from './XMessage.mts';
+export type * from './MediaMessage.mts';
