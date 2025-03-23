@@ -127,14 +127,11 @@ registerCommand({
   desc: 'Get all the list of numbers you have blocked',
   type: 'whatsapp',
   function: async (message) => {
-    const list = await message.fetchBlocklist();
-    if (!list) return message.send(lang.commands.blocklist.no_blocked);
-    return await message.send(
-      `Blocked Users:\n${list.map((nums) => `\n@${nums.split('@')[0]}`).join('')}`,
-      {
-        mentions: [...list],
-      },
-    );
+    const users = await message.fetchBlocklist();
+    if (!users) return message.send(lang.commands.blocklist.no_blocked);
+    return await message.send(users.map((nums) => `\n@${nums.split('@')[0]}`).join(''), {
+      mentions: users,
+    });
   },
 });
 
