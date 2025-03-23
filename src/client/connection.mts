@@ -13,12 +13,13 @@ import {
   type Client,
   saveReceipts,
 } from '../index.mts';
+import { environment } from '../../config.ts';
 
 EventEmitter.defaultMaxListeners = 10000;
 process.setMaxListeners(10000);
 
 export const logger = Logger.pino({
-  level: 'info',
+  level: environment.DEBUG ? 'info' : 'silent',
 });
 
 export const client = async (): Promise<Client> => {
