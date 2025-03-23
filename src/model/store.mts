@@ -1,35 +1,13 @@
 import { getDb } from './database.mts';
 import type Database from 'better-sqlite3';
 import type { Statement } from 'better-sqlite3';
-import { type WAMessage, type MessageUpsertType, type GroupMetadata, WAProto } from 'baileys';
-
-async function SqliteMemoryStore(): Promise<void> {
-  const db = await getDb();
-  db.exec(`
-        CREATE TABLE IF NOT EXISTS messages (
-            remoteJid TEXT,
-            id TEXT,
-            fromMe INTEGER,
-            participant TEXT,
-            messageTimestamp INTEGER,
-            status TEXT,
-            data JSON,
-            requestId TEXT,
-            upsertType TEXT,
-            PRIMARY KEY (remoteJid, id, fromMe)
-        )
-    `);
-}
-
-async function GroupMetaCache(): Promise<void> {
-  const db: Database.Database = await getDb();
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS group_metadata (
-      jid TEXT PRIMARY KEY,
-      metadata JSON
-    )
-  `);
-}
+import {
+  WAProto,
+  type WAMessage,
+  type MessageUpsertType,
+  type GroupMetadata,
+  type MessageUserReceiptUpdate,
+} from 'baileys';
 
 async function ContactStore(): Promise<void> {
   const db: Database.Database = await getDb();
@@ -45,7 +23,6 @@ async function ContactStore(): Promise<void> {
 }
 
 export async function groupMetadata(jid: string): Promise<GroupMetadata | undefined> {
-  await GroupMetaCache();
   const db: Database.Database = await getDb();
 
   const stmt: Statement = db.prepare(`SELECT metadata FROM group_metadata WHERE jid = ?`);
@@ -54,13 +31,26 @@ export async function groupMetadata(jid: string): Promise<GroupMetadata | undefi
   return result && result.metadata ? JSON.parse(result.metadata) : undefined;
 }
 
-export async function upsertM(upsert: {
+export async function saveMessages(upsert: {
   messages: WAMessage[];
   type: MessageUpsertType;
   requestId?: string;
 }): Promise<void> {
-  await SqliteMemoryStore();
   const db = await getDb();
+  db.exec(`
+        CREATE TABLE IF NOT EXISTS messages (
+            remoteJid TEXT,
+            id TEXT,
+            fromMe INTEGER,
+            participant TEXT,
+            messageTimestamp INTEGER,
+            status TEXT,
+            data JSON,
+            requestId TEXT,
+            upsertType TEXT,
+            PRIMARY KEY (remoteJid, id, fromMe)
+        )
+    `);
   const stmt: Statement = db.prepare(`
         INSERT OR REPLACE INTO messages (
             remoteJid, 
@@ -135,4 +125,38 @@ export async function saveContact(contact: {
   ];
 
   stmt.run(params);
+}
+
+export async function saveReceipts(updates: MessageUserReceiptUpdate[]): Promise<void> {
+  const db = await getDb();
+  const stmt: Statement = db.prepare(`
+    CREATE TABLE IF NOT EXISTS message_receipts (
+      remoteJid TEXT,
+      id TEXT,
+      fromMe INTEGER,
+      receipt JSON,
+      PRIMARY KEY (remoteJid, id, fromMe)
+    )
+  `);
+  stmt.run();
+
+  const insertStmt: Statement = db.prepare(`
+    INSERT OR REPLACE INTO message_receipts (
+      remoteJid,
+      id,
+      fromMe,
+      receipt
+    ) VALUES (?, ?, ?, ?)
+  `);
+
+  for (const update of updates) {
+    const { key, receipt } = update;
+    const params = [
+      key.remoteJid ?? null,
+      key.id ?? null,
+      key.fromMe ? 1 : 0,
+      JSON.stringify(receipt),
+    ];
+    insertStmt.run(params);
+  }
 }

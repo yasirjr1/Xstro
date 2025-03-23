@@ -11,6 +11,7 @@ import {
   groupMetadata,
   useSqliteAuthState,
   type Client,
+  saveReceipts,
 } from '../index.mts';
 
 EventEmitter.defaultMaxListeners = 10000;
@@ -49,7 +50,7 @@ export const client = async (): Promise<Client> => {
     }
 
     if (events['message-receipt.update']) {
-      logger.info(events['message-receipt.update'][0]);
+      await saveReceipts(events['message-receipt.update']);
     }
   });
 

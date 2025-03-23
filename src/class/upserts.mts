@@ -6,7 +6,7 @@ import {
   getAntiword,
   isUrl,
   saveContact,
-  upsertM,
+  saveMessages,
   getAntidelete,
   lang,
   getConfig,
@@ -25,7 +25,7 @@ export class MessagesUpsert {
     if (!event) return;
 
     const { messages, type, requestId } = event;
-    upsertM({ messages, type, requestId });
+    saveMessages({ messages, type, requestId });
 
     if (type !== 'notify') return;
 
