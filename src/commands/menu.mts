@@ -44,14 +44,14 @@ registerCommand({
 
     const sort = Object.keys(cmdTypes).sort();
 
-    let cmdNumbers = 1;
+    let cmdCount = 1;
 
     sort.forEach((type) => {
       const sortedCommands = cmdTypes[type].sort();
       menuInfo += `╭──── *${toFancyFont(type)}* ────\n`;
       sortedCommands.forEach((cmd: string) => {
-        menuInfo += `│${cmdNumbers}· ${toFancyFont(cmd)}\n`;
-        cmdNumbers++;
+        menuInfo += `│${cmdCount}· ${toFancyFont(cmd)}\n`;
+        cmdCount++;
       });
       menuInfo += `╰────────────\n`;
     });
