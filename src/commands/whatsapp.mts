@@ -144,22 +144,7 @@ registerCommand({
   type: 'whatsapp',
   function: async (message) => {
     if (!message.quoted) return message.send('Reply a message');
-    const quoted = message.quoted;
-    const type = message.isGroup
-      ? (await message.isBotAdmin()) || quoted.key.fromMe
-      : quoted.key.fromMe;
-    await (type
-      ? message.delete(quoted)
-      : message.chatModify(
-          {
-            deleteForMe: {
-              deleteMedia: isMediaMessage(quoted),
-              key: quoted.key,
-              timestamp: Date.now(),
-            },
-          },
-          message.jid,
-        ));
+    return await message.delete(message.quoted);
   },
 });
 

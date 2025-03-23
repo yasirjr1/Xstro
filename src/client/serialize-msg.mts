@@ -8,7 +8,7 @@ import {
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import { Boom } from '@hapi/boom';
-import { extractTextFromMessage, numToJid } from '../utilities/constants.mts';
+import { extractTextFromMessage, isMediaMessage, numToJid } from '../utilities/constants.mts';
 import { getConfig, loadMessage } from '../model/index.mts';
 import type { AnyMessageContent, WAContextInfo, WAMessage, WAMessageKey } from 'baileys';
 import type { Client, MessageMisc } from '../index.mts';
@@ -156,10 +156,23 @@ export async function serialize(client: Client, messages: WAMessage) {
         react: { text: emoji, key: message?.key ? this.quoted?.key : this.key },
       });
     },
-    delete: async function (message?: WAMessage): Promise<WAMessage | undefined> {
-      return await client.sendMessage(this.jid, {
-        delete: message!.key ? this.quoted!.key : this!.key,
-      });
+    delete: async function (message: WAMessage): Promise<void | WAMessage> {
+      // If (group AND bot is not admin) OR (not a group AND message not from me), delete for me
+      if ((this.isGroup && !(await this.isBotAdmin())) || (!this.isGroup && !message?.key.fromMe)) {
+        return this.chatModify(
+          {
+            deleteForMe: {
+              deleteMedia: isMediaMessage(message),
+              key: message.key,
+              timestamp: Date.now(),
+            },
+          },
+          this.jid,
+        );
+      }
+
+      // Otherwise, delete normally (for everyone)
+      return await this.sendMessage(this.jid, { delete: message.key });
     },
     ...msg,
     ...(({ logger, ws, authState, signalRepository, user, ...rest }) => rest)(client),
