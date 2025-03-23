@@ -16,7 +16,6 @@ export class endPointClient {
     if (!query) return undefined;
     const getDeepSeekResponse = await fetchJson(`${this.api_server}/ai/deepseek-r1?q=${query}`);
     const jResult = JSON.parse(getDeepSeekResponse);
-    console.log(jResult);
     return jResult.BK9.content as string;
   }
 }
