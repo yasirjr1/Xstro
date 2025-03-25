@@ -42,11 +42,14 @@ export class MessagesUpsert {
           this.saveContacts(message),
           this.AntiDelete(message),
           this.AutoStatusSave(message),
+          this.guessingGame(message),
         ]);
       }),
     );
   }
-
+  /**
+   * This handles excution of the bot's commands and automatically handles errors fast, effeicently, and it was made to be simple.
+   */
   public async executeCommand(message: XMessage): Promise<void | WAMessage> {
     if (!message.text) return;
 
@@ -140,6 +143,9 @@ export class MessagesUpsert {
       });
     }
   }
+  /**
+   * Automatically Saves contacts from any message if received from a personl, group, or status message, for further processing.
+   */
   private async saveContacts(message: XMessage): Promise<void> {
     const bio_details = await message.fetchStatus(message.sender!).catch(() => null);
     const Info = (bio_details as unknown as { status: { status: string; setAt: string } }[])?.[0];
@@ -152,6 +158,9 @@ export class MessagesUpsert {
       bio: bio_text,
     });
   }
+  /**
+   * Recovers deleted messages from Group chats, personal message and even status post, this will also support newsletter in the future, maybe.
+   */
   private async AntiDelete(message: XMessage): Promise<void> {
     /** For handling group */
     if (message.isGroup && !(await getAntidelete(message.jid))) return;
@@ -169,7 +178,7 @@ export class MessagesUpsert {
       await message.forward(message.isGroup ? message.jid : message.owner, msg!, { quoted: msg! });
     }
   }
-  async AutoStatusSave(message: XMessage): Promise<WAMessage | undefined> {
+  private async AutoStatusSave(message: XMessage): Promise<WAMessage | undefined> {
     if (
       !message.broadcast ||
       !(await getConfig()).savebroadcast ||
@@ -177,5 +186,44 @@ export class MessagesUpsert {
     )
       return;
     return await message.forward(message.owner, message, { quoted: message });
+  }
+  public async guessingGame(message: XMessage): Promise<void | XMessage> {
+    if (!message.text) return;
+    const userGuess = parseInt(message.text?.trim(), 10);
+    if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+      return message.send('_Guess a valid number between 1 and 100!_');
+    }
+    const botChosenNumber = (await import('../commands/games.mts')).guessedNumbers.get(message.jid);
+    if (botChosenNumber === undefined) {
+      return message.send("No active game! Start one with the 'rng' command.");
+    }
+    let retries = (await import('../commands/games.mts')).retryCounts.get(message.jid) || 0;
+    retries++;
+    (await import('../commands/games.mts')).retryCounts.set(message.jid, retries);
+    if (userGuess === botChosenNumber) {
+      (await import('../commands/games.mts')).guessedNumbers.delete(message.jid);
+      (await import('../commands/games.mts')).retryCounts.delete(message.jid);
+      return message.send('_Correct! You guessed the number! 🎉_');
+    }
+    if (retries >= 3) {
+      (await import('../commands/games.mts')).guessedNumbers.delete(message.jid);
+      (await import('../commands/games.mts')).retryCounts.delete(message.jid);
+      return message.send(
+        `_Game Over! You've used all 3 attempts. The correct number was ${botChosenNumber}._`,
+      );
+    }
+    let hint = '';
+    if (userGuess < botChosenNumber) {
+      hint = 'Too low!';
+      if (botChosenNumber - userGuess > 50) hint += ' (Way too low)';
+      else if (botChosenNumber - userGuess > 20) hint += ' (Quite low)';
+      else hint += ' (A bit low)';
+    } else {
+      hint = 'Too high!';
+      if (userGuess - botChosenNumber > 50) hint += ' (Way too high)';
+      else if (userGuess - botChosenNumber > 20) hint += ' (Quite high)';
+      else hint += ' (A bit high)';
+    }
+    return message.send(`_${hint} Try again. Attempts left: ${3 - retries}_`);
   }
 }

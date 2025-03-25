@@ -1,0 +1,1 @@
+console.log((await import('crypto')).randomInt(10))

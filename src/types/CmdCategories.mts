@@ -12,4 +12,5 @@ export type cmdCategories =
   | 'media'
   | 'utilities'
   | 'user'
-  | 'privacy';
+  | 'privacy'
+  | 'games';
