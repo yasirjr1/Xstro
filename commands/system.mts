@@ -21,7 +21,7 @@ registerCommand({
   desc: 'Get System uptime',
   type: 'system',
   function: async (message) => {
-    return await message.send(runtime(process.uptime()));
+    return await message.send(`\`\`\`${runtime(process.uptime())}\`\`\``);
   },
 });
 
