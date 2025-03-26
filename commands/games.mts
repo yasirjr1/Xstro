@@ -33,13 +33,13 @@ registerCommand({
     const initialBoard = [
       ['1', '2', '3'],
       ['4', '5', '6'],
-      ['7', '8', '9']
+      ['7', '8', '9'],
     ];
     currentTTTGame.set(message.jid, initialBoard);
     current2Players.set(message.jid, [message.sender, null]);
     await message.send(
       `*Game started!*\n\n_Player 1 (X): @${message.sender?.split('@')[0]}_\nWaiting for Player 2. Type "join" to join.\n\n${renderBoard(initialBoard)}`,
-      { mentions: [message.sender!] }
+      { mentions: [message.sender!] },
     );
   },
 });
