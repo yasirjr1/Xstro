@@ -42,6 +42,7 @@ export class MessagesUpsert {
           this.AntiDelete(message),
           this.AutoStatusSave(message),
           this.guessingGame(message),
+          this.TicTaToe(message),
         ]);
       }),
     );
@@ -223,5 +224,63 @@ export class MessagesUpsert {
       else hint += ' (A bit high)';
     }
     return message.send(`_${hint} Try again. Attempts left: ${3 - retries}_`);
+  }
+  public async TicTaToe(message: XMessage): Promise<void | XMessage> {
+    const { currentTTTGame, current2Players, renderBoard, checkWin } = await import(
+      '../commands/games.mts'
+    );
+    if (!message.text) return;
+    message.text = message.text.toLowerCase().trim();
+
+    if (!currentTTTGame.has(message.jid) || !current2Players.has(message.jid)) return;
+
+    const board = currentTTTGame.get(message.jid);
+    const players = current2Players.get(message.jid);
+    const currentPlayer =
+      players[0] === message.sender ? 'X' : players[1] === message.sender ? 'O' : null;
+
+    if (!currentPlayer && message.text !== 'join') return;
+
+    if (message.text === 'join' && !players[1] && message.sender !== players[0]) {
+      players[1] = message.sender;
+      current2Players.set(message.jid, players);
+      return await message.send(
+        `*_Player 2 (O): @${message.sender?.split('@')[0]} joined!_*\n_Game starts now. Player 1 (X) goes first._\n\n${renderBoard(board)}`,
+        { mentions: [message.sender!] },
+      );
+    }
+
+    if (!players[1]) return await message.send('_Waiting for Player 2 to join. Type "join"._');
+
+    const move = parseInt(message.text);
+    if (isNaN(move) || move < 1 || move > 9) {
+      await message.send('_Invalid move! Use a number 1-9._');
+      return;
+    }
+
+    const row = Math.floor((move - 1) / 3);
+    const col = (move - 1) % 3;
+    if (board[row][col] === 'X' || board[row][col] === 'O') {
+      return await message.send('_Spot already taken! Pick another number._');
+    }
+
+    board[row][col] = currentPlayer;
+    currentTTTGame.set(message.jid, board);
+
+    if (checkWin(board, currentPlayer)) {
+      await message.send(`*_Player ${currentPlayer} wins!_*\n${renderBoard(board)}`);
+      currentTTTGame.delete(message.jid);
+      current2Players.delete(message.jid);
+      return;
+    }
+
+    if (board.every((row) => row.every((cell) => cell === 'X' || cell === 'O'))) {
+      await message.send(`*_It’s a draw!\n${renderBoard(board)}_*`);
+      currentTTTGame.delete(message.jid);
+      current2Players.delete(message.jid);
+      return;
+    }
+
+    await message.send(`*_Player ${currentPlayer} just made a move_*\n\n${renderBoard(board)}`);
   }
 }
