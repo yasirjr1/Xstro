@@ -3,7 +3,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { Boom } from '@hapi/boom';
 import { fileTypeFromBuffer } from 'file-type';
-import { postJson } from '../index.mts';
+import { postJson } from '../utilities/index.mts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

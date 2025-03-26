@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
-import { logger } from '../client.mts';
-import { environment } from '../../config.ts';
+import { logger } from './client.mts';
+import { environment } from '../config.ts';
 
 let database: Database.Database | null = null;
 
@@ -13,7 +13,7 @@ export const getDb = async (): Promise<Database.Database> => {
     const dbOptions: Database.Options = {};
     if (environment.DEBUG === true) dbOptions.verbose = verboseDebug;
 
-    database = new Database('database.db', dbOptions);
+    database = new Database(environment.DATABASE_URI, dbOptions);
   }
   return database;
 };

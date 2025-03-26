@@ -1,4 +1,4 @@
-import { getDb } from './database.mts';
+import { getDb } from '../src/database.mts';
 import type { Statement } from 'better-sqlite3';
 
 async function Antilink(): Promise<void> {

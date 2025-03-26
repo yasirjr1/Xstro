@@ -1,4 +1,4 @@
-import type { Command } from '../src/index.mts';
+import type { Command } from '../Types/Command.mts';
 
 export const commands: Command[] = [];
 

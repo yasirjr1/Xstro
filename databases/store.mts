@@ -1,4 +1,4 @@
-import { getDb } from './database.mts';
+import { getDb } from '../src/database.mts';
 import type Database from 'better-sqlite3';
 import type { Statement } from 'better-sqlite3';
 import {

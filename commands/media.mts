@@ -8,7 +8,7 @@ import {
   cropToCircle,
   createSticker,
   trimVideo,
-} from '../src/index.mts';
+} from '../utilities/index.mts';
 
 registerCommand({
   name: 'ptt',

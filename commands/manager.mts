@@ -6,7 +6,7 @@ import {
   getAntiword,
   setAntilink,
   setAntiword,
-} from '../src/index.mts';
+} from '../databases/index.mts';
 
 registerCommand({
   name: 'antilink',

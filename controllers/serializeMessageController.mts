@@ -1,3 +1,6 @@
+import { promises as fs } from 'fs';
+import { join } from 'path';
+import { Boom } from '@hapi/boom';
 import {
   downloadMediaMessage,
   getContentType,
@@ -5,14 +8,11 @@ import {
   isJidGroup,
   normalizeMessageContent,
 } from 'baileys';
-import { promises as fs } from 'fs';
-import { join } from 'path';
-import { Boom } from '@hapi/boom';
-import { extractTextFromMessage, isMediaMessage, numToJid } from '../src/utilities/constants.mts';
-import { getConfig, loadMessage } from '../src/model/index.mts';
-import type { AnyMessageContent, WAContextInfo, WAMessage, WAMessageKey } from 'baileys';
-import type { Client, MessageMisc } from '../src/index.mts';
 import { sendClientMessage } from './sendMessageController.mts';
+import { extractTextFromMessage, isMediaMessage, numToJid } from '../utilities/index.mts';
+import { getConfig, loadMessage } from '../databases/index.mts';
+import type { AnyMessageContent, WAContextInfo, WAMessage, WAMessageKey } from 'baileys';
+import type { Client, MessageMisc } from '../Types/index.mts';
 
 export async function serialize(client: Client, messages: WAMessage) {
   const normalizedMessages = {

@@ -1,8 +1,8 @@
 import fs from 'fs/promises';
-import { logger } from '../client.mts';
-import { MakeSession } from '../../controllers/index.mts';
-import { environment } from '../../config.ts';
-import { getDb } from '../model/database.mts';
+import { logger } from '../src/client.mts';
+import { getDb } from '../src/database.mts';
+import { MakeSession } from '../controllers/index.mts';
+import { environment } from '../config.ts';
 
 const sessionId = environment.SESSION;
 const server = environment.SESSION_URL;

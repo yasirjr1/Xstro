@@ -1,4 +1,4 @@
-import { getConfig } from '../index.mts';
+import { getConfig } from '../databases/index.mts';
 
 const db = await getConfig();
 

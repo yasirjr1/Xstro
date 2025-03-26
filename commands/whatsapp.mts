@@ -1,5 +1,5 @@
-import { lang } from '../src/index.mts';
 import { registerCommand } from './_registers.mts';
+import { lang } from '../utilities/index.mts';
 
 registerCommand({
   name: 'bio',

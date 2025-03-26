@@ -1,6 +1,6 @@
-import { getDb } from './database.mts';
+import { getDb } from '../src/database.mts';
 import type { Statement } from 'better-sqlite3';
-import type { Config } from '../index.mts';
+import type { Config } from '../Types/index.mts';
 
 async function ConfigDB(): Promise<void> {
   const db = await getDb();

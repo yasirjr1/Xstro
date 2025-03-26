@@ -1,5 +1,5 @@
 import { registerCommand, commands } from './_registers.mts';
-import { formatBytes, runtime, toFancyFont } from '../src/index.mts';
+import { formatBytes, runtime, toFancyFont } from '../utilities/index.mts';
 import { platform, totalmem, freemem } from 'os';
 import { environment } from '../config.ts';
 

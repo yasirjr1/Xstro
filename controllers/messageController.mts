@@ -1,17 +1,16 @@
-import { isJidUser, type BaileysEventMap, type WAMessage, type WASocket } from 'baileys';
 import {
-  getAntilink,
   getAntiword,
-  isUrl,
+  getAntidelete,
+  getAntilink,
+  getConfig,
   saveContact,
   saveMessages,
-  getAntidelete,
-  lang,
-  getConfig,
-  type XMessage,
-} from '../src/index.mts';
-import {commands} from '../commands/_registers.mts'
+} from '../databases/index.mts';
+import { commands } from '../commands/_registers.mts';
 import { serialize } from './serializeMessageController.mts';
+import { lang, isUrl } from '../utilities/index.mts';
+import { isJidUser, type BaileysEventMap, type WAMessage, type WASocket } from 'baileys';
+import type { XMessage } from '../Types/XMessage.mts';
 
 export class MessagesUpsert {
   constructor(client: WASocket, upserts: BaileysEventMap['messages.upsert']) {
@@ -189,9 +188,7 @@ export class MessagesUpsert {
   }
   public async guessingGame(message: XMessage): Promise<void | XMessage> {
     if (!message.text) return;
-    const botChosenNumber = (await import('../commands/games.mts')).guessedNumbers.get(
-      message.jid,
-    );
+    const botChosenNumber = (await import('../commands/games.mts')).guessedNumbers.get(message.jid);
     if (botChosenNumber === undefined) return;
     if (isNaN(Number(message.text))) return;
     const userGuess = parseInt(message.text?.trim(), 10);

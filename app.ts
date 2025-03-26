@@ -1,7 +1,9 @@
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import { client } from './src/client.mts';
-import { checkNodeVersion, getSession, loadPlugins } from './src/index.mts';
+import { loadPlugins } from './src/files.mts';
+import { makeClientConnection } from './src/client.mts';
+import { checkNodeVersion } from './utilities/node-v.mts';
+import { getSession } from './utilities/session.mts';
 import type { Server, ServerResponse, IncomingMessage } from 'http';
 
 dotenv.config();
@@ -10,7 +12,7 @@ dotenv.config();
   await checkNodeVersion();
   await getSession();
   await loadPlugins();
-  await client();
+  await makeClientConnection();
 
   return createServer((_, res) => {
     res.writeHead(200);

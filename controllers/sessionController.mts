@@ -1,11 +1,11 @@
 import { Boom } from '@hapi/boom';
-import { fetchJson } from '../src/index.mts';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { createDecipheriv } from 'node:crypto';
 import { join } from 'node:path';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { getDb } from '../src/model/database.mts';
+import { getDb } from '../src/database.mts';
+import { fetchJson } from '../utilities/index.mts';
 
 export class MakeSession {
   private sessionId: string;

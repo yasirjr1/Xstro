@@ -16,3 +16,16 @@ registerCommand({
     );
   },
 });
+
+export const currentTTTGame = new Map();
+export const current2Players = new Map();
+
+registerCommand({
+  name: 'ttt',
+  fromMe: false,
+  desc: 'Start TicTaToe Game',
+  type: 'games',
+  function: async (message, match: 'start' | 'end') => {
+    // TO DO: build starter
+  },
+});

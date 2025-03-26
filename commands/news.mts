@@ -1,5 +1,5 @@
 import { registerCommand } from './_registers.mts';
-import { voxnews, wabetanews, technews } from '../src/index.mts';
+import { voxnews, wabetanews, technews } from '../utilities/index.mts';
 
 registerCommand({
   name: 'news',

@@ -1,5 +1,4 @@
-import type { Database } from 'better-sqlite3';
-import type { Statement } from 'better-sqlite3';
+import { type Database, type Statement } from 'better-sqlite3';
 import type { AuthenticationCreds, AuthenticationState, SignalDataTypeMap } from 'baileys';
 import { initAuthCreds, BufferJSON, WAProto as proto } from 'baileys';
 

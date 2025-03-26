@@ -1,13 +1,6 @@
 import { registerCommand } from './_registers.mts';
-import {
-  fetchJson,
-  getAntidelete,
-  isUrl,
-  numToJid,
-  setAntidelete,
-  uploadFile,
-  urlBuffer,
-} from '../src/index.mts';
+import { getAntidelete, setAntidelete } from '../databases/index.mts';
+import { fetchJson, isUrl, numToJid, uploadFile, urlBuffer } from '../utilities/index.mts';
 
 registerCommand({
   name: 'url',

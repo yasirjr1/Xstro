@@ -1,4 +1,4 @@
-import { getDb } from './database.mts';
+import { getDb } from '../src/database.mts';
 
 async function Antidelete(): Promise<void> {
   const db = await getDb();
