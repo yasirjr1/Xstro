@@ -3,7 +3,7 @@ import { fileTypeFromBuffer } from 'file-type';
 import type { Options as gotOps } from 'got';
 import got from 'got';
 import type { WAMessage, WAMessageContent } from 'baileys';
-import { getContentType, jidNormalizedUser } from 'baileys';
+import { getContentType, getDevice, jidNormalizedUser } from 'baileys';
 import FormData from 'form-data';
 
 export function isUrl(text: string): boolean {
@@ -286,4 +286,10 @@ export const isMediaMessage = (message: WAMessage): boolean => {
     typeof content === 'string' &&
     mediaMessageTypes.includes(content as (typeof mediaMessageTypes)[number])
   );
+};
+
+export const isBaileys = (id: string): boolean => {
+  const deviceInfo = getDevice(id);
+  if (deviceInfo === 'web' && id.length <= 22) return true;
+  return false;
 };
