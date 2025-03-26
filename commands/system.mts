@@ -1,5 +1,5 @@
 import { registerCommand } from './_registers.mts';
-import { runtime } from '../index.mts';
+import { runtime } from '../src/index.mts';
 import pm2 from 'pm2';
 
 registerCommand({

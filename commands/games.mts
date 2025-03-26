@@ -1,4 +1,4 @@
-import { registerCommand } from '../index.mts';
+import { registerCommand } from './_registers.mts';
 
 export const guessedNumbers = new Map();
 export const retryCounts = new Map();

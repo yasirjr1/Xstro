@@ -1,5 +1,5 @@
 import { registerCommand } from './_registers.mts';
-import { lang, numToJid } from '../index.mts';
+import { lang, numToJid } from '../src/index.mts';
 
 registerCommand({
   name: 'newgc',

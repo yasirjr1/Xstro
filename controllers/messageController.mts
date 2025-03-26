@@ -1,6 +1,5 @@
 import { isJidUser, type BaileysEventMap, type WAMessage, type WASocket } from 'baileys';
 import {
-  commands,
   getAntilink,
   getAntiword,
   isUrl,
@@ -11,6 +10,7 @@ import {
   getConfig,
   type XMessage,
 } from '../src/index.mts';
+import {commands} from '../commands/_registers.mts'
 import { serialize } from './serializeMessageController.mts';
 
 export class MessagesUpsert {
@@ -189,7 +189,7 @@ export class MessagesUpsert {
   }
   public async guessingGame(message: XMessage): Promise<void | XMessage> {
     if (!message.text) return;
-    const botChosenNumber = (await import('../src/commands/games.mts')).guessedNumbers.get(
+    const botChosenNumber = (await import('../commands/games.mts')).guessedNumbers.get(
       message.jid,
     );
     if (botChosenNumber === undefined) return;
@@ -198,17 +198,17 @@ export class MessagesUpsert {
     if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
       return message.send('_Guess a valid number between 1 and 100!_');
     }
-    let retries = (await import('../src/commands/games.mts')).retryCounts.get(message.jid) || 0;
+    let retries = (await import('../commands/games.mts')).retryCounts.get(message.jid) || 0;
     retries++;
-    (await import('../src/commands/games.mts')).retryCounts.set(message.jid, retries);
+    (await import('../commands/games.mts')).retryCounts.set(message.jid, retries);
     if (userGuess === botChosenNumber) {
-      (await import('../src/commands/games.mts')).guessedNumbers.delete(message.jid);
-      (await import('../src/commands/games.mts')).retryCounts.delete(message.jid);
+      (await import('../commands/games.mts')).guessedNumbers.delete(message.jid);
+      (await import('../commands/games.mts')).retryCounts.delete(message.jid);
       return message.send('_Correct! You guessed the number! 🎉_');
     }
     if (retries >= 3) {
-      (await import('../src/commands/games.mts')).guessedNumbers.delete(message.jid);
-      (await import('../src/commands/games.mts')).retryCounts.delete(message.jid);
+      (await import('../commands/games.mts')).guessedNumbers.delete(message.jid);
+      (await import('../commands/games.mts')).retryCounts.delete(message.jid);
       return message.send(
         `_Game Over! You've used all 3 attempts. The correct number was ${botChosenNumber}._`,
       );

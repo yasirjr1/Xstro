@@ -1,4 +1,5 @@
-import { commands, editConfig, getConfig, registerCommand } from '../index.mts';
+import { registerCommand, commands } from './_registers.mts';
+import { editConfig, getConfig } from '../src/index.mts';
 
 registerCommand({
   name: 'mode',

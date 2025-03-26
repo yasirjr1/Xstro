@@ -1,4 +1,5 @@
-import { fetchJson, registerCommand } from '../index.mts';
+import { registerCommand } from './_registers.mts';
+import { fetchJson } from '../src/index.mts';
 
 registerCommand({
   name: 'ai',

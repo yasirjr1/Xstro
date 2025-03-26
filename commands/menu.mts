@@ -1,7 +1,7 @@
 import { registerCommand, commands } from './_registers.mts';
-import { formatBytes, runtime, toFancyFont } from '../index.mts';
+import { formatBytes, runtime, toFancyFont } from '../src/index.mts';
 import { platform, totalmem, freemem } from 'os';
-import { environment } from '../../config.ts';
+import { environment } from '../config.ts';
 
 const BOT_INFO = environment.META_DATA;
 const TIME_ZONE = environment.TIME_ZONE;

@@ -1,5 +1,5 @@
 import { registerCommand } from './_registers.mts';
-import { editConfig, getConfig } from '../index.mts';
+import { editConfig, getConfig } from '../src/index.mts';
 
 registerCommand({
   name: 'setprefix',

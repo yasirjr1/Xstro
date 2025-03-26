@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export async function loadPlugins(): Promise<void> {
-  const pluginsDir = join(__dirname, '../commands');
+  const pluginsDir = join(__dirname, '../../commands');
 
   const files = await readdir(pluginsDir, { withFileTypes: true });
   await Promise.all(

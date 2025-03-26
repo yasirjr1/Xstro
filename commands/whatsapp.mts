@@ -1,4 +1,4 @@
-import { lang } from '../index.mts';
+import { lang } from '../src/index.mts';
 import { registerCommand } from './_registers.mts';
 
 registerCommand({
