@@ -1,5 +1,5 @@
 import { Boom } from '@hapi/boom';
-import { getDb } from '../model/database.mts';
+import { getDb } from '../src/model/database.mts';
 import type { Database } from 'better-sqlite3';
 import type { Statement } from 'better-sqlite3';
 import type { WASocket, GroupMetadata } from 'baileys';

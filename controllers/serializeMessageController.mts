@@ -8,11 +8,11 @@ import {
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import { Boom } from '@hapi/boom';
-import { extractTextFromMessage, isMediaMessage, numToJid } from '../utilities/constants.mts';
-import { getConfig, loadMessage } from '../model/index.mts';
+import { extractTextFromMessage, isMediaMessage, numToJid } from '../src/utilities/constants.mts';
+import { getConfig, loadMessage } from '../src/model/index.mts';
 import type { AnyMessageContent, WAContextInfo, WAMessage, WAMessageKey } from 'baileys';
-import type { Client, MessageMisc } from '../index.mts';
-import { sendClientMessage } from './send-msg.mts';
+import type { Client, MessageMisc } from '../src/index.mts';
+import { sendClientMessage } from './sendMessageController.mts';
 
 export async function serialize(client: Client, messages: WAMessage) {
   const normalizedMessages = {
