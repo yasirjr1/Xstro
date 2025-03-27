@@ -246,6 +246,7 @@ registerCommand({
 registerCommand({
   name: 'promote',
   fromMe: false,
+  isGroup: true,
   desc: 'Promote a participant to admin role',
   type: 'group',
   function: async (message, match) => {
@@ -262,6 +263,7 @@ registerCommand({
 registerCommand({
   name: 'demote',
   fromMe: false,
+  isGroup: true,
   desc: 'Demote an admin to regular participant role',
   type: 'group',
   function: async (message, match) => {
