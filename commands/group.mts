@@ -242,3 +242,35 @@ registerCommand({
     );
   },
 });
+
+registerCommand({
+  name: 'promote',
+  fromMe: false,
+  desc: 'Promote a participant to admin role',
+  type: 'group',
+  function: async (message, match) => {
+    const user = message.user(match);
+    if (!user) return message.send('_Provide user to promote to admin_');
+    const groupInfo = await message.groupMetadata(message.jid);
+    const admins = groupInfo.participants.filter((v) => v.admin !== null).map((v) => v.id);
+    if (admins.includes(user)) return message.send('_User is already a group admin_');
+    await message.groupParticipantsUpdate(message.jid, [user], 'promote');
+    return message.send(`_@${user.split('@')[0]} is now an Admin_`, { mentions: [user] });
+  },
+});
+
+registerCommand({
+  name: 'demote',
+  fromMe: false,
+  desc: 'Demote an admin to regular participant role',
+  type: 'group',
+  function: async (message, match) => {
+    const user = message.user(match);
+    if (!user) return message.send('_Provide user to demote from admin_');
+    const groupInfo = await message.groupMetadata(message.jid);
+    const admins = groupInfo.participants.filter((v) => v.admin !== null).map((v) => v.id);
+    if (!admins.includes(user)) return message.send('_User is not a group admin_');
+    await message.groupParticipantsUpdate(message.jid, [user], 'demote');
+    return message.send(`_@${user.split('@')[0]} is no longer an Admin_`, { mentions: [user] });
+  },
+});
