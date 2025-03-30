@@ -1,19 +1,21 @@
 {
-     "compilerOptions": {
-          "target": "ESNext",
-          "module": "NodeNext",
-          "moduleResolution": "nodenext",
-          "rootDir": ".",
-          "strictNullChecks": true,
-          "skipLibCheck": true,
-          "noImplicitThis": true,
-          "resolveJsonModule": true,
-          "forceConsistentCasingInFileNames": true,
-          "noEmit": true,
-          "allowImportingTsExtensions": true,
-          "paths": {
-               "*": ["./node_modules/*", "./src/*"]
-          },
-          "allowSyntheticDefaultImports": true
-     }
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "rootDir": ".",
+    "outDir": "./dist",
+    "removeComments": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "noImplicitThis": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "*": ["./node_modules/*", "./src/*"]
+    },
+    "allowSyntheticDefaultImports": true
+  }
 }

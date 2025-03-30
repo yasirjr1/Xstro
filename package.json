@@ -5,9 +5,9 @@
     "type": "module",
     "main": "app.ts",
     "scripts": {
-        "start": "pm2 start app.ts --name xstro --attach --interpreter node",
-        "restart": "yarn stop && yarn start",
+        "start": "pm2 start app.ts --name xstro --attach",
         "dev": "ts-node --esm app.ts",
+        "build":"tsc .",
         "stop": "pm2 stop xstro",
         "lint": "yarn run eslint . --fix"
     },
@@ -19,7 +19,6 @@
     "homepage": "https://github.com/AstroX11/xstro#readme",
     "author": "AstroX11 <danielfx0012@gmail.com>",
     "devDependencies": {
-        "@types/better-sqlite3": "^7.6.12",
         "@types/cheerio": "^0.22.35",
         "eslint": "^9.22.0",
         "eslint-config-prettier": "^10.1.1",
@@ -28,9 +27,9 @@
         "prettier": "^3.5.3"
     },
     "dependencies": {
+        "@astrox11/sqlite": "^1.1.0",
         "@hapi/boom": "^10.0.1",
         "baileys": "^6.7.16",
-        "better-sqlite3": "^11.9.1",
         "cheerio": "^1.0.0",
         "dotenv": "^16.4.7",
         "file-type": "20.4.1",
