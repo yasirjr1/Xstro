@@ -1,13 +1,13 @@
 {
     "name": "xstro",
-    "version": "7.0.0",
+    "version": "8.0.0",
     "description": "Simple WA bot.",
     "type": "module",
-    "main": "app.ts",
+    "main": "bot.js",
     "scripts": {
-        "start": "pm2 start app.ts --name xstro --attach",
-        "dev": "ts-node --esm app.ts",
-        "build":"tsc .",
+        "start": "pm2 start bot.js --name xstro --attach",
+        "dev": "node ./dist/bot.js",
+        "build": "tsc",
         "stop": "pm2 stop xstro",
         "lint": "yarn run eslint . --fix"
     },
@@ -28,19 +28,16 @@
     },
     "dependencies": {
         "@astrox11/sqlite": "^1.1.0",
-        "@hapi/boom": "^10.0.1",
         "baileys": "^6.7.16",
         "cheerio": "^1.0.0",
         "dotenv": "^16.4.7",
         "file-type": "20.4.1",
         "got": "^14.4.6",
-        "link-preview-js": "^3.0.14",
+        "https-proxy-agent": "^7.0.6",
         "node-webpmux": "^3.2.0",
-        "pino": "^9.6.0",
         "pm2": "^6.0.5",
         "qrcode-terminal": "^0.12.0",
         "sharp": "^0.33.5",
-        "ts-node": "^10.9.2",
         "typescript": "^5.9.0-dev.20250303"
     },
     "engines": {
