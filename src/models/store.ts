@@ -24,3 +24,13 @@ export async function getMessage(key: WAMessageKey): Promise<WAMessageContent | 
     | undefined;
   return m?.message ? WAProto.Message.fromObject(m.message) : undefined;
 }
+
+export async function getLastMessagesFromChat(jid: string): Promise<WAMessage[] | undefined> {
+  const store = messageDb.findAll({});
+  if (!store || store.length === 0) return undefined;
+
+  const messages: WAMessage[] = store.map((msg: any) => JSON.parse(msg.message) as WAMessage);
+  const fromChat = messages.filter((msg: WAMessage) => msg.key?.remoteJid === jid);
+
+  return fromChat.length > 0 ? fromChat : undefined;
+}
