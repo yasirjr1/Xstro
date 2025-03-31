@@ -1,8 +1,9 @@
-import { DisconnectReason, type BaileysEventMap, type WASocket } from 'baileys';
+import { DisconnectReason, jidNormalizedUser, type BaileysEventMap, type WASocket } from 'baileys';
 import pm2 from 'pm2';
 import { Boom } from '@hapi/boom';
 import logger from '../../../utils/logger.js';
 import config from '../../../../config.js';
+import { setSudo } from '../../../models/sudo.js';
 
 export default class makeConnectionEvent {
   private client: WASocket;
@@ -26,8 +27,10 @@ export default class makeConnectionEvent {
     }
   }
   private async handleConnecting() {
-    /** TO DO add more features */
     logger.info('Connecting to WhatsApp...');
+    if (this.client.user?.id) {
+      await setSudo(jidNormalizedUser(this.client.user.id));
+    }
   }
   private async handleClose(
     lastDisconnect?: BaileysEventMap['connection.update']['lastDisconnect'],
