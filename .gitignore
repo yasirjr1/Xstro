@@ -4,3 +4,4 @@ database.db-wal
 *.db
 *env
 dist
+session
