@@ -5,7 +5,7 @@
     "type": "module",
     "main": "bot.js",
     "scripts": {
-        "start": "pm2 start bot.js --name xstro --attach",
+        "start": "pm2 start ./dist/bot.js --name xstro --attach",
         "dev": "node ./dist/bot.js",
         "build": "tsc",
         "stop": "pm2 stop xstro",
@@ -28,6 +28,7 @@
     },
     "dependencies": {
         "@astrox11/sqlite": "^1.1.0",
+        "@hapi/boom": "^10.0.1",
         "baileys": "^6.7.16",
         "cheerio": "^1.0.0",
         "dotenv": "^16.4.7",

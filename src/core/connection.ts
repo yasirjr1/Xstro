@@ -11,7 +11,7 @@ import { getMessage } from '../models/store.js';
 import { connectProxy } from '../hooks/proxy.js';
 
 export const initConnection = async () => {
-  const { state, saveCreds } = await useMultiFileAuthState('./test');
+  const { state, saveCreds } = await useMultiFileAuthState('./session');
   const sock = makeWASocket({
     auth: {
       creds: state.creds,
@@ -24,5 +24,5 @@ export const initConnection = async () => {
     emitOwnEvents: true,
     getMessage,
   });
-  return new MakeListeners(sock, { saveCreds });
+  return await new MakeListeners(sock, { saveCreds }).manageProcesses();
 };
