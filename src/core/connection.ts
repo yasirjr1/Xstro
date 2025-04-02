@@ -8,6 +8,7 @@ import config from '../../config.js';
 import logger from '../utils/logger.js';
 import MakeListeners from '../hooks/api/listeners.js';
 import { getMessage } from '../models/store.js';
+import { cachedGroupMetadata } from '../models/group.js';
 import { connectProxy } from '../hooks/proxy.js';
 
 export const initConnection = async () => {
@@ -23,6 +24,7 @@ export const initConnection = async () => {
     browser: Browsers.windows('Chrome'),
     emitOwnEvents: true,
     getMessage,
+    cachedGroupMetadata,
   });
   return await new MakeListeners(sock, { saveCreds }).manageProcesses();
 };

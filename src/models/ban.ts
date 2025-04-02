@@ -30,3 +30,4 @@ export async function removeBan(jid: string): Promise<boolean> {
   const result = bannedUsers.destroy({ where: { jid } });
   return result.changes ? true : false;
 }
+

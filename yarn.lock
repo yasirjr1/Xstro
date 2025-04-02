@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@adiwajshing/keyed-db/-/keyed-db-0.2.4.tgz#2a09e88fce20b2672deb60a7750c5fe3ab0dfd99"
   integrity sha512-yprSnAtj80/VKuDqRcFFLDYltoNV8tChNwFfIgcf6PGD4sjzWIBgs08pRuTqGH5mk5wgL6PBRSsMCZqtZwzFEw==
 
-"@astrox11/sqlite@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@astrox11/sqlite/-/sqlite-1.1.0.tgz#d8bc3b75f5a85f2c6dfcedf18dba7608444158e5"
-  integrity sha512-kzVVeSkFCMCskhrbiJsHo8A7ARuNjRMs9wxto9b8p2yU6hbQKnWz3ri16ya6Zg9U9wfSh+AD72QtKE68nM2iUA==
+"@astrox11/sqlite@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@astrox11/sqlite/-/sqlite-1.5.0.tgz#5120f9e76898f5abdede9c49a5307e76dd24b6dc"
+  integrity sha512-oBJdB/RlclFP/i2e9x2OM6VH2hZDABotcTxJBI2/CE65mk/KV/Yuxd4ryrkeCG+WhXKFllnqmFCmWQjYKgd/5g==
   dependencies:
     "@types/node" "^22.13.14"
     typescript "^5.8.2"
@@ -491,9 +491,9 @@
   integrity sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw==
 
 "@types/node@^22.13.14":
-  version "22.13.14"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.13.14.tgz#70d84ec91013dcd2ba2de35532a5a14c2b4cc912"
-  integrity sha512-Zs/Ollc1SJ8nKUAgc7ivOEdIBM8JAKgrqqUYi2J997JuKO7/tpQC+WCetQ1sypiKCQWHdvdg9wBNpUPEWZae7w==
+  version "22.13.17"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.13.17.tgz#9ca6a81a0180cdcfd3719b9cf6c09186756e1754"
+  integrity sha512-nAJuQXoyPj04uLgu+obZcSmsfOenUg6DxPKogeUy6yNCFwWaj5sBF8/G/pNo8EtBJjAfSVgfIlugR/BCOleO+g==
   dependencies:
     undici-types "~6.20.0"
 
@@ -2852,11 +2852,6 @@ typescript@^5.8.2:
   version "5.8.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.8.2.tgz#8170b3702f74b79db2e5a96207c15e65807999e4"
   integrity sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==
-
-typescript@^5.9.0-dev.20250303:
-  version "5.9.0-dev.20250322"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.0-dev.20250322.tgz#9baee28a5512b7fd544e0ba95354d21018f11103"
-  integrity sha512-RjHXD3thtKocraZMuh84ttrdF0H7YlyGLG1BBoBxSWCyX66i30sdys8jHpS7iUdsGdoGO4IRpFJ3OaLoVd7z9w==
 
 uint8array-extras@^1.4.0:
   version "1.4.0"

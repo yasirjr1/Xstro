@@ -1,3 +1,9 @@
 import { initConnection } from './src/core/connection.js';
 
-initConnection();
+(async (): Promise<void> => {
+  try {
+    await initConnection();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+})();
