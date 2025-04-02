@@ -8,10 +8,10 @@ const Sudo = database.define(
   { freezeTableName: true },
 );
 
-export async function getSudo(): Promise<string[] | undefined> {
-  const sudousers = Sudo.findAll();
-  if (!sudousers) return undefined;
-  return JSON.parse(JSON.stringify(sudousers)).map((users: { jid: string }) => users.jid);
+export function getSudo(): string[] | undefined {
+  const users = Sudo.findAll();
+  if (!users) return undefined;
+  return JSON.parse(JSON.stringify(users)).map((users: { jid: string }) => users.jid);
 }
 
 export async function setSudo(jid: string) {
@@ -21,7 +21,7 @@ export async function setSudo(jid: string) {
   return await Sudo.create({ jid: jid });
 }
 
-export async function removeSudo(jid: string) {
+export function removeSudo(jid: string) {
   return Sudo.destroy({
     where: {
       jid: jid,

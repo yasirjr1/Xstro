@@ -1,5 +1,5 @@
 import { BaileysEventMap, WASocket } from 'baileys';
-import { saveMessage } from '../../../models/store.js';
+import { storeMessages } from '../../../models/store.js';
 import logger from '../../../utils/logger.js';
 
 export default class makeMessageUpsert {
@@ -20,7 +20,7 @@ export default class makeMessageUpsert {
   public async queueAllTasks() {
     for (const message of this.upserts.messages) {
       logger.info(message);
-      await saveMessage(message);
+      await storeMessages(message);
     }
   }
 }

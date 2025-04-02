@@ -10,27 +10,27 @@ const messageDb = database.define(
   { freezeTableName: true },
 );
 
-export async function saveMessage(message: WAMessage) {
+export async function storeMessages(message: WAMessage) {
   await messageDb.create({ id: message.key.id, message: message });
 }
 
 export async function getMessage(key: WAMessageKey): Promise<WAMessageContent | undefined> {
   if (!key.id) return undefined;
-  const m = (await messageDb.findOne({ where: { id: key.id } })) as
-    | {
-        id: string;
-        message: WAMessage;
-      }
-    | undefined;
-  return m?.message ? WAProto.Message.fromObject(m.message) : undefined;
+
+  const message = messageDb.findOne({ where: { id: key.id } });
+  if (!message) return undefined;
+
+  const parsed: WAMessage = JSON.parse(message.message);
+  return parsed.message ? WAProto.Message.fromObject(parsed.message) : undefined;
 }
 
-export async function getLastMessagesFromChat(jid: string): Promise<WAMessage[] | undefined> {
+export function getLastMessagesFromChat(jid: string): WAMessage[] | undefined {
   const store = messageDb.findAll({});
   if (!store || store.length === 0) return undefined;
 
-  const messages: WAMessage[] = store.map((msg: any) => JSON.parse(msg.message) as WAMessage);
-  const fromChat = messages.filter((msg: WAMessage) => msg.key?.remoteJid === jid);
+  const messages: WAMessage[] = store
+    .map((msg: any) => JSON.parse(msg.message) as WAMessage)
+    .filter((parsed: WAMessage) => parsed.key?.remoteJid === jid);
 
-  return fromChat.length > 0 ? fromChat : undefined;
+  return messages.length > 0 ? messages : undefined;
 }

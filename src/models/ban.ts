@@ -20,9 +20,9 @@ export async function setBanned(jid: string): Promise<boolean | undefined> {
   }
 }
 
-export async function getBanned(jid: string): Promise<boolean | undefined> {
+export function getBanned(jid: string): boolean | undefined {
   if (!jid) return undefined;
-  const banned = await bannedUsers.findOne({ where: { jid } });
+  const banned = bannedUsers.findOne({ where: { jid } });
   return banned !== undefined;
 }
 
