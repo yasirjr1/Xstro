@@ -15,4 +15,3 @@ const database = new Database(config.DATABASE, {
 });
 
 export default database;
-

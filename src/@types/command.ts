@@ -7,7 +7,7 @@ export interface Commands {
   /** Should the command always run when it recieves a messgae */
   on?: string | undefined;
   /** Function of the command, must be async */
-  function?: (message: any, match?: string) => Promise<unknown>;
+  function?: (message: Serialize, match?: string) => Promise<unknown>;
   /** Should the command be for only sudo and bot owner */
   fromMe?: boolean;
   /** Should the command only be for Groups */
