@@ -1,3 +1,6 @@
+import type { serialize } from '../hooks/api/functions/serialize.js';
+import type { WAMessage } from 'baileys';
+
 export interface Commands {
   /** Name of function */
   name?: string | RegExp;
@@ -31,3 +34,16 @@ export interface Commands {
   /** Should the command appear on the menu list? */
   dontAddCommandList?: boolean;
 }
+
+export type Serialize = ReturnType<typeof serialize> extends Promise<infer T> ? T : undefined;
+
+export type MessageMisc = {
+  /** Send to a specific number else it will auto get the jid */
+  jid?: string;
+  /** mime type */
+  mimetype?: string;
+  /** Select your content type if you want it for a specific type */
+  type?: 'text' | 'audio' | 'image' | 'video' | 'sticker' | 'document';
+  /** quoted message */
+  quoted?: WAMessage;
+};

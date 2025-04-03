@@ -1,6 +1,6 @@
 import type { WASocket } from 'baileys';
-import makeConnectionEvent from './classes/Socket.js';
-import makeMessageUpsert from './classes/Message.js';
+import ConnectionUpdate from './classes/Socket.js';
+import MessageUpsert from './classes/Message.js';
 
 export default class MakeListeners {
   private clientSocket: WASocket;
@@ -18,14 +18,14 @@ export default class MakeListeners {
       }
 
       if (events['connection.update']) {
-        await new makeConnectionEvent(
+        await new ConnectionUpdate(
           this.clientSocket,
           events['connection.update'],
         ).handleConnectionUpdate();
       }
 
       if (events['messages.upsert']) {
-        await new makeMessageUpsert(this.clientSocket, events['messages.upsert']).queueAllTasks();
+        await new MessageUpsert(this.clientSocket, events['messages.upsert']).queueAllTasks();
       }
     });
   }

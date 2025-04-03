@@ -11,21 +11,21 @@ const messageDb = database.define(
 );
 
 export async function storeMessages(message: WAMessage) {
-  await messageDb.create({ id: message.key.id, message: message });
+  await messageDb.create({ id: message.key.id, message: JSON.stringify(message) });
 }
 
 export async function getMessage(key: WAMessageKey): Promise<WAMessageContent | undefined> {
   if (!key.id) return undefined;
 
-  const message = messageDb.findOne({ where: { id: key.id } });
-  if (!message) return undefined;
+  const message = (await messageDb.findOne({ where: { id: key.id } })) as WAMessage;
+  if (!message || !message.message) return undefined;
 
-  const parsed: WAMessage = JSON.parse(message.message);
+  const parsed: WAMessage = JSON.parse(message.message as string);
   return parsed.message ? WAProto.Message.fromObject(parsed.message) : undefined;
 }
 
-export function getLastMessagesFromChat(jid: string): WAMessage[] | undefined {
-  const store = messageDb.findAll({});
+export async function getLastMessagesFromChat(jid: string): Promise<WAMessage[] | undefined> {
+  const store = (await messageDb.findAll({})) as string[];
   if (!store || store.length === 0) return undefined;
 
   const messages: WAMessage[] = store

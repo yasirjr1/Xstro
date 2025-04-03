@@ -9,7 +9,7 @@ const bannedUsers = database.define(
 );
 
 export async function setBanned(jid: string): Promise<boolean | undefined> {
-  const banned = bannedUsers.findOne({ where: { jid } });
+  const banned = await bannedUsers.findOne({ where: { jid } });
   if (!banned) {
     await bannedUsers.create({ jid: jid });
     return true;
@@ -20,13 +20,13 @@ export async function setBanned(jid: string): Promise<boolean | undefined> {
   }
 }
 
-export function getBanned(jid: string): boolean | undefined {
+export async function getBanned(jid: string): Promise<boolean | undefined> {
   if (!jid) return undefined;
-  const banned = bannedUsers.findOne({ where: { jid } });
-  return banned !== undefined;
+  const banned = await bannedUsers.findOne({ where: { jid } });
+  return banned !== null;
 }
 
 export async function removeBan(jid: string): Promise<boolean> {
-  const result = bannedUsers.destroy({ where: { jid } });
-  return result.changes ? true : false;
+  const result = (await bannedUsers.destroy({ where: { jid } })) as number;
+  return result > 0;
 }

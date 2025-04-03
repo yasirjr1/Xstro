@@ -7,7 +7,6 @@ function logIt(level, data, msg) {
   if (LEVELS[level] < currentLevel) return;
 
   const entry = {
-    level,
     ...(typeof data === 'object' ? data : { msg: data }),
     ...(msg ? { msg } : {}),
   };

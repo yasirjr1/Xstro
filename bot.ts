@@ -1,9 +1,10 @@
+import logger from './src/utils/logger.js';
 import { initConnection } from './src/core/connection.js';
 
 (async (): Promise<void> => {
   try {
     await initConnection();
   } catch (error) {
-    throw new Error(error.message);
+    logger.error(error);
   }
 })();

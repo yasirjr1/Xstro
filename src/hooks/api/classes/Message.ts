@@ -1,7 +1,9 @@
-import { BaileysEventMap, WASocket } from 'baileys';
+import { BaileysEventMap, WAMessage, WASocket } from 'baileys';
 import { storeMessages } from '../../../models/store.js';
 import logger from '../../../utils/logger.js';
 import { Semaphore } from '../../cache/semaphore.js';
+import { serialize } from '../functions/serialize.js';
+
 export default class MessageUpsert {
   private client: WASocket;
   private upserts: BaileysEventMap['messages.upsert'];
@@ -16,7 +18,14 @@ export default class MessageUpsert {
     const taskPromises: Promise<void>[] = [];
     let failedTasks: number = 0;
 
-    const tasks = [async (message: any) => await storeMessages(message)];
+    const tasks = [
+      async (message: WAMessage) => {
+        await storeMessages(message);
+      },
+      async (message: WAMessage, client: WASocket) => {
+        await serialize(client, message);
+      },
+    ];
 
     try {
       for (const message of this.upserts.messages) {
@@ -26,7 +35,7 @@ export default class MessageUpsert {
               .acquire()
               .then(async () => {
                 try {
-                  await task(message);
+                  await task(message, this.client);
                 } catch (error) {
                   failedTasks++;
                   logger.error(`Task error: ${error}`);
