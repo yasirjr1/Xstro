@@ -5,7 +5,7 @@ import logger from '../../../utils/logger.js';
 import config from '../../../../config.js';
 import { setSudo } from '../../../models/sudo.js';
 
-export default class makeConnectionEvent {
+export default class ConnectionUpdate {
   private client: WASocket;
   private events: BaileysEventMap['connection.update'];
   constructor(client: WASocket, events: BaileysEventMap['connection.update']) {

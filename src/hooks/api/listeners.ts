@@ -1,6 +1,6 @@
 import type { WASocket } from 'baileys';
-import makeConnectionEvent from './classes/event-connection.js';
-import makeMessageUpsert from './classes/event-msg-upsert.js';
+import makeConnectionEvent from './classes/Socket.js';
+import makeMessageUpsert from './classes/Message.js';
 
 export default class MakeListeners {
   private clientSocket: WASocket;

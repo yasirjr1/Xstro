@@ -51,14 +51,14 @@ export function formatBytes(bytes: number): string {
 
 export function parseJid(jid: string): string | undefined {
   if (!jid) return undefined;
-  const parsed =
-    Array.isArray(jid) ? jid[0]
-    : typeof jid === 'object' ? String(Object.values(jid)[0])
-    : String(jid);
+  const parsed = Array.isArray(jid)
+    ? jid[0]
+    : typeof jid === 'object'
+      ? String(Object.values(jid)[0])
+      : String(jid);
   const numbers = parsed.replace(/\D/g, '');
   if (!numbers) return undefined;
   const num = numbers.slice(0, 12);
   if (num.length < 11) return undefined;
   return `${num}@whatsapp.net`;
 }
-

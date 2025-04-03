@@ -1,95 +1,36 @@
-import { ILogger, LogLevel } from '../@types/logger.js';
+import { ILogger } from '../@types/logger.js';
 
-const logLevels: Record<LogLevel, number> = {
-  fatal: 60,
-  error: 50,
-  warn: 40,
-  info: 30,
-  debug: 20,
-  trace: 10,
-};
+const LEVELS = { trace: 10, debug: 20, info: 30, warn: 40, error: 50, fatal: 60 };
+const currentLevel = LEVELS[process.env.LOG_LEVEL || 'info'] || 30;
 
-const currentLevelThreshold = logLevels[(process.env.LOG_LEVEL || 'info') as LogLevel] || 30;
+function logIt(level, data, msg) {
+  if (LEVELS[level] < currentLevel) return;
 
-function createLogEntry(level: LogLevel, obj: unknown, msg?: string) {
-  if (logLevels[level] < currentLevelThreshold) {
-    return;
-  }
-
-  const logEntry = {
+  const entry = {
     level,
-    timestamp: new Date().toISOString(),
-    ...(typeof obj === 'object' && obj !== null ? obj : { msg: obj }),
+    ...(typeof data === 'object' ? data : { msg: data }),
     ...(msg ? { msg } : {}),
   };
 
-  const logString = JSON.stringify(logEntry);
-  if (level === 'fatal' || level === 'error') {
-    console.error(logString);
-  } else {
-    console.log(logString);
-  }
+  console[level === 'error' || level === 'fatal' ? 'error' : 'log'](JSON.stringify(entry));
 }
 
 const logger: ILogger = {
   level: process.env.LOG_LEVEL || 'info',
-  child(obj: Record<string, unknown>) {
-    const childLogger: ILogger = {
-      ...logger,
-      trace: (childObj, msg) =>
-        createLogEntry(
-          'trace',
-          {
-            ...obj,
-            ...(typeof childObj === 'object' && childObj !== null ? childObj : { msg: childObj }),
-          },
-          msg,
-        ),
-      debug: (childObj, msg) =>
-        createLogEntry(
-          'debug',
-          {
-            ...obj,
-            ...(typeof childObj === 'object' && childObj !== null ? childObj : { msg: childObj }),
-          },
-          msg,
-        ),
-      info: (childObj, msg) =>
-        createLogEntry(
-          'info',
-          {
-            ...obj,
-            ...(typeof childObj === 'object' && childObj !== null ? childObj : { msg: childObj }),
-          },
-          msg,
-        ),
-      warn: (childObj, msg) =>
-        createLogEntry(
-          'warn',
-          {
-            ...obj,
-            ...(typeof childObj === 'object' && childObj !== null ? childObj : { msg: childObj }),
-          },
-          msg,
-        ),
-      error: (childObj, msg) =>
-        createLogEntry(
-          'error',
-          {
-            ...obj,
-            ...(typeof childObj === 'object' && childObj !== null ? childObj : { msg: childObj }),
-          },
-          msg,
-        ),
-      child: (newObj) => childLogger.child({ ...obj, ...newObj }),
-    };
+  trace: (d: object, m: string) => logIt('trace', d, m),
+  debug: (d: object, m: string) => logIt('debug', d, m),
+  info: (d: object, m: string) => logIt('info', d, m),
+  warn: (d: object, m: string) => logIt('warn', d, m),
+  error: (d: object, m: string) => logIt('error', d, m),
+  child: (obj: object) => {
+    const childLogger = { ...logger };
+    Object.keys(LEVELS).forEach((lvl) => {
+      childLogger[lvl] = (d: object, m: string) =>
+        logIt(lvl, { ...obj, ...(typeof d === 'object' ? d : {}) }, typeof d === 'object' ? m : d);
+    });
+    childLogger.child = (newObj) => logger.child({ ...obj, ...newObj });
     return childLogger;
   },
-  trace: (obj, msg) => createLogEntry('trace', obj, msg),
-  debug: (obj, msg) => createLogEntry('debug', obj, msg),
-  info: (obj, msg) => createLogEntry('info', obj, msg),
-  warn: (obj, msg) => createLogEntry('warn', obj, msg),
-  error: (obj, msg) => createLogEntry('error', obj, msg),
 };
 
 export default logger;

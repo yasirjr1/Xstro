@@ -35,4 +35,3 @@ export function extractStringfromMessage(message: WAMessageContent) {
     }
   }
 }
-

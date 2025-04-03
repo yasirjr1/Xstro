@@ -4,4 +4,3 @@ export async function prepareMessageObject(jid: string, content: sendMessageOpti
   // TODO: Implement message preparation logic
   throw new Error('prepareMessageObject function not implemented');
 }
-
