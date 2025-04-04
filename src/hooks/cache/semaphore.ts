@@ -20,7 +20,9 @@ export class Semaphore {
   }
 
   release(): void {
-    this.current--;
+    if (this.current > 0) {
+      this.current--;
+    }
     const next = this.queue.shift();
     if (next) {
       this.current++;
@@ -28,3 +30,4 @@ export class Semaphore {
     }
   }
 }
+

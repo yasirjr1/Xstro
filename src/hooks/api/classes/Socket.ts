@@ -16,7 +16,7 @@ export default class ConnectionUpdate {
     const { connection, lastDisconnect } = this.events;
     switch (connection) {
       case 'connecting':
-        this.handleConnecting();
+        await this.handleConnecting();
         break;
       case 'close':
         await this.handleClose(lastDisconnect);
