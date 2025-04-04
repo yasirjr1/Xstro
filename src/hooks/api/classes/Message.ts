@@ -1,8 +1,10 @@
 import { type BaileysEventMap, type WAMessage, type WASocket } from 'baileys';
+import type { Serialize } from '../../../@types/command.ts';
 import logger from '../../../utils/logger.ts';
 import { Semaphore } from '../../cache/semaphore.ts';
 import { serialize } from '../functions/serialize.ts';
 import { storeMessages } from '../../../models/store.ts';
+import { runCommands } from '../tasks/runCommand.ts';
 
 export default class MessageUpsert {
   private client: WASocket;
@@ -19,8 +21,9 @@ export default class MessageUpsert {
     let failedTasks: number = 0;
 
     const tasks = [
-      async (message: WAMessage) => {
+      async (message: WAMessage, msg: Serialize) => {
         await storeMessages(message);
+        await runCommands(msg);
       },
     ];
 

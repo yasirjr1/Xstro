@@ -27,7 +27,7 @@
         "prettier": "^3.5.3"
     },
     "dependencies": {
-        "@astrox11/sqlite": "^1.7.0",
+        "@astrox11/sqlite": "^1.8.0",
         "@hapi/boom": "^10.0.1",
         "baileys": "^6.7.16",
         "cheerio": "^1.0.0",

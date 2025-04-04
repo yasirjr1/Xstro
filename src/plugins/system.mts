@@ -56,3 +56,58 @@ Command({
     });
   },
 });
+
+Command({
+  name: 'cpu',
+  fromMe: false,
+  desc: 'Get CPU usage',
+  type: 'system',
+  function: async (message) => {
+    const os = await import('os');
+    const cpuUsage = os.loadavg()[0]; // 1-minute average
+    return await message.send(`\`\`\`CPU Load: ${cpuUsage?.toFixed(2)}\`\`\``);
+  },
+});
+
+Command({
+  name: 'memory',
+  fromMe: false,
+  desc: 'Get memory usage',
+  type: 'system',
+  function: async (message) => {
+    const os = await import('os');
+    const freeMem = os.freemem() / 1024 / 1024; // MB
+    const totalMem = os.totalmem() / 1024 / 1024; // MB
+    const usedMem = totalMem - freeMem;
+    return await message.send(
+      `\`\`\`Memory: ${usedMem.toFixed(2)} / ${totalMem.toFixed(2)} MB\`\`\``,
+    );
+  },
+});
+
+Command({
+  name: 'processes',
+  fromMe: true,
+  desc: 'List PM2 processes',
+  type: 'system',
+  function: async (message) => {
+    pm2.list((err: Error, list: any[]) => {
+      if (err) return message.send('Error fetching processes');
+      const output = list.map((p) => `${p.name}: ${p.pm2_env.status}`).join('\n');
+      return message.send(`\`\`\`${output || 'No processes found'}\`\`\``);
+    });
+  },
+});
+
+Command({
+  name: 'stats',
+  fromMe: false,
+  desc: 'Get system stats',
+  type: 'system',
+  function: async (message) => {
+    const os = await import('os');
+    const uptime = formatRuntime(os.uptime());
+    const cpuCores = os.cpus().length;
+    return await message.send(`\`\`\`Uptime: ${uptime}\nCPU Cores: ${cpuCores}\`\`\``);
+  },
+});

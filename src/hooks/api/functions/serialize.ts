@@ -19,6 +19,8 @@ import { parseJid } from '../../../utils/constants.ts';
 import { extractStringfromMessage } from '../../../utils/extractor.ts';
 import { getSudo } from '../../../models/sudo.ts';
 import { isMediaMessage } from '../../../utils/content.ts';
+import logger from '../../../utils/logger.ts';
+import { getSettings } from '../../../models/settings.ts';
 
 export async function serialize(client: WASocket, messages: WAMessage) {
   const normalizedMessages = {
@@ -26,7 +28,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
     message: normalizeMessageContent(messages?.message),
   };
   const { key, message, ...msg } = normalizedMessages;
-  //   const { prefix, mode } = await getConfig();
+  const { prefix, mode } = await getSettings();
   const owner = parseJid(client?.user!.id);
   const sender =
     isJidGroup(key.remoteJid!) || msg.broadcast
@@ -52,11 +54,11 @@ export async function serialize(client: WASocket, messages: WAMessage) {
     jid: key.remoteJid!,
     isGroup: isJidGroup(key.remoteJid!),
     owner: owner,
-    // prefix,
+    prefix: prefix,
     sender: sender,
     text: extractStringfromMessage(message!),
     mentions: Quoted ? Quoted.mentionedJid : [],
-    // mode,
+    mode,
     sudo: (await getSudo())?.includes(sender!) || sender === owner,
     user: function (match?: string): string | undefined {
       if (this.isGroup) {
@@ -127,7 +129,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
     async downloadM(
       message: WAMessage,
       shouldSaveasFile?: boolean,
-    ): Promise<Buffer<ArrayBufferLike> | string> {
+    ): Promise<string | Buffer<ArrayBufferLike> | undefined> {
       try {
         const media = await downloadMediaMessage(message, 'buffer', {});
         if (shouldSaveasFile) {
@@ -140,7 +142,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
         }
         return media;
       } catch (error) {
-        throw new Error(error);
+        logger.error(`Error while downloading:`, error as string);
       }
     },
     forward: async function (

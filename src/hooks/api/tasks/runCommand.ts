@@ -2,7 +2,7 @@ import { type Serialize } from '../../../@types/command.ts';
 import { commands } from '../../../core/command.ts';
 import logger from '../../../utils/logger.ts';
 
-async function runCommands(message: Serialize) {
+export async function runCommands(message: Serialize) {
   if (!message.text) return;
 
   for (const cmd of commands) {
@@ -11,7 +11,7 @@ async function runCommands(message: Serialize) {
     if (!handler || !match) continue;
 
     try {
-      if (cmd.function) await cmd.function(message, match[2] ?? '');
+      await cmd.function(message, match[2] ?? '');
     } catch (err) {
       logger.error(err);
     }

@@ -4,7 +4,7 @@ import { syncPlugins } from './src/hooks/api/functions/loader.ts';
 
 (async (): Promise<void> => {
   try {
-    await syncPlugins('../../../plugins', '.ts');
+    await syncPlugins('../../../plugins', '.mts');
     await initConnection();
   } catch (error) {
     logger.error(error);

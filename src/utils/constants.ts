@@ -24,24 +24,16 @@ export function formatDate(timestamp: number | Date): string {
   return `${day}/${month}/${year}`;
 }
 
-export function formatRuntime(ms: number): string {
-  if (ms < 0) return '0s';
-
-  const seconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  const weeks = Math.floor(days / 7);
-  const months = Math.floor(days / 30.44); // Average days in a month
-  const years = Math.floor(days / 365.25); // Account for leap years
-
-  if (years > 0) return `${years}y ${months % 12}mo`;
-  if (months > 0) return `${months}mo ${weeks % 4}w`;
-  if (weeks > 0) return `${weeks}w ${days % 7}d`;
-  if (days > 0) return `${days}d ${hours % 24}h`;
-  if (hours > 0) return `${hours}h ${minutes % 60}m`;
-  if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
-  return `${seconds}s`;
+export function formatRuntime(seconds: number): string {
+  const d = Math.floor(seconds / (3600 * 24));
+  const h = Math.floor((seconds % (3600 * 24)) / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  const dDisplay = d > 0 ? `${d} d ` : '';
+  const hDisplay = h > 0 ? `${h} h ` : '';
+  const mDisplay = m > 0 ? `${m} m ` : '';
+  const sDisplay = s > 0 ? `${s} s` : '';
+  return dDisplay + hDisplay + mDisplay + sDisplay;
 }
 
 export function formatBytes(bytes: number): string {

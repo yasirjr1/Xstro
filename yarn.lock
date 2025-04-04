@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@adiwajshing/keyed-db/-/keyed-db-0.2.4.tgz#2a09e88fce20b2672deb60a7750c5fe3ab0dfd99"
   integrity sha512-yprSnAtj80/VKuDqRcFFLDYltoNV8tChNwFfIgcf6PGD4sjzWIBgs08pRuTqGH5mk5wgL6PBRSsMCZqtZwzFEw==
 
-"@astrox11/sqlite@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@astrox11/sqlite/-/sqlite-1.7.0.tgz#a5d671c54fdba90499459a6fe0ad69343a94afc3"
-  integrity sha512-awDlfOOMsddr4SXJ7iF9X1ueJYXJfJVOPTAG4h6ez9J3DLfP0M15Qa28nUjcAyKBVz8HW7b84B7woJWj2/saeg==
+"@astrox11/sqlite@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@astrox11/sqlite/-/sqlite-1.8.0.tgz#c58d286375e6274eb19f7fec27a804c9c2a21c8b"
+  integrity sha512-BZvHSSJFrncUHL52oyhfikto+Ffz+PHfVvo4bq+7Xz96Lm+G3HO87VrdwAYxQZLGqDNLIwAxiXjeVArBAvXwOQ==
   dependencies:
     "@types/node" "^22.13.14"
     typescript "^5.8.2"
