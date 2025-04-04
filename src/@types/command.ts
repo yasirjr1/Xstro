@@ -1,4 +1,4 @@
-import type { serialize } from '../hooks/api/functions/serialize.js';
+import type { serialize } from '../hooks/api/functions/serialize.ts';
 import type { WAMessage } from 'baileys';
 
 export interface Commands {
@@ -7,7 +7,7 @@ export interface Commands {
   /** Should the command always run when it recieves a messgae */
   on?: string | undefined;
   /** Function of the command, must be async */
-  function?: (message: Serialize, match?: string) => Promise<unknown>;
+  function: (message: Serialize, match?: string) => Promise<unknown>;
   /** Should the command be for only sudo and bot owner */
   fromMe?: boolean;
   /** Should the command only be for Groups */

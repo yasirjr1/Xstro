@@ -1,7 +1,7 @@
 import { fileTypeFromBuffer } from 'file-type';
-import { isPath, isText } from './constants.js';
-import { ContentTypeResult } from '../@types/content.js';
-import logger from './logger.js';
+import { isPath, isText } from './constants.ts';
+import logger from './logger.ts';
+import type { ContentTypeResult } from '../@types/content.ts';
 import { type WAMessage } from 'baileys';
 
 export const getContentType = async (content: unknown): Promise<ContentTypeResult> => {
@@ -23,7 +23,7 @@ export const getContentType = async (content: unknown): Promise<ContentTypeResul
     const fileType = await fileTypeFromBuffer(buffer);
     return fileType ?? undefined;
   } catch (error) {
-    logger.error('Error detecting content type:', error);
+    logger.error('Error detecting content type:', error as string);
     return undefined;
   }
 };

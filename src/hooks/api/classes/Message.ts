@@ -1,8 +1,8 @@
-import { BaileysEventMap, type WAMessage, type WASocket } from 'baileys';
-import logger from '../../../utils/logger.js';
-import { Semaphore } from '../../cache/semaphore.js';
-import { serialize } from '../functions/serialize.js';
-import { storeMessages } from '../../../models/store.js';
+import { type BaileysEventMap, type WAMessage, type WASocket } from 'baileys';
+import logger from '../../../utils/logger.ts';
+import { Semaphore } from '../../cache/semaphore.ts';
+import { serialize } from '../functions/serialize.ts';
+import { storeMessages } from '../../../models/store.ts';
 
 export default class MessageUpsert {
   private client: WASocket;

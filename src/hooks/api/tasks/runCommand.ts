@@ -1,6 +1,6 @@
-import { type Serialize } from '../../../@types/command.js';
-import { commands } from '../../../core/command.js';
-import logger from '../../../utils/logger.js';
+import { type Serialize } from '../../../@types/command.ts';
+import { commands } from '../../../core/command.ts';
+import logger from '../../../utils/logger.ts';
 
 async function runCommands(message: Serialize) {
   if (!message.text) return;

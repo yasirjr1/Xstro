@@ -25,11 +25,19 @@ export function formatDate(timestamp: number | Date): string {
 }
 
 export function formatRuntime(ms: number): string {
+  if (ms < 0) return '0s';
+
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(days / 30.44); // Average days in a month
+  const years = Math.floor(days / 365.25); // Account for leap years
 
+  if (years > 0) return `${years}y ${months % 12}mo`;
+  if (months > 0) return `${months}mo ${weeks % 4}w`;
+  if (weeks > 0) return `${weeks}w ${days % 7}d`;
   if (days > 0) return `${days}d ${hours % 24}h`;
   if (hours > 0) return `${hours}h ${minutes % 60}m`;
   if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
@@ -37,16 +45,11 @@ export function formatRuntime(ms: number): string {
 }
 
 export function formatBytes(bytes: number): string {
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-  let size = bytes;
-  let unitIndex = 0;
-
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex++;
-  }
-
-  return `${Math.round(size * 100) / 100}${units[unitIndex]}`;
+  if (bytes === 0) return '0B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))}${sizes[i]}`;
 }
 
 export function parseJid(jid: string): string | undefined {

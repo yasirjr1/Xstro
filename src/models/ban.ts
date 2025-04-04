@@ -1,4 +1,4 @@
-import database from '../core/database.js';
+import database from '../core/database.ts';
 
 const bannedUsers = database.define(
   'banned',

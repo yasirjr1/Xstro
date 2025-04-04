@@ -1,4 +1,5 @@
-import type { Commands } from '../@types/command.js';
+import type { Commands } from '../@types/command.ts';
+import logger from '../utils/logger.ts';
 
 export const commands: Commands[] = [];
 
@@ -11,6 +12,7 @@ export function Command({
   type,
   dontAddCommandList,
 }: Commands): number {
+  logger.info('Command Loaded:', name?.toString());
   return commands.push({
     name: new RegExp(`^\\s*(${name})(?:\\s+([\\s\\S]+))?$`, 'i'),
     function: func,

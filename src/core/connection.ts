@@ -4,12 +4,12 @@ import {
   makeCacheableSignalKeyStore,
   Browsers,
 } from 'baileys';
-import config from '../../config.js';
-import logger from '../utils/logger.js';
-import MakeListeners from '../hooks/api/listeners.js';
-import { getMessage } from '../models/store.js';
-import { cachedGroupMetadata } from '../models/group.js';
-import { connectProxy } from '../hooks/proxy.js';
+import config from '../../config.ts';
+import logger from '../utils/logger.ts';
+import MakeListeners from '../hooks/api/listeners.ts';
+import { getMessage } from '../models/store.ts';
+import { cachedGroupMetadata } from '../models/group.ts';
+import { connectProxy } from '../hooks/proxy.ts';
 
 export const initConnection = async () => {
   const { state, saveCreds } = await useMultiFileAuthState('./session');

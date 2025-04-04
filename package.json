@@ -3,10 +3,10 @@
     "version": "8.0.0",
     "description": "Simple WA bot.",
     "type": "module",
-    "main": "bot.js",
+    "main": "bot.ts",
     "scripts": {
-        "start": "pm2 start ./dist/bot.js --name xstro --attach",
-        "dev": "node ./dist/bot.js",
+        "start": "pm2 start ./dist/bot.ts --name xstro --attach",
+        "dev": "node ./dist/bot.ts",
         "build": "tsc",
         "stop": "pm2 stop xstro",
         "lint": "yarn run eslint . --fix"

@@ -13,12 +13,12 @@ import {
   type WAMessageKey,
   type WASocket,
 } from 'baileys';
-import type { MessageMisc } from '../../../@types/command.js';
-import { prepareMessage } from './prepareMessage.js';
-import { parseJid } from '../../../utils/constants.js';
-import { extractStringfromMessage } from '../../../utils/extractor.js';
-import { getSudo } from '../../../models/sudo.js';
-import { isMediaMessage } from '../../../utils/content.js';
+import type { MessageMisc } from '../../../@types/command.ts';
+import { prepareMessage } from './prepareMessage.ts';
+import { parseJid } from '../../../utils/constants.ts';
+import { extractStringfromMessage } from '../../../utils/extractor.ts';
+import { getSudo } from '../../../models/sudo.ts';
+import { isMediaMessage } from '../../../utils/content.ts';
 
 export async function serialize(client: WASocket, messages: WAMessage) {
   const normalizedMessages = {
