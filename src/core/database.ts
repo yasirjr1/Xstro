@@ -12,6 +12,7 @@ const database = new Database(config.DATABASE, {
   open: true,
   enableForeignKeyConstraints: true,
   readOnly: false,
+  verbose: true,
 });
 
 export default database;

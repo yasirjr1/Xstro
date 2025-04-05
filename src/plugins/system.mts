@@ -1,6 +1,7 @@
 import { Command } from '../core/command.ts';
 import { formatRuntime } from '../utils/constants.ts';
 import pm2 from 'pm2';
+import os from 'node:os';
 
 Command({
   name: 'ping',
@@ -63,7 +64,6 @@ Command({
   desc: 'Get CPU usage',
   type: 'system',
   function: async (message) => {
-    const os = await import('os');
     const cpuUsage = os.loadavg()[0]; // 1-minute average
     return await message.send(`\`\`\`CPU Load: ${cpuUsage?.toFixed(2)}\`\`\``);
   },
@@ -75,7 +75,6 @@ Command({
   desc: 'Get memory usage',
   type: 'system',
   function: async (message) => {
-    const os = await import('os');
     const freeMem = os.freemem() / 1024 / 1024; // MB
     const totalMem = os.totalmem() / 1024 / 1024; // MB
     const usedMem = totalMem - freeMem;
@@ -105,7 +104,6 @@ Command({
   desc: 'Get system stats',
   type: 'system',
   function: async (message) => {
-    const os = await import('os');
     const uptime = formatRuntime(os.uptime());
     const cpuCores = os.cpus().length;
     return await message.send(`\`\`\`Uptime: ${uptime}\nCPU Cores: ${cpuCores}\`\`\``);
