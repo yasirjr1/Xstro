@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export async function syncPlugins(plugin: string, extensions?: string): Promise<void> {
-  if (!extensions) extensions = '.ts';
+  if (!extensions) extensions = '';
   const plugins = join(__dirname, plugin);
 
   const files = await readdir(plugins, { withFileTypes: true });

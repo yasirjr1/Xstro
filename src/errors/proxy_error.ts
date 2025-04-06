@@ -1,4 +1,4 @@
-import { ErrorBuilder } from './error_builder.ts';
+import { ErrorBuilder } from './error_builder';
 import type { ErrorOptions } from '../@types';
 
 export class ProxyError extends ErrorBuilder {

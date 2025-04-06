@@ -1,6 +1,6 @@
 import { fileTypeFromBuffer } from 'file-type';
-import { isPath, isText } from './constants.ts';
-import { logger } from './logger.ts';
+import { isPath, isText } from './constants';
+import { logger } from './logger';
 import type { ContentTypeResult } from '../@types';
 import { type WAMessage } from 'baileys';
 

@@ -1,4 +1,4 @@
-import database from '../core/database.ts';
+import database from '../core/database';
 import type { SettingsMap } from '../@types';
 
 export const configDB = database.define('config', {

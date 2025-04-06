@@ -2,8 +2,8 @@ import { DisconnectReason, jidNormalizedUser } from 'baileys';
 import pm2 from 'pm2';
 import { Boom } from '@hapi/boom';
 import { logger } from '../utils';
-import config from '../../config.ts';
-import { setSudo } from '../models/sudo.ts';
+import config from '../../config';
+import { setSudo } from '../models';
 
 import type { BaileysEventMap, WASocket } from 'baileys';
 

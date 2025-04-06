@@ -4,8 +4,8 @@ import {
   makeCacheableSignalKeyStore,
   Browsers,
 } from 'baileys';
-import config from '../../config.ts';
-import MakeListeners from '../api/makeEvents.ts';
+import config from '../../config';
+import MakeListeners from '../api/makeEvents';
 import { logger } from '../utils';
 import { connectProxy } from '../utils';
 import { getMessage, cachedGroupMetadata } from '../models';
