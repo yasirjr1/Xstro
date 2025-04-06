@@ -18,7 +18,7 @@ export default class MessageUpsert {
   public async queueAllTasks() {
     const semaphore = new Semaphore(5);
     const taskPromises: Promise<void>[] = [];
-    let failedTasks: number = 0;
+    let failedTasks = 0;
 
     const tasks = [
       async (message: WAMessage, msg: Serialize) => {
@@ -36,7 +36,7 @@ export default class MessageUpsert {
               .then(async () => {
                 try {
                   const msg = await serialize(this.client, message);
-                  logger.info(msg);
+                  logger.info(msg?.message);
                   await task(message, msg);
                 } catch (error) {
                   failedTasks++;

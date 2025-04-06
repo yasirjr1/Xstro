@@ -1,5 +1,5 @@
 import { ErrorBuilder } from './error_builder.ts';
-import type { ErrorOptions } from '../@types/error.ts';
+import type { ErrorOptions } from '../@types';
 
 export class ProxyError extends ErrorBuilder {
   constructor(message: string, options: ErrorOptions = {}) {

@@ -1,12 +1,10 @@
-import logger from './src/utils/logger.ts';
-import { initConnection } from './src/core/socket.ts';
-import { syncPlugins } from './src/hooks/api/functions/loader.ts';
+import { logger } from './src/utils';
+import { initConnection } from './src/core';
+import { syncPlugins } from './src/functions';
 
-(async (): Promise<void> => {
-  try {
-    await syncPlugins('../../../plugins', '.mts');
-    await initConnection();
-  } catch (error) {
-    logger.error(error);
-  }
-})();
+try {
+  await syncPlugins('../plugins', '.mts');
+  await initConnection();
+} catch (error) {
+  logger.error(error);
+}

@@ -1,5 +1,5 @@
 import type { WASocket } from 'baileys';
-import ConnectionUpdate from './Connection';
+import ConnectionUpdate from './connection';
 import MessageUpsert from './Message';
 
 export default class MakeListeners {

@@ -1,4 +1,4 @@
-import type { ErrorDetails, ErrorOptions } from '../@types/error.ts';
+import type { ErrorDetails, ErrorOptions } from '../@types';
 
 export class ErrorBuilder extends Error {
   public readonly code: string;

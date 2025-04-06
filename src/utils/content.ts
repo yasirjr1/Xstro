@@ -1,7 +1,7 @@
 import { fileTypeFromBuffer } from 'file-type';
 import { isPath, isText } from './constants.ts';
-import logger from './logger.ts';
-import type { ContentTypeResult } from '../@types/content.ts';
+import { logger } from './logger.ts';
+import type { ContentTypeResult } from '../@types';
 import { type WAMessage } from 'baileys';
 
 export const getContentType = async (content: unknown): Promise<ContentTypeResult> => {
