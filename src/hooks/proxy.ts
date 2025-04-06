@@ -1,8 +1,8 @@
 import { HttpsProxyAgent } from 'https-proxy-agent';
-import { URL } from 'url';
+import { URL } from 'node:url';
 import { ProxyError } from '../errors/proxy_error.ts';
 
-function validateProxy(proxyUri: string): boolean {
+export function validateProxy(proxyUri: string): boolean {
   if (!proxyUri) {
     throw ProxyError.invalidProxyUri(proxyUri);
   }
@@ -11,7 +11,7 @@ function validateProxy(proxyUri: string): boolean {
     const url = new URL(proxyUri);
     return ['http:', 'https:'].includes(url.protocol) && !!url.hostname;
   } catch (error) {
-    throw ProxyError.invalidProxyUri(proxyUri, error);
+    throw ProxyError.invalidProxyUri(proxyUri, error as Error);
   }
 }
 
@@ -23,6 +23,6 @@ export function connectProxy(proxyUri: string): HttpsProxyAgent<string> {
   try {
     return new HttpsProxyAgent(proxyUri);
   } catch (error) {
-    throw ProxyError.connectionFailed(proxyUri, error);
+    throw ProxyError.connectionFailed(proxyUri, error as Error);
   }
 }

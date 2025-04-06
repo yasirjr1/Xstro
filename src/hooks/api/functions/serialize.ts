@@ -142,7 +142,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
         }
         return media;
       } catch (error) {
-        logger.error(`Error while downloading:`, error as string);
+        logger.error(`Error while downloading:`, error as Error);
       }
     },
     forward: async function (

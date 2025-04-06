@@ -9,13 +9,13 @@ export interface Commands {
   /** Function of the command, must be async */
   function: (message: Serialize, match?: string) => Promise<unknown>;
   /** Should the command be for only sudo and bot owner */
-  fromMe?: boolean;
+  fromMe: boolean;
   /** Should the command only be for Groups */
-  isGroup?: boolean;
+  isGroup: boolean;
   /** Description of what the command does */
   desc?: string;
   /** Category of where the command should belong */
-  type?:
+  type:
     | 'ai'
     | 'misc'
     | 'system'

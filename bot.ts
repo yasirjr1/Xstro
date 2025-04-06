@@ -1,5 +1,5 @@
 import logger from './src/utils/logger.ts';
-import { initConnection } from './src/core/connection.ts';
+import { initConnection } from './src/core/socket.ts';
 import { syncPlugins } from './src/hooks/api/functions/loader.ts';
 
 (async (): Promise<void> => {
