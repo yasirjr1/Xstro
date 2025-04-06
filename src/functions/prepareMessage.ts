@@ -1,5 +1,5 @@
 import { Boom } from '@hapi/boom';
-import { getDataType } from '../utils';
+import { getDataType } from '../utils/index.ts';
 import type { MessageMisc, Serialize } from '../@types';
 import type { AnyMessageContent, WAMessage, WASocket } from 'baileys';
 

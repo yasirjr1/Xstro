@@ -1,6 +1,6 @@
-import { logger } from './src/utils';
-import { initConnection } from './src/core';
-import { syncPlugins } from './src/functions';
+import { logger } from './src/utils/index.ts';
+import { initConnection } from './src/core/index.ts';
+import { syncPlugins } from './src/functions/index.ts';
 
 try {
   await syncPlugins('../plugins', '.mts');

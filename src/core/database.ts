@@ -1,5 +1,5 @@
 import Database from '@astrox11/sqlite';
-import config from '../../config';
+import config from '../../config.ts';
 
 /**
  * Custom ORM handles everything effortlessly, and it supports only `node:sqlite`

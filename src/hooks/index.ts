@@ -1,1 +1,1 @@
-export * from './semaphore';
+export * from './semaphore.ts';

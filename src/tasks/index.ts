@@ -1,1 +1,1 @@
-export * from './runCommand';
+export * from './runCommand.ts';

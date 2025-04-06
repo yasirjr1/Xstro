@@ -1,2 +1,2 @@
-export * from './plugins';
-export * from './prepareMessage';
+export * from './plugins.ts';
+export * from './prepareMessage.ts';

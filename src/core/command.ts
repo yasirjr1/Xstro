@@ -1,4 +1,4 @@
-import { logger } from '../utils';
+import { logger } from '../utils/index.ts';
 import type { Commands } from '../@types';
 
 export const commands: Commands[] = [];

@@ -1,48 +1,49 @@
 {
-    "name": "xstro",
-    "version": "8.0.0",
-    "description": "Simple WA bot.",
-    "type": "module",
-    "main": "./dist/bot.js",
-    "scripts": {
-        "start": "pm2 start ./dist/bot.js --name xstro --attach",
-        "dev": "tsc && node --loader jiti ./dist/bot.js",
-        "build": "tsc",
-        "stop": "pm2 stop xstro",
-        "lint": "yarn run eslint . --fix"
-    },
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/AstroX11/xstro"
-    },
-    "homepage": "https://github.com/AstroX11/xstro#readme",
-    "author": "AstroX11 <danielfx0012@gmail.com>",
-    "devDependencies": {
-        "@types/cheerio": "^0.22.35",
-        "eslint": "^9.22.0",
-        "eslint-config-prettier": "^10.1.1",
-        "eslint-plugin-prettier": "^5.2.3",
-        "jiti": "^2.4.2",
-        "prettier": "^3.5.3"
-    },
-    "dependencies": {
-        "@astrox11/sqlite": "^1.8.5",
-        "@hapi/boom": "^10.0.1",
-        "baileys": "^6.7.16",
-        "cheerio": "^1.0.0",
-        "dotenv": "^16.4.7",
-        "file-type": "20.4.1",
-        "got": "^14.4.7",
-        "https-proxy-agent": "^7.0.6",
-        "node-webpmux": "^3.2.1",
-        "pm2": "^6.0.5",
-        "qrcode-terminal": "^0.12.0",
-        "sharp": "^0.33.5",
-        "typescript": "^5.8.2"
-    },
-    "engines": {
-        "node": ">=23"
-    },
-    "packageManager": "yarn@1.22.22"
+  "name": "xstro",
+  "version": "8.0.0",
+  "description": "Simple WA bot.",
+  "type": "module",
+  "main": "./dist/bot.js",
+  "scripts": {
+    "start": "pm2 start ./dist/bot.js --name xstro --attach",
+    "dev": "ts-node --esm bot.ts",
+    "test": "tsc && node --loader jiti ./dist/bot.js",
+    "build": "tsc",
+    "stop": "pm2 stop xstro",
+    "lint": "yarn run eslint . --fix"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AstroX11/xstro"
+  },
+  "homepage": "https://github.com/AstroX11/xstro#readme",
+  "author": "AstroX11 <danielfx0012@gmail.com>",
+  "devDependencies": {
+    "@types/cheerio": "^0.22.35",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "jiti": "^2.4.2",
+    "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "@astrox11/sqlite": "^1.8.5",
+    "@hapi/boom": "^10.0.1",
+    "baileys": "^6.7.16",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "file-type": "20.4.1",
+    "got": "^14.4.7",
+    "https-proxy-agent": "^7.0.6",
+    "node-webpmux": "^3.2.1",
+    "pm2": "^6.0.5",
+    "qrcode-terminal": "^0.12.0",
+    "sharp": "^0.33.5",
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=23"
+  },
+  "packageManager": "yarn@1.22.22"
 }

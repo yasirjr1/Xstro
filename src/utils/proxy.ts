@@ -1,6 +1,6 @@
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { URL } from 'node:url';
-import { ProxyError } from '../errors/proxy_error';
+import { ProxyError } from '../errors/proxy_error.ts';
 
 export function validateProxy(proxyUri: string): boolean {
   if (!proxyUri) {

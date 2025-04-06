@@ -1,6 +1,6 @@
-import { commands } from '../core';
-import { logger } from '../utils';
-import { Serialize } from '../@types';
+import { commands } from '../core/index.ts';
+import { logger } from '../utils/index.ts';
+import type { Serialize } from '../@types';
 
 export async function runCommands(message: Serialize) {
   if (!message.text) return;

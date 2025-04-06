@@ -14,8 +14,10 @@
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    // "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": true,
     // "noEmit": true,
+    "rewriteRelativeImportExtensions": true,
+    "useDefineForClassFields": true,
 
     // Best practices
     "allowJs": true,

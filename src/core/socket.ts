@@ -4,26 +4,31 @@ import {
   makeCacheableSignalKeyStore,
   Browsers,
 } from 'baileys';
-import config from '../../config';
-import MakeListeners from '../api/makeEvents';
-import { logger } from '../utils';
-import { connectProxy } from '../utils';
-import { getMessage, cachedGroupMetadata } from '../models';
+import config from '../../config.ts';
+import MakeListeners from '../api/makeEvents.ts';
+import { logger, connectProxy } from '../utils/index.ts';
+import { getMessage, cachedGroupMetadata } from '../models/index.ts';
 
 export const initConnection = async () => {
-  const { state, saveCreds } = await useMultiFileAuthState('./session');
-  const sock = makeWASocket({
-    auth: {
-      creds: state.creds,
-      keys: makeCacheableSignalKeyStore(state.keys, logger),
-    },
-    printQRInTerminal: config.DEV_MODE,
-    agent: config.PROXY_URI ? connectProxy(config.PROXY_URI) : undefined,
-    logger,
-    browser: Browsers.windows('Chrome'),
-    emitOwnEvents: true,
-    getMessage,
-    cachedGroupMetadata,
-  });
-  return await new MakeListeners(sock, { saveCreds }).manageProcesses();
+  try {
+    logger.info('Starting connection...');
+    const { state, saveCreds } = await useMultiFileAuthState(config.SESSION_DIR || './session');
+    const sock = makeWASocket({
+      auth: {
+        creds: state.creds,
+        keys: makeCacheableSignalKeyStore(state.keys, logger),
+      },
+      printQRInTerminal: config.DEV_MODE,
+      agent: config.PROXY_URI ? connectProxy(config.PROXY_URI) : undefined,
+      logger,
+      browser: Browsers.windows('Chrome'),
+      emitOwnEvents: true,
+      getMessage,
+      cachedGroupMetadata,
+    });
+    return await new MakeListeners(sock, { saveCreds }).manageProcesses();
+  } catch (error) {
+    logger.error({ error }, 'Failed to initialize connection');
+    throw error;
+  }
 };

@@ -1,5 +1,5 @@
 import type { GroupMetadata } from 'baileys';
-import database from '../core/database';
+import database from '../core/database.ts';
 
 const Metadata = database.define(
   'group_metadata',

@@ -1,8 +1,8 @@
-import { serialize } from '../core';
-import { logger } from '../utils';
-import { storeMessages } from '../models';
-import { runCommands } from '../tasks';
-import { Semaphore } from '../hooks';
+import { serialize } from '../core/index.ts';
+import { logger } from '../utils/index.ts';
+import { storeMessages } from '../models/index.ts';
+import { runCommands } from '../tasks/index.ts';
+import { Semaphore } from '../hooks/index.ts';
 import type { Serialize } from '../@types';
 import type { BaileysEventMap, WAMessage, WASocket } from 'baileys';
 

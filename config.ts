@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import type { AppConfig } from './src/@types';
 
 config();
 
@@ -9,4 +10,4 @@ export default {
   DEV_MODE: Boolean(process.env.DEV_MODE ?? true),
   LOGGER: process.env.LOG_LEVEL ?? 'info',
   PROCESS_NAME: process.env.PROCESS_NAME ?? 'xstro',
-};
+} as AppConfig;

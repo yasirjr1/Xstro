@@ -1,5 +1,5 @@
 import { type WAMessage, type WAMessageContent, type WAMessageKey, WAProto } from 'baileys';
-import database from '../core/database';
+import database from '../core/database.ts';
 
 const messageDb = database.define(
   'messages',

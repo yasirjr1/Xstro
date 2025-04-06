@@ -1,6 +1,6 @@
 import { fileTypeFromBuffer } from 'file-type';
-import { isPath, isText } from './constants';
-import { logger } from './logger';
+import { isPath, isText } from './constants.ts';
+import { logger } from './logger.ts';
 import type { ContentTypeResult } from '../@types';
 import { type WAMessage } from 'baileys';
 
@@ -21,7 +21,7 @@ export const getContentType = async (content: unknown): Promise<ContentTypeResul
       return undefined;
     }
     const fileType = await fileTypeFromBuffer(buffer);
-    return fileType ?? undefined;
+    return fileType;
   } catch (error) {
     logger.error('Error detecting content type:', error as string);
     return undefined;
@@ -58,14 +58,14 @@ export const getDataType = async (
   }
 };
 
-export const isMediaMessage = (message: WAMessage): boolean => {
+export const isMediaMessage = async (message: WAMessage): Promise<boolean> => {
   const mediaMessageTypes = [
     'imageMessage',
     'videoMessage',
     'audioMessage',
     'documentMessage',
   ] as const;
-  const content = getContentType(message?.message!);
+  const content = await getContentType(message?.message || {});
   return (
     typeof content === 'string' &&
     mediaMessageTypes.includes(content as (typeof mediaMessageTypes)[number])

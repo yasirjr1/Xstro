@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+import fs from 'node:fs/promises';
 import { join } from 'path';
 import { Boom } from '@hapi/boom';
 import {
@@ -9,9 +9,9 @@ import {
   normalizeMessageContent,
 } from 'baileys';
 
-import { prepareMessage } from '../functions';
-import { getSettings, getSudo } from '../models';
-import { parseJid, isMediaMessage, logger, extractStringfromMessage } from '../utils';
+import { prepareMessage } from '../functions/index.ts';
+import { getSettings, getSudo } from '../models/index.ts';
+import { parseJid, isMediaMessage, logger, extractStringfromMessage } from '../utils/index.ts';
 import type { MessageMisc } from '../@types';
 import type { AnyMessageContent, WAContextInfo, WAMessage, WAMessageKey, WASocket } from 'baileys';
 
@@ -49,19 +49,19 @@ export async function serialize(client: WASocket, messages: WAMessage) {
     owner: owner,
     prefix: prefix,
     sender: sender,
-    text: extractStringfromMessage(message!),
+    text: message ? extractStringfromMessage(message) : undefined,
     mentions: Quoted ? Quoted.mentionedJid : [],
     mode,
-    sudo: (await getSudo())?.includes(sender!) || sender === owner,
+    sudo: (await getSudo())?.includes(sender ?? '') || sender === owner,
     user: function (match?: string): string | undefined {
       if (this.isGroup) {
         if (this.quoted && this.quoted.sender) return this.quoted.sender;
-        if (match && Array.isArray(match)) return parseJid(match[0]);
-        if (match && !Array.isArray(match)) return parseJid(match);
+        if (!match) return undefined;
+        return Array.isArray(match) ? parseJid(match[0]) : parseJid(match);
       } else {
         if (this.quoted && this.quoted.sender) return this.quoted.sender;
-        if (match) return parseJid(match);
-        if (!match) return this.jid;
+        if (!match) return undefined;
+        Array.isArray(match) ? parseJid(match[0]) : parseJid(match);
       }
       return undefined;
     },
@@ -167,7 +167,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
         return this.chatModify(
           {
             deleteForMe: {
-              deleteMedia: isMediaMessage(message),
+              deleteMedia: await isMediaMessage(message),
               key: message.key,
               timestamp: Date.now(),
             },
