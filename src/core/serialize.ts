@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+import fs from 'fs/promises';
 import { join } from 'path';
 import { Boom } from '@hapi/boom';
 import {
@@ -7,20 +7,13 @@ import {
   isJidBroadcast,
   isJidGroup,
   normalizeMessageContent,
-  type AnyMessageContent,
-  type WAContextInfo,
-  type WAMessage,
-  type WAMessageKey,
-  type WASocket,
 } from 'baileys';
-import type { MessageMisc } from '../../../@types/command.ts';
-import { prepareMessage } from './prepareMessage.ts';
-import { parseJid } from '../../../utils/constants.ts';
-import { extractStringfromMessage } from '../../../utils/extractor.ts';
-import { getSudo } from '../../../models/sudo.ts';
-import { isMediaMessage } from '../../../utils/content.ts';
-import logger from '../../../utils/logger.ts';
-import { getSettings } from '../../../models/settings.ts';
+
+import { prepareMessage } from '../functions';
+import { getSettings, getSudo } from '../models';
+import { parseJid, isMediaMessage, logger, extractStringfromMessage } from '../utils';
+import type { MessageMisc } from '../@types';
+import type { AnyMessageContent, WAContextInfo, WAMessage, WAMessageKey, WASocket } from 'baileys';
 
 export async function serialize(client: WASocket, messages: WAMessage) {
   const normalizedMessages = {

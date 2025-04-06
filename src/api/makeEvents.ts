@@ -1,6 +1,6 @@
 import type { WASocket } from 'baileys';
-
-const processes = (await import('./classes/index.ts')).default;
+import ConnectionUpdate from './Connection';
+import MessageUpsert from './Message';
 
 export default class MakeListeners {
   private clientSocket: WASocket;
@@ -18,14 +18,14 @@ export default class MakeListeners {
       }
 
       if (events['connection.update']) {
-        await new processes.ConnectionUpdate(
+        await new ConnectionUpdate(
           this.clientSocket,
           events['connection.update'],
         ).handleConnectionUpdate();
       }
 
       if (events['messages.upsert']) {
-        await new processes.MessageUpsert(this.clientSocket, events['messages.upsert']).queueAllTasks();
+        await new MessageUpsert(this.clientSocket, events['messages.upsert']).queueAllTasks();
       }
     });
   }

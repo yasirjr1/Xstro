@@ -5,11 +5,10 @@ import {
   Browsers,
 } from 'baileys';
 import config from '../../config.ts';
-import logger from '../utils/logger.ts';
-import MakeListeners from '../hooks/api/listeners.ts';
-import { getMessage } from '../models/store.ts';
-import { cachedGroupMetadata } from '../models/group.ts';
-import { connectProxy } from '../hooks/proxy.ts';
+import MakeListeners from '../api/makeEvents.ts';
+import { logger } from '../utils';
+import { connectProxy } from '../utils';
+import { getMessage, cachedGroupMetadata } from '../models';
 
 export const initConnection = async () => {
   const { state, saveCreds } = await useMultiFileAuthState('./session');

@@ -25,11 +25,11 @@ export async function getMessage(key: WAMessageKey): Promise<WAMessageContent | 
 }
 
 export async function getLastMessagesFromChat(jid: string): Promise<WAMessage[] | undefined> {
-  const store = (await messageDb.findAll({})) as string[];
+  const store = (await messageDb.findAll({})) as Array<{ message: string }>;
   if (!store || store.length === 0) return undefined;
 
   const messages: WAMessage[] = store
-    .map((msg: any) => JSON.parse(msg.message) as WAMessage)
+    .map((msg: { message: string }) => JSON.parse(msg.message) as WAMessage)
     .filter((parsed: WAMessage) => parsed.key?.remoteJid === jid);
 
   return messages.length > 0 ? messages : undefined;

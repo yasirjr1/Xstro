@@ -1,7 +1,7 @@
 import { Boom } from '@hapi/boom';
+import { getDataType } from '../utils';
+import type { MessageMisc, Serialize } from '../@types';
 import type { AnyMessageContent, WAMessage, WASocket } from 'baileys';
-import { type MessageMisc, type Serialize } from '../../../@types/command.ts';
-import { getDataType } from '../../../utils/content.ts';
 
 export async function prepareMessage(
   createserialize: (client: WASocket, msg: WAMessage) => Promise<Serialize>,

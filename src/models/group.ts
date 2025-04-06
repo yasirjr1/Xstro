@@ -13,6 +13,6 @@ const Metadata = database.define(
 export async function cachedGroupMetadata(jid: string): Promise<GroupMetadata | undefined> {
   const metadata = await Metadata.findOne({ where: { jid } });
   if (!metadata) return undefined;
-  JSON.parse(JSON.stringify(metadata));
-  return JSON.parse(JSON.parse(JSON.stringify(metadata)).data) as GroupMetadata;
+  const raw = JSON.parse(JSON.stringify(metadata));
+  return JSON.parse(raw.data) as GroupMetadata;
 }

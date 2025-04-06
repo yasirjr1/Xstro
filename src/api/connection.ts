@@ -1,9 +1,11 @@
-import { DisconnectReason, jidNormalizedUser, type BaileysEventMap, type WASocket } from 'baileys';
+import { DisconnectReason, jidNormalizedUser } from 'baileys';
 import pm2 from 'pm2';
 import { Boom } from '@hapi/boom';
-import logger from '../../../utils/logger.ts';
-import config from '../../../../config.ts';
-import { setSudo } from '../../../models/sudo.ts';
+import { logger } from '../utils';
+import config from '../../config.ts';
+import { setSudo } from '../models/sudo.ts';
+
+import type { BaileysEventMap, WASocket } from 'baileys';
 
 export default class ConnectionUpdate {
   private client: WASocket;

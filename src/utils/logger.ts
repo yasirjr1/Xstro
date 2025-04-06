@@ -1,5 +1,5 @@
-import config from '../../config.ts';
-import type { ILogger } from '../@types/logger.ts';
+import config from '../../config';
+import type { ILogger } from '../@types';
 
 const LEVELS = {
   trace: 10,
@@ -10,21 +10,31 @@ const LEVELS = {
   fatal: 60,
 } as const;
 
-const Level = LEVELS[(config.LOGGER as keyof typeof LEVELS) || 'info'] || 30;
+const currentLevel = LEVELS[(config.LOGGER as keyof typeof LEVELS) || 'info'];
 
-const log = (level: keyof typeof LEVELS, data: unknown, msg?: string) => {
-  if (LEVELS[level] < Level) return;
+const log = (level: keyof typeof LEVELS, data: unknown, msg?: unknown) => {
+  if (LEVELS[level] < currentLevel) return;
 
+  const timestamp = new Date().toISOString();
   const entry = msg
-    ? { ...(typeof data === 'object' && data !== null ? data : { msg: data }), msg }
+    ? {
+        timestamp,
+        level,
+        ...(typeof data === 'object' && data !== null ? data : { msg: data }),
+        msg,
+      }
     : typeof data === 'object' && data !== null
-      ? data
-      : { msg: data };
+      ? { timestamp, level, ...data }
+      : { timestamp, level, msg: data };
 
-  console.log(JSON.stringify(entry));
+  if (level === 'error' || level === 'fatal') {
+    console.error(JSON.stringify(entry));
+  } else {
+    console.log(JSON.stringify(entry));
+  }
 };
 
-const logger: ILogger = {
+export const logger: ILogger = {
   level: process.env.LOG_LEVEL || 'info',
 
   trace: (data, msg) => log('trace', data, msg),
@@ -35,8 +45,8 @@ const logger: ILogger = {
 
   child: (obj: Record<string, unknown>) => {
     const childLog = (level: keyof typeof LEVELS) => (data: unknown, msg?: string) => {
-      const mergedData = { ...obj, ...(typeof data === 'object' ? data : {}) };
-      const message = typeof data === 'object' ? msg : String(data);
+      const mergedData = { ...obj, ...(typeof data === 'object' && data !== null ? data : {}) };
+      const message = typeof data === 'object' && data !== null ? msg : String(data);
       log(level, mergedData, message);
     };
 
@@ -47,9 +57,8 @@ const logger: ILogger = {
       info: childLog('info'),
       warn: childLog('warn'),
       error: childLog('error'),
+      fatal: childLog('fatal'),
       child: (newObj) => logger.child({ ...obj, ...newObj }),
     };
   },
 };
-
-export default logger;

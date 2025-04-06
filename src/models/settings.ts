@@ -1,5 +1,5 @@
-import type { Settings, SettingsMap } from '../@types/settings.ts';
 import database from '../core/database.ts';
+import type { SettingsMap } from '../@types';
 
 export const configDB = database.define('config', {
   prefix: { type: 'STRING', allowNull: false, defaultValue: '.' },
@@ -7,13 +7,11 @@ export const configDB = database.define('config', {
 });
 
 export async function getSettings(): Promise<SettingsMap> {
-  const settings = (await configDB.findAll()) as SettingsMap[];
-  const plainSettings = JSON.parse(JSON.stringify(settings)) as SettingsMap[];
-  const mappedSettings = plainSettings.map(
-    (setting): SettingsMap => ({
-      prefix: Array.isArray(setting.prefix) ? setting.prefix : Array.from(setting.prefix),
-      mode: Boolean(setting.mode),
-    }),
-  );
+  const msg = (await configDB.findAll()) as SettingsMap[];
+  const config = JSON.parse(JSON.stringify(msg));
+  const mappedSettings = config.map((setting: SettingsMap) => ({
+    prefix: Array.isArray(setting.prefix) ? setting.prefix : Array.from(setting.prefix),
+    mode: Boolean(setting.mode),
+  }));
   return mappedSettings[0] as SettingsMap;
 }

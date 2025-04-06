@@ -1,10 +1,10 @@
-import { type BaileysEventMap, type WAMessage, type WASocket } from 'baileys';
-import type { Serialize } from '../../../@types/command.ts';
-import logger from '../../../utils/logger.ts';
-import { Semaphore } from '../../cache/semaphore.ts';
-import { serialize } from '../functions/serialize.ts';
-import { storeMessages } from '../../../models/store.ts';
-import { runCommands } from '../tasks/runCommand.ts';
+import { serialize } from '../core';
+import { logger } from '../utils';
+import { storeMessages } from '../models';
+import { runCommands } from '../tasks';
+import { Semaphore } from '../hooks';
+import type { Serialize } from '../@types';
+import type { BaileysEventMap, WAMessage, WASocket } from 'baileys';
 
 export default class MessageUpsert {
   private client: WASocket;

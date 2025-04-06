@@ -1,4 +1,4 @@
-import database from '../core/database.ts';
+import database from '../core/database';
 
 const Sudo = database.define(
   'sudo',
