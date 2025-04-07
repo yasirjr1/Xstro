@@ -41,7 +41,8 @@ export default class ConnectionUpdate {
     const statusCode = error?.output?.statusCode;
 
     if (statusCode === DisconnectReason.loggedOut) {
-      this.client.ws.close();
+      this.client.ev.flush();
+      await this.client.ws.close();
       process.exit(1);
     } else {
       pm2.restart(config.PROCESS_NAME, async (error: Error) => {

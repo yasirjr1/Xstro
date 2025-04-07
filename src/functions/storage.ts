@@ -51,8 +51,11 @@ export const useSqliteAuthStore = async () => {
     state: {
       creds,
       keys: {
-        get: async (type: keyof SignalDataTypeMap, ids: string[]) => {
-          const data: { [_: string]: SignalDataTypeMap[typeof type] } = {};
+        get: async <T extends keyof SignalDataTypeMap>(
+          type: T,
+          ids: string[],
+        ): Promise<{ [id: string]: SignalDataTypeMap[T] }> => {
+          const data: { [id: string]: SignalDataTypeMap[T] } = {};
           await Promise.all(
             ids.map(async (id) => {
               let value = await readData(`${type}-${id}`);

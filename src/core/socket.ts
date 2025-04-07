@@ -31,6 +31,5 @@ export const initConnection = async () => {
     return await new MakeListeners(sock, { saveCreds }).manageProcesses();
   } catch (error) {
     logger.error({ error }, 'Failed to initialize connection');
-    throw error;
   }
 };

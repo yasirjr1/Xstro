@@ -15,17 +15,14 @@ const currentLevel = LEVELS[(config.LOGGER as keyof typeof LEVELS) || 'info'];
 const log = (level: keyof typeof LEVELS, data: unknown, msg?: unknown) => {
   if (LEVELS[level] < currentLevel) return;
 
-  const timestamp = new Date().toISOString();
   const entry = msg
     ? {
-        timestamp,
-        level,
         ...(typeof data === 'object' && data !== null ? data : { msg: data }),
         msg,
       }
     : typeof data === 'object' && data !== null
-      ? { timestamp, level, ...data }
-      : { timestamp, level, msg: data };
+      ? { ...data }
+      : { msg: data };
 
   if (level === 'error' || level === 'fatal') {
     console.error(JSON.stringify(entry));

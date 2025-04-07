@@ -6,6 +6,14 @@ export const configDB = database.define('config', {
   mode: { type: 'INTEGER', allowNull: false, defaultValue: 1 },
 });
 
+async function init() {
+  return await configDB.create({
+    prefix: '.',
+    mode: 1,
+  });
+}
+init();
+
 export async function getSettings(): Promise<SettingsMap> {
   const msg = (await configDB.findAll()) as SettingsMap[];
   const config = JSON.parse(JSON.stringify(msg));

@@ -3,8 +3,6 @@ import { logger } from '../utils/index.ts';
 import type { Serialize } from '../@types';
 
 export async function runCommands(message: Serialize) {
-  console.log(message.text);
-  console.log(message.prefix);
   if (!message.text) return;
 
   for (const cmd of commands) {

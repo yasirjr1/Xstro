@@ -22,8 +22,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
   };
   const { key, message, ...msg } = normalizedMessages;
   const { prefix, mode } = await getSettings();
-  console.log(prefix, mode);
-  const owner = parseJid(client?.user!.id);
+  const owner = parseJid(client?.user?.id);
   const sender =
     isJidGroup(key.remoteJid!) || msg.broadcast
       ? key.participant
@@ -45,7 +44,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
     key,
     message,
     mtype,
-    jid: key.remoteJid!,
+    jid: key.remoteJid ?? '',
     isGroup: isJidGroup(key.remoteJid!),
     owner: owner,
     prefix: prefix,
@@ -94,12 +93,14 @@ export async function serialize(client: WASocket, messages: WAMessage) {
     isAdmin: async function (): Promise<boolean | unknown[]> {
       const metadata = await this.groupMetadata(this.jid);
       const allAdmins = metadata.participants.filter((v) => v.admin !== null).map((v) => v.id);
-      return !Array.isArray(allAdmins) ? Array.from(allAdmins) : allAdmins.includes(sender!);
+      return !Array.isArray(allAdmins) ? Array.from(allAdmins) : allAdmins.includes(sender ?? '');
     },
     isBotAdmin: async function (): Promise<boolean | unknown[]> {
       const metadata = await this.groupMetadata(this.jid);
       const allAdmins = metadata.participants.filter((v) => v.admin !== null).map((v) => v.id);
-      return !Array.isArray(allAdmins) ? Array.from(allAdmins) : allAdmins.includes(this.owner!);
+      return !Array.isArray(allAdmins)
+        ? Array.from(allAdmins)
+        : allAdmins.includes(this.owner ?? '');
     },
     send: async function (
       content: string | Buffer,

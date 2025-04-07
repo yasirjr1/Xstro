@@ -36,7 +36,7 @@ export default class MessageUpsert {
               .then(async () => {
                 try {
                   const msg = await serialize(this.client, message);
-                  logger.info(msg?.message);
+                  logger.info(msg?.key, msg.message);
                   await task(message, msg);
                 } catch (error) {
                   failedTasks++;

@@ -44,7 +44,7 @@ export function formatBytes(bytes: number): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))}${sizes[i]}`;
 }
 
-export function parseJid(jid: string): string | undefined {
+export function parseJid(jid?: string): string | undefined {
   if (!jid) return undefined;
   const parsed = Array.isArray(jid)
     ? jid[0]
