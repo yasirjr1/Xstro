@@ -1,5 +1,5 @@
-import { Command } from '../core';
-import { formatRuntime } from '../utils';
+import { Command } from '../core/index.ts';
+import { formatRuntime } from '../utils/index.ts';
 import pm2 from 'pm2';
 
 Command({

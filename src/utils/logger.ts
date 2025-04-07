@@ -1,14 +1,14 @@
 import config from '../../config.ts';
 import type { ILogger } from '../@types';
 
-const LEVELS = Object.freeze({  
-  trace: 10,  
-  debug: 20,  
-  info: 30,  
-  warn: 40,  
-  error: 50,  
-  fatal: 60,  
-});  
+const LEVELS = Object.freeze({
+  trace: 10,
+  debug: 20,
+  info: 30,
+  warn: 40,
+  error: 50,
+  fatal: 60,
+});
 
 const currentLevel = LEVELS[(config.LOGGER as keyof typeof LEVELS) || 'info'];
 

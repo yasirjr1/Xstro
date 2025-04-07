@@ -16,7 +16,7 @@ export default class MessageUpsert {
   }
 
   public async queueAllTasks() {
-    const semaphore = new Semaphore(5);
+    const semaphore = new Semaphore(50);
     const taskPromises: Promise<void>[] = [];
     let failedTasks = 0;
 

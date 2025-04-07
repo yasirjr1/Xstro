@@ -22,6 +22,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
   };
   const { key, message, ...msg } = normalizedMessages;
   const { prefix, mode } = await getSettings();
+  console.log(prefix, mode);
   const owner = parseJid(client?.user!.id);
   const sender =
     isJidGroup(key.remoteJid!) || msg.broadcast
