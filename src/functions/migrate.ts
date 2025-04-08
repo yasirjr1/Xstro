@@ -1,8 +1,8 @@
 import { createDecipheriv } from 'node:crypto';
+import config from '../../config.ts';
 import database from '../core/database.ts';
 import { authstate } from './storage.ts';
 import { fetchJson, logger } from '../utils/index.ts';
-import config from '../../config.ts';
 
 const sessionId = database.define(
   'sessionId',
