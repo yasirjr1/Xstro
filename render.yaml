@@ -5,14 +5,6 @@ services:
     repo: https://github.com/AstroX11/Xstro
     plan: free
     envVars:
-      - key: TIME_ZONE
-        sync: false
-      - key: WARN_COUNT
-        sync: false
-      - key: META_DATA
-        sync: false
-      - key: SUDO
-        sync: false
       - key: SESSION
         sync: false
     region: oregon

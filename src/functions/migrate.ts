@@ -67,7 +67,7 @@ const transferToDb = async (data: {
   return await sessionId.create({ session: config.SESSION });
 };
 
-export async function initSession() {
+export async function initSession(): Promise<unknown> {
   if (!config.SESSION) throw new Error('No session Id found!');
   if (await isSessionSame(config.SESSION)) return console.info('Session Loaded!');
   const data = await fetchSession();
