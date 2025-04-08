@@ -36,7 +36,7 @@ export default class ReplyMessage extends Message {
         },
         message: quotedM,
         type: getContentType(quotedM),
-        sender: Quoted.participant!,
+        sender: Quoted.participant ?? '',
         text: extractStringfromMessage(quotedM) ?? undefined,
         viewOnce:
           quotedM?.audioMessage?.viewOnce ||

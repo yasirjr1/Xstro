@@ -31,7 +31,7 @@ export default class Base {
     this.client = client;
     this.key = msg.key;
     this.jid = msg.key.remoteJid ?? '';
-    this.owner = parseJid(client?.user?.id)!;
+    this.owner = parseJid(client?.user?.id) ?? '';
     this.sender = this.getSender(msg);
     this.prefix = settings.prefix;
     this.mode = settings.mode;
