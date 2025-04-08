@@ -8,7 +8,7 @@ import {
   type AuthenticationCreds,
 } from 'baileys';
 
-const authstate = database.define(
+export const authstate = database.define(
   'auth',
   {
     name: { type: 'STRING', allowNull: true, primaryKey: true },

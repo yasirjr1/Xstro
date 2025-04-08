@@ -9,7 +9,7 @@ export async function serialize(client: WASocket, msg: WAMessage) {
   const sender = msg.key.fromMe ? owner : msg.key.participant || msg.key.remoteJid;
   const sudo = (await getSudo())?.includes(sender ?? '') || sender === owner;
 
-  return msg ?
-      new Message(client, msg, { prefix, mode }, sudo)
+  return msg
+    ? new Message(client, msg, { prefix, mode }, sudo)
     : new ReplyMessage(client, msg, { prefix, mode }, sudo);
 }
