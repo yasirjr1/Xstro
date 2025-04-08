@@ -1,5 +1,5 @@
-import { getContentType, normalizeMessageContent, type WASocket, type WAMessage } from 'baileys';
 import Base from './Base.ts';
+import { getContentType, normalizeMessageContent, type WASocket, type WAMessage } from 'baileys';
 import { extractStringfromMessage } from '../../utils/index.ts';
 
 export default class Message extends Base {
