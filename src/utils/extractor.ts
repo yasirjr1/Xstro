@@ -1,6 +1,7 @@
 import type { WAMessageContent } from 'baileys';
 
-export function extractStringfromMessage(message: WAMessageContent) {
+export function extractStringfromMessage(message?: WAMessageContent) {
+  if (!message) return undefined;
   if (message?.conversation) return message.conversation;
   if (message?.documentMessage?.caption) return message.documentMessage.caption;
   if (message?.videoMessage?.caption) return message.videoMessage.caption;

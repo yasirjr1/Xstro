@@ -146,7 +146,7 @@ Command({
   function: async (message) => {
     const users = await message.fetchBlocklist();
     if (!users) return message.send('No blocked users found');
-    return await message.send(users.map((nums) => `\n@${nums.split('@')[0]}`).join(''), {
+    return await message.send(users.map((nums: string) => `\n@${nums.split('@')[0]}`).join(''), {
       mentions: users,
     });
   },

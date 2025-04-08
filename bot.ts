@@ -3,7 +3,7 @@ import { initConnection } from './src/core/index.ts';
 import { syncPlugins } from './src/functions/index.ts';
 
 try {
-  await syncPlugins('../plugins', '.mts');
+  await syncPlugins('../plugins', ['.mjs', '.mts']);
   await initConnection();
 } catch (error) {
   logger.error(error);
