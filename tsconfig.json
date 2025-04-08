@@ -5,7 +5,7 @@
     "module": "ESNext",
     "moduleDetection": "force",
     "moduleResolution": "bundler",
-    "rootDirs": ["src"],
+    "rootDir": ".",
     "outDir": "dist",
     "baseUrl": ".",
 
