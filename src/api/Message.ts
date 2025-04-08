@@ -36,7 +36,7 @@ export default class MessageUpsert {
               .then(async () => {
                 try {
                   const msg = await serialize(this.client, message);
-                  logger.info(msg?.key, msg.message);
+                  logger.info(msg);
                   await task(message, msg);
                 } catch (error) {
                   failedTasks++;
@@ -48,9 +48,9 @@ export default class MessageUpsert {
         }
       }
       await Promise.all(taskPromises);
-      logger.info(`Processed ${taskPromises.length} tasks (${failedTasks} failed)`);
+      logger.info(`(Success ${taskPromises.length}) (${failedTasks} failed)`);
     } catch (error) {
-      logger.error(`Batch failed: ${error}`);
+      logger.error(`Failed: ${error}`);
     }
   }
 }
