@@ -21,9 +21,9 @@ Command({
   desc: 'Get the profile picture of any person or group',
   type: 'tools',
   function: async (message, match) => {
-    const user = message.parseUser(match);
+    const user = message.user(match);
     if (!user) return message.send('Provide someone number');
-    const profilePic = await message.profilePictureUrl(user, 'image');
+    const profilePic = await message.client.profilePictureUrl(user, 'image');
     if (!profilePic)
       return message.send(
         'User has no profile picture, or maybe their settings is prevent the bot from seeing it.',

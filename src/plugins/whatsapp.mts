@@ -8,7 +8,7 @@ Command({
   type: 'whatsapp',
   function: async (message, match) => {
     if (!match) return message.send('No bio text provided');
-    await message.updateProfileStatus(match);
+    await message.client.updateProfileStatus(match);
     return message.send('Bio updated successfully');
   },
 });
@@ -21,7 +21,7 @@ Command({
   type: 'whatsapp',
   function: async (message, match) => {
     if (!match) return message.send('No name provided');
-    await message.updateProfileName(match);
+    await message.client.updateProfileName(match);
     return message.send('Name updated successfully');
   },
 });
@@ -33,11 +33,11 @@ Command({
   desc: 'Block a user from Messaging you',
   type: 'whatsapp',
   function: async (message, match) => {
-    const jid = message.user(match);
+    const jid = message.data.user(match);
     if (!jid) return message.send('No user specified to block');
-    if (!(await message.onWhatsApp(jid))) return message.send('User is not on WhatsApp');
+    if (!(await message.client.onWhatsApp(jid))) return message.send('User is not on WhatsApp');
     await message.send('User blocked successfully');
-    return message.updateBlockStatus(jid, 'block');
+    return message.client.updateBlockStatus(jid, 'block');
   },
 });
 
@@ -51,7 +51,7 @@ Command({
     const jid = message.user(match);
     if (!jid) return message.send('No user specified to unblock');
     await message.send('User unblocked successfully');
-    return message.updateBlockStatus(jid, 'unblock');
+    return message.client.updateBlockStatus(jid, 'unblock');
   },
 });
 
@@ -67,8 +67,8 @@ Command({
     }
     const media = await message.downloadM(message.quoted);
     if (!media || !Buffer.isBuffer(media)) return message.send('Failed to download image');
-    if (!message?.owner) return;
-    await message.updateProfilePicture(message.owner, media);
+    if (!message.owner) return;
+    await message.client.updateProfilePicture(message.owner, media);
     return message.send('Profile picture updated successfully');
   },
 });
@@ -81,7 +81,7 @@ Command({
   type: 'whatsapp',
   function: async (message) => {
     if (!message.quoted?.viewOnce) return message.send('No view-once message replied to');
-    const msg = message?.quoted?.message;
+    const msg = message?.message;
     const messageType = ['imageMessage', 'videoMessage', 'audioMessage'].find(
       (type) => msg?.[type as keyof typeof msg],
     );
@@ -89,7 +89,7 @@ Command({
     const media = msg[messageType as keyof typeof msg] as { viewOnce: boolean };
     media.viewOnce = false;
     if (!message?.owner) return;
-    return await message.forward(message.owner, message.quoted, { quoted: message.quoted });
+    return await message.forward(message.owner, {});
   },
 });
 
@@ -108,7 +108,7 @@ Command({
     if (!messageType) return message.send('No valid media found');
     (quoted.message[messageType as keyof typeof quoted.message] as any).viewOnce = true;
     if (!message?.owner) return;
-    return await message.forward(message.owner, quoted, { quoted });
+    return await message.forward(message.owner, {});
   },
 });
 
@@ -144,7 +144,7 @@ Command({
   desc: 'Get all the list of numbers you have blocked',
   type: 'whatsapp',
   function: async (message) => {
-    const users = await message.fetchBlocklist();
+    const users = await message.client.fetchBlocklist();
     if (!users) return message.send('No blocked users found');
     return await message.send(users.map((nums: string) => `\n@${nums.split('@')[0]}`).join(''), {
       mentions: users,
@@ -161,7 +161,7 @@ Command({
   function: async (message) => {
     if (!message?.quoted?.broadcast) return message.send('No status replied to');
     if (!message?.owner) return;
-    await message.forward(message.owner, message.quoted, { quoted: message.quoted });
-    return message.send('Status saved successfully');
+    await message.forward(message.owner, {});
+    return message.send('Status saved!');
   },
 });

@@ -12,7 +12,7 @@ Command({
   desc: 'Update the bot',
   type: 'utilities',
   function: async (message, match) => {
-    const prefix = message.prefix;
+    const prefix = message.prefix[0];
     await execPromise('git fetch');
 
     const { stdout: logOutput } = await execPromise(

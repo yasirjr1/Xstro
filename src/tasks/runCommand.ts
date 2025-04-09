@@ -1,13 +1,13 @@
 import { commands } from '../core/index.ts';
 import { logger } from '../utils/index.ts';
-import type { Serialize } from '../@types';
+import AllMess from '../core/Messages/AllMess.ts';
 
-export async function runCommands(message: Serialize) {
-  if (!message.text) return;
+export async function runCommands(message: AllMess) {
+  if (!message.data.text) return;
 
   for (const cmd of commands) {
-    const handler = message.prefix.find((p: string) => message.text?.startsWith(p));
-    const match = message.text.slice(handler?.length || 0).match(cmd.name as string);
+    const handler = message.data.prefix.find((p: string) => message.data.text?.startsWith(p));
+    const match = message.data.text.slice(handler?.length || 0).match(cmd.name as string);
     if (!handler || !match) continue;
 
     try {

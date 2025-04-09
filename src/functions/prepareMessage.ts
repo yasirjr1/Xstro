@@ -1,15 +1,14 @@
 import { Boom } from '@hapi/boom';
 import { getDataType } from '../utils/index.ts';
-import type { MessageMisc, Serialize } from '../@types';
-import type { AnyMessageContent, WAMessage, WASocket } from 'baileys';
+import type { MessageMisc } from '../@types';
+import type { AnyMessageContent, WASocket } from 'baileys';
 
 export async function prepareMessage(
-  createserialize: (client: WASocket, msg: WAMessage) => Promise<Serialize>,
   client: WASocket,
   content: string | Buffer,
   options?: MessageMisc & Partial<AnyMessageContent>,
-): Promise<Serialize> {
-  const jid = options?.jid;
+) {
+  const jid = options?.jid ?? ' ';
   const explicitType = options?.type;
   const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
   let messageContent: AnyMessageContent;
@@ -37,6 +36,5 @@ export async function prepareMessage(
     throw new Boom('Unknown content type');
   }
 
-  const m = await client.sendMessage(jid!, messageContent, { ...options });
-  return createserialize(client, m!);
+  return await client.sendMessage(jid, messageContent, { ...options });
 }

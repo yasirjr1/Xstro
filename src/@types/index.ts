@@ -1,6 +1,7 @@
 import type { WAContextInfo, WAMessage, WAMessageContent } from 'baileys';
 import type { FileTypeResult } from 'file-type';
 import type { serialize } from '../core/serialize';
+import { AllMess } from 'src/core/Messages';
 
 /**
  * Commands interface for defining command handlers
@@ -25,7 +26,7 @@ export interface Commands {
    * @param {string} [match] - Optional matched string from RegExp pattern
    * @returns {Promise<unknown>}
    */
-  function: (message: Serialize, match?: string) => Promise<unknown>;
+  function: (message: AllMess, match?: string) => Promise<unknown>;
 
   /**
    * Whether the command is restricted to sudo and bot owner

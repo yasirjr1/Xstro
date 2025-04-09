@@ -1,4 +1,5 @@
 import { serialize } from '../core/index.ts';
+import { AllMess } from '../core/Messages/index.ts';
 import { logger } from '../utils/index.ts';
 import { storeMessages } from '../models/index.ts';
 import { runCommands } from '../tasks/index.ts';
@@ -21,9 +22,9 @@ export default class MessageUpsert {
     let failedTasks = 0;
 
     const tasks = [
-      async (message: WAMessage, msg: Serialize) => {
+      async (message: WAMessage, Instance: AllMess, msg: Serialize) => {
         await storeMessages(message);
-        await runCommands(msg);
+        await runCommands(Instance);
       },
     ];
 
@@ -35,9 +36,9 @@ export default class MessageUpsert {
               .acquire()
               .then(async () => {
                 try {
-                  const msg = await serialize(this.client, message);
-                  logger.info(msg);
-                  await task(message, msg);
+                  const serializeM = await serialize(this.client, structuredClone(message));
+                  const Instance = new AllMess(serializeM, this.client);
+                  await task(message, Instance, serializeM);
                 } catch (error) {
                   failedTasks++;
                   logger.error(`Task error: ${error}`);
@@ -50,7 +51,8 @@ export default class MessageUpsert {
       await Promise.all(taskPromises);
       logger.info(`(Success ${taskPromises.length}) (${failedTasks} failed)`);
     } catch (error) {
-      logger.error(`Failed: ${error}`);
+      const errorMessage = error instanceof Error ? error.stack : String(error);
+      logger.error(`Failed in queueAllTasks: ${errorMessage}`);
     }
   }
 }
