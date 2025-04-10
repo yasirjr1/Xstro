@@ -1,16 +1,18 @@
 import { type WAMessage, type WAMessageContent, type WAMessageKey, WAProto } from 'baileys';
 import database from '../core/database.ts';
+import { logger } from '../utils/index.ts'
 
 const messageDb = database.define(
   'messages',
   {
-    id: { type: 'STRING', allowNull: false, primaryKey: true },
+    id: { type: 'STRING', allowNull: false, primaryKey: true, unique: false },
     message: { type: 'STRING', allowNull: true },
   },
   { freezeTableName: true },
 );
 
 export async function storeMessages(message: WAMessage) {
+  if (!message || !message.key || !message.message) return logger.error('Incomplete message object to save')
   await messageDb.create({ id: message.key.id, message: JSON.stringify(message) });
 }
 
