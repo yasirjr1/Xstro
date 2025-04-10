@@ -155,9 +155,9 @@ Command({
   desc: 'Save a status by replying to it',
   type: 'whatsapp',
   function: async (message) => {
-    const msg = message.quoted
+    const msg = message.quoted;
     if (!msg?.broadcast) return message.send('No status replied to');
-    await msg.forward(message.owner)
+    await msg.forward(message.owner);
     return message.send('Status saved!');
   },
 });

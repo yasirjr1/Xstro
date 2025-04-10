@@ -29,7 +29,7 @@ export default class ReplyMessage {
     this.sender = data.quoted?.sender;
     this.isGroup = data.isGroup;
     this.owner = data.owner;
-    this.broadcast = data.quoted?.broadcast
+    this.broadcast = data.quoted?.broadcast;
     this.image = Boolean(data?.quoted?.message?.imageMessage);
     this.video = Boolean(data?.quoted?.message?.videoMessage);
     this.audio = Boolean(data?.quoted?.message?.audioMessage);

@@ -23,7 +23,7 @@ export default class Base {
   constructor(data: Serialize, client: WASocket) {
     this.client = client;
     this.data = data;
-    this.jid = parseJid(data.jid);
+    this.jid = data.jid;
     this.id = data.key.id;
     this.fromMe = data.key.fromMe;
     this.participant = data.key.participant;
