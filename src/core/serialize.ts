@@ -7,7 +7,7 @@ export async function serialize(client: WASocket, messages: WAMessage) {
   const normalizedMessages = { ...messages, message: normalizeMessageContent(messages?.message) };
   const { key, message, ...props } = normalizedMessages;
   const { prefix, mode } = await getSettings();
-  const owner = parseJid(client?.user?.id) ?? '';
+  const owner = parseJid(client?.user?.id);
   const sender =
     isJidGroup(key.remoteJid!) || props.broadcast
       ? key.participant

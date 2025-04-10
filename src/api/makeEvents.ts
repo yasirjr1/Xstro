@@ -1,6 +1,6 @@
 import type { WASocket } from 'baileys';
 import ConnectionUpdate from './connection.ts';
-import MessageUpsert from './Message.ts';
+import MessageUpsert from './MessageUpsert.ts';
 
 export default class MakeListeners {
   private clientSocket: WASocket;

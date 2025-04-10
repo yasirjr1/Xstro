@@ -1,11 +1,11 @@
 import { serialize } from '../core/index.ts';
-import { AllMess } from '../core/Messages/index.ts';
+import { Message } from '../core/Messages/index.ts';
 import { logger } from '../utils/index.ts';
 import { storeMessages } from '../models/index.ts';
 import { runCommands } from '../tasks/index.ts';
 import { Semaphore } from '../hooks/index.ts';
-import type { Serialize } from '../@types';
-import type { BaileysEventMap, WAMessage, WASocket } from 'baileys';
+import type { Serialize } from '../@types/index.ts';
+import type { BaileysEventMap, WASocket } from 'baileys';
 
 export default class MessageUpsert {
   private client: WASocket;
@@ -22,9 +22,9 @@ export default class MessageUpsert {
     let failedTasks = 0;
 
     const tasks = [
-      async (message: WAMessage, Instance: AllMess, msg: Serialize) => {
-        await storeMessages(message);
-        await runCommands(Instance);
+      async (client: Message, data: Serialize) => {
+        await storeMessages(data);
+        await runCommands(client);
       },
     ];
 
@@ -36,9 +36,9 @@ export default class MessageUpsert {
               .acquire()
               .then(async () => {
                 try {
-                  const serializeM = await serialize(this.client, structuredClone(message));
-                  const Instance = new AllMess(serializeM, this.client);
-                  await task(message, Instance, serializeM);
+                  const data = await serialize(this.client, structuredClone(message));
+                  const client = new Message(data, this.client);
+                  await task(client, data);
                 } catch (error) {
                   failedTasks++;
                   logger.error(`Task error: ${error}`);

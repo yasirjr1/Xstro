@@ -1,3 +1,5 @@
+import { jidNormalizedUser } from 'baileys';
+
 export function isPath(text: string): boolean {
   if (typeof text !== 'string' || text.trim() === '') return false;
 
@@ -44,16 +46,9 @@ export function formatBytes(bytes: number): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))}${sizes[i]}`;
 }
 
-export function parseJid(jid?: string): string | undefined {
-  if (!jid) return undefined;
-  const parsed = Array.isArray(jid)
-    ? jid[0]
-    : typeof jid === 'object'
-      ? String(Object.values(jid)[0])
-      : String(jid);
-  const numbers = parsed.replace(/\D/g, '');
-  if (!numbers) return undefined;
-  const num = numbers.slice(0, 12);
-  if (num.length < 11) return undefined;
-  return `${num}@whatsapp.net`;
+export function parseJid(num?: string | number): string {
+  if (!num) return ``;
+  let strNum = typeof num === 'string' ? num : num.toString();
+  strNum = strNum.replace(/:\d+/, '').replace(/\D/g, '');
+  return jidNormalizedUser(`${strNum}@s.whatsapp.net`);
 }

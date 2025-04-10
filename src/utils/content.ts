@@ -68,14 +68,14 @@ export const getDataType = async (
   }
 };
 
-export const isMediaMessage = async (message: WAMessage): Promise<boolean> => {
+export const isMediaMessage = (message: WAMessage): boolean => {
   const mediaMessageTypes = [
     'imageMessage',
     'videoMessage',
     'audioMessage',
     'documentMessage',
   ] as const;
-  const content = await contentType(message?.message || {});
+  const content = contentType(message?.message || {});
   return (
     typeof content === 'string' &&
     mediaMessageTypes.includes(content as (typeof mediaMessageTypes)[number])

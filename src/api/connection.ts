@@ -1,8 +1,8 @@
-import { DisconnectReason, jidNormalizedUser } from 'baileys';
+import { DisconnectReason } from 'baileys';
 import pm2 from 'pm2';
 import { Boom } from '@hapi/boom';
-import { logger } from '../utils/index.ts';
 import config from '../../config.ts';
+import { logger, parseJid } from '../utils/index.ts';
 import { setSudo } from '../models/index.ts';
 
 import type { BaileysEventMap, WASocket } from 'baileys';
@@ -31,7 +31,7 @@ export default class ConnectionUpdate {
   private async handleConnecting() {
     logger.info('Connecting to WhatsApp...');
     if (this.client.user?.id) {
-      await setSudo(jidNormalizedUser(this.client.user.id));
+      await setSudo(parseJid(this.client?.user?.id));
     }
   }
   private async handleClose(

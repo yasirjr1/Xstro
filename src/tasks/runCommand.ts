@@ -1,8 +1,8 @@
 import { commands } from '../core/index.ts';
 import { logger } from '../utils/index.ts';
-import AllMess from '../core/Messages/AllMess.ts';
+import Message from '../core/Messages/Message.ts';
 
-export async function runCommands(message: AllMess) {
+export async function runCommands(message: Message) {
   if (!message.data.text) return;
 
   for (const cmd of commands) {
