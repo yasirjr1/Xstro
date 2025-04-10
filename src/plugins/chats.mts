@@ -7,26 +7,33 @@ Command({
   isGroup: true,
   desc: 'Get latest messages from this Group',
   type: 'chats',
-  function: async (message, match) => {
+  function: async (message) => {
     const messages = await getLastMessagesFromChat(message.jid);
     if (!messages) return message.send('No messages saved from this Group!');
-    const participantMessages = messages.reduce(
+
+    const msgs = messages.reduce(
       (acc, msg) => {
         const participant = msg.participant || (msg.key.participant as string);
-        if (!acc[participant]) {
-          acc[participant] = [];
-        }
-        acc[participant].push(msg);
+        acc[participant] = (acc[participant] || []).concat(msg);
         return acc;
       },
       {} as Record<string, typeof messages>,
     );
 
-    const sortedParticipants = Object.entries(participantMessages)
-      .sort((a, b) => b[1]!.length - a[1]!.length)
-      .map(([participant, msgs]) => `@${participant.split('@')[0]}: ${msgs!.length} messages`)
-      .join('\n');
+    const sorted = Object.entries(msgs)
+      .sort(([, a], [, b]) => b.length - a.length)
+      .map(([participant, msgs]) => ({
+        participant,
+        msgsCount: msgs.length,
+      }));
 
-    return await message.send(sortedParticipants);
+    return await message.send(
+      `*Group Messages:*\n${sorted
+        .map(({ participant, msgsCount }) => `@${participant.split('@')[0]}: ${msgsCount}`)
+        .join('\n')}`,
+      {
+        mentions: sorted.map(({ participant }) => participant),
+      },
+    );
   },
 });
