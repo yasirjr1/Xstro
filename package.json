@@ -1,6 +1,6 @@
 {
   "name": "xstro",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "Simple WA bot.",
   "type": "module",
   "main": "./dist/bot.js",
