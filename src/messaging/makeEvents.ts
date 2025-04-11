@@ -1,8 +1,8 @@
 import type { WASocket } from 'baileys';
-import ConnectionUpdate from './connection.ts';
-import MessageUpsert from './MessageUpsert.ts';
+import ConnectionUpdate from './Connections/client.ts';
+import MessageUpsert from './Messages/Upsert.ts';
 
-export default class MakeListeners {
+export default class makeEvents {
   private clientSocket: WASocket;
   private saveCreds: () => Promise<void>;
 

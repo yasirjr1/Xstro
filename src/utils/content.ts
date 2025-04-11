@@ -12,7 +12,7 @@ import {
   type WAMessageKey,
   type WAMessage,
 } from 'baileys';
-import type { ContentTypeResult } from '../@types';
+import type { ContentTypeResult } from '../types';
 
 export const getContentType = async (content: unknown): Promise<ContentTypeResult> => {
   try {

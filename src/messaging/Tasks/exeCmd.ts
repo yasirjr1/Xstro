@@ -1,8 +1,8 @@
-import { commands } from '../core/index.ts';
-import { logger } from '../utils/index.ts';
-import Message from '../core/Messages/Message.ts';
+import { commands } from '../../core/index.ts';
+import { logger } from '../../utils/index.ts';
+import type { Message } from '../Messages';
 
-export async function runCommands(message: Message) {
+export async function execCmd(message: Message) {
   if (!message.data.text) return;
 
   for (const cmd of commands) {

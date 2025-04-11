@@ -1,6 +1,6 @@
 import { logger } from './src/utils/index.ts';
-import { initConnection } from './src/core/index.ts';
-import { initSession, syncPlugins } from './src/functions/index.ts';
+import { initConnection, syncPlugins } from './src/core/index.ts';
+import { initSession } from './src/utils/index.ts';
 
 try {
   await initSession();

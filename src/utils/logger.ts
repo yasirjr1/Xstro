@@ -1,5 +1,5 @@
 import config from '../../config.ts';
-import type { ILogger } from '../@types';
+import type { ILogger } from '../types';
 
 const LEVELS = Object.freeze({
   trace: 10,

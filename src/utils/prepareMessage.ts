@@ -1,6 +1,6 @@
 import { Boom } from '@hapi/boom';
-import { getDataType } from '../utils/index.ts';
-import type { MessageMisc } from '../@types';
+import { getDataType } from './content.ts';
+import type { MessageMisc } from '../types/index.ts';
 import type { AnyMessageContent, WASocket } from 'baileys';
 
 export async function prepareMessage(

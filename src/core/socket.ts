@@ -1,9 +1,8 @@
 import { makeWASocket, makeCacheableSignalKeyStore, Browsers } from 'baileys';
 import config from '../../config.ts';
-import MakeListeners from '../api/makeEvents.ts';
-import { logger, connectProxy } from '../utils/index.ts';
+import makeEvents from '../messaging/makeEvents.ts';
+import { logger, connectProxy, useSqliteAuthStore } from '../utils/index.ts';
 import { getMessage, cachedGroupMetadata } from '../models/index.ts';
-import { useSqliteAuthStore } from '../functions/index.ts';
 
 export const initConnection = async () => {
   try {
@@ -21,7 +20,7 @@ export const initConnection = async () => {
       getMessage,
       cachedGroupMetadata,
     });
-    return await new MakeListeners(sock, { saveCreds }).manageProcesses();
+    return await new makeEvents(sock, { saveCreds }).manageProcesses();
   } catch (error) {
     logger.error({ error }, 'Failed to initialize connection');
   }

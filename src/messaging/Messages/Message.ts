@@ -1,9 +1,8 @@
 import Base from './Base.ts';
 import { downloadMediaMessage } from 'baileys';
-import { serialize } from '../serialize.ts';
-import { prepareMessage } from '../../functions/index.ts';
-import { isMediaMessage } from '../../utils/index.ts';
-import type { MessageMisc, Serialize } from '../../@types';
+import { serialize } from '../../core/serialize.ts';
+import { isMediaMessage, prepareMessage } from '../../utils/index.ts';
+import type { MessageMisc, Serialize } from '../../types/index.ts';
 import type { AnyMessageContent, WASocket } from 'baileys';
 
 export default class Message extends Base {

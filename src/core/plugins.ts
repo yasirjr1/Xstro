@@ -1,10 +1,34 @@
+import { logger } from '../utils/index.ts';
 import { pathToFileURL, fileURLToPath } from 'url';
 import { join, extname, dirname } from 'path';
 import { readdir } from 'fs/promises';
-import { logger } from '../utils/index.ts';
+import type { Commands } from '../types/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+export const commands: Commands[] = [];
+
+export function Command({
+  name,
+  function: func,
+  fromMe,
+  isGroup,
+  desc,
+  type,
+  dontAddCommandList,
+}: Commands): number {
+  logger.info('Command Loaded:', name?.toString());
+  return commands.push({
+    name: new RegExp(`^\\s*(${name})(?:\\s+([\\s\\S]+))?$`, 'i'),
+    function: func,
+    fromMe: fromMe,
+    isGroup: isGroup,
+    desc: desc,
+    type: type,
+    dontAddCommandList: dontAddCommandList,
+  });
+}
 
 export async function syncPlugins(plugin: string, extensions: string[] = ['.ts']): Promise<void> {
   const plugins = join(__dirname, plugin);

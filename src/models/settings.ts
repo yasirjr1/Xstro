@@ -1,5 +1,5 @@
 import database from '../core/database.ts';
-import type { SettingsMap } from '../@types';
+import type { SettingsMap } from '../types/index.ts';
 
 export const configDB = database.define('config', {
   prefix: { type: 'STRING', allowNull: false, defaultValue: '.' },

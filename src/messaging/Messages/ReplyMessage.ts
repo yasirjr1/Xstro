@@ -1,5 +1,5 @@
 import { isMediaMessage } from '../../utils/content.ts';
-import type { Serialize } from '../../@types';
+import type { Serialize } from '../../types/index.ts';
 import { downloadMediaMessage, type WASocket, type WAMessageKey, type WAMessage } from 'baileys';
 
 export default class ReplyMessage {

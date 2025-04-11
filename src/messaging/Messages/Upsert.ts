@@ -1,10 +1,10 @@
-import { serialize } from '../core/index.ts';
-import { Message } from '../core/Messages/index.ts';
-import { logger } from '../utils/index.ts';
-import { storeMessages } from '../models/index.ts';
-import { runCommands } from '../tasks/index.ts';
-import { Semaphore } from '../hooks/index.ts';
-import type { Serialize } from '../@types/index.ts';
+import Message from './Message.ts';
+import { serialize } from '../../core/index.ts';
+import { logger } from '../../utils/index.ts';
+import { storeMessages } from '../../models/index.ts';
+import { execCmd } from '../Tasks/index.ts';
+import { Semaphore } from '../Hooks/index.ts';
+import type { Serialize } from '../../types/index.ts';
 import type { BaileysEventMap, WASocket } from 'baileys';
 
 export default class MessageUpsert {
@@ -24,7 +24,7 @@ export default class MessageUpsert {
     const tasks = [
       async (client: Message, data: Serialize) => {
         await storeMessages(data);
-        await runCommands(client);
+        await execCmd(client);
       },
     ];
 

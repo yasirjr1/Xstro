@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import type { AppConfig } from './src/@types';
+import type { AppConfig } from './src/types/index.ts';
 
 config();
 
