@@ -1,11 +1,12 @@
-import { logger } from './src/utils/index.ts';
-import { initConnection, syncPlugins } from './src/core/index.ts';
-import { initSession } from './src/utils/index.ts';
+import { initConnection } from './src/_core.ts';
+import { syncPlugins } from './src/messaging/plugins.ts';
+import { initSession } from './src/utils/migrate.ts';
+import { log } from './src/utils/logger.ts';
 
 try {
-  await initSession();
-  await syncPlugins('../plugins', ['.mjs', '.mts']);
-  await initConnection();
+ await initSession();
+ await syncPlugins('../plugins', ['.mjs', '.mts']);
+ await initConnection();
 } catch (error) {
-  logger.error(error);
+ log.error(error);
 }
