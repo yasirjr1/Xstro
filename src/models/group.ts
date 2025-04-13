@@ -13,20 +13,25 @@ const Metadata = database.define(
 export async function cachedGroupMetadata(
  jid: string,
 ): Promise<GroupMetadata | undefined> {
- const metadata = await Metadata.findOne({ where: { jid } });
+ const metadata = (await Metadata.findOne({ where: { jid } })) as {
+  data: string;
+ };
  if (!metadata) return undefined;
- const raw = JSON.parse(JSON.stringify(metadata));
- return JSON.parse(raw.data) as GroupMetadata;
+ return JSON.parse(metadata.data) as GroupMetadata;
 }
 
 export async function preserveGroupMetaData(
  jid: string,
- GroupMetadata: GroupMetadata,
-): Promise<GroupMetadata | undefined> {
- if (!GroupMetadata) return undefined;
- const exists = await Metadata.findOne({ where: { jid, data: GroupMetadata } });
+ groupMetadata: GroupMetadata,
+): Promise<GroupMetadata> {
+ const exists = await Metadata.findOne({ where: { jid } });
+ const data = JSON.stringify(groupMetadata);
+
  if (exists) {
-  await Metadata.update({ jid, data: GroupMetadata });
+  await Metadata.update({ data }, { where: { jid } });
+ } else {
+  await Metadata.create({ jid, data });
  }
- return GroupMetadata;
+
+ return groupMetadata;
 }

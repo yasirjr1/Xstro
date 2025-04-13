@@ -10,6 +10,7 @@ export default class MakeGroupCache {
    try {
     if (!socket?.authState?.creds?.registered) return;
     const groups = await this.socket.groupFetchAllParticipating();
+    if (!groups) return;
     for (const [jid, metadata] of Object.entries(groups)) {
      await preserveGroupMetaData(jid, metadata);
     }
