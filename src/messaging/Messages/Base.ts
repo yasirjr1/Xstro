@@ -1,6 +1,6 @@
 import ReplyMessage from './ReplyMessage.ts';
 import type { Serialize } from '../../types/index.ts';
-import { type WASocket, type WAMessageKey } from 'baileys';
+import type { WASocket, WAMessageKey } from 'baileys';
 
 export default class Base {
  public client: WASocket;
