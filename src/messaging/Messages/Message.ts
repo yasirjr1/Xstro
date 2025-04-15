@@ -1,13 +1,15 @@
 import Base from './Base.ts';
-import { downloadMediaMessage } from 'baileys';
-import { serialize } from '../serialize.ts';
-import { isMediaMessage, prepareMessage } from '../../utils/index.ts';
-import type { MessageMisc, Serialize } from '../../types/index.ts';
-import type { AnyMessageContent, WASocket } from 'baileys';
+import ReplyMessage from './ReplyMessage.ts';
+import type { Serialize, MessageMisc } from '../../types/index.ts';
+import type { WASocket, AnyMessageContent } from 'baileys';
+import { prepareMessage } from '../../utils/index.ts';
 
 export default class Message extends Base {
+ public quoted?: ReplyMessage;
+
  constructor(data: Serialize, client: WASocket) {
   super(data, client);
+  this.quoted = data.quoted ? new ReplyMessage(data, this.client) : undefined;
  }
 
  async send(
@@ -17,56 +19,37 @@ export default class Message extends Base {
   const jid = options?.jid ?? this.jid;
   const updatedOptions = { ...options, jid };
   const msg = await prepareMessage(this.client, content, updatedOptions);
-  return new Message(await serialize(this.client, msg!), this.client);
+  return new Message(
+   await (await import('../serialize.ts')).serialize(this.client, msg!),
+   this.client,
+  );
  }
 
  async edit(text: string) {
-  return await this.client.sendMessage(this.jid, {
-   text,
-   edit: this.key,
-  });
+  return await super.edit(text, this.jid, this.key);
  }
 
  async delete() {
-  const isRestrictedGroup = this.isGroup && !(await this.isBotAdmin());
-  const isPrivateNotMe = !this.isGroup && !this.fromMe;
-
-  if (isRestrictedGroup || isPrivateNotMe) {
-   return await this.client.chatModify(
-    {
-     deleteForMe: {
-      deleteMedia: isMediaMessage(this.data),
-      key: this.key,
-      timestamp: Date.now(),
-     },
-    },
-    this.jid,
-   );
-  }
-  return await this.client.sendMessage(this.jid, { delete: this.key });
+  return await super.delete(this.jid, this.key);
  }
 
  async downloadM() {
-  return await downloadMediaMessage(this.data, 'buffer', {});
+  return await super.downloadM(this.data);
  }
 
  async isAdmin() {
-  const metadata = await this.client.groupMetadata(this.jid);
-  const allAdmins = metadata.participants
-   .filter((v) => v.admin !== null)
-   .map((v) => v.id);
-  return !Array.isArray(allAdmins)
-   ? Array.from(allAdmins)
-   : allAdmins.includes(this.sender ?? '');
+  return await super.isAdmin();
  }
 
  async isBotAdmin() {
-  const metadata = await this.client.groupMetadata(this.jid);
-  const allAdmins = metadata.participants
-   .filter((v) => v.admin !== null)
-   .map((v) => v.id);
-  return !Array.isArray(allAdmins)
-   ? Array.from(allAdmins)
-   : allAdmins.includes(this.owner);
+  return await super.isBotAdmin();
+ }
+
+ async forward(jid: string) {
+  return await super.forward(jid);
+ }
+
+ async react(emoji: string) {
+  return await super.react(emoji, this.jid, this.key);
  }
 }
