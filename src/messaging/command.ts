@@ -14,7 +14,12 @@ export async function execCmd(message: Message) {
    .match(cmd.name as string);
   if (!handler || !match) continue;
 
+  if (message.mode && !message.sudo) continue;
+  if (cmd.fromMe && !message.sudo) continue;
+  if (cmd.isGroup && !message.isGroup) continue;
+
   try {
+   await message.react('⏳');
    await cmd.function(message, match[2] ?? '');
   } catch (err) {
    log.error(err);

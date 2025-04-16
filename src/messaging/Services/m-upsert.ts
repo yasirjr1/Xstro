@@ -22,7 +22,7 @@ export default class MessageUpsert {
     const cmdInstance = new Message(msg, this.client);
     await Promise.all([
      await messageDb.create({
-      id: message.key.id,
+      id: message?.key?.id ?? null,
       message,
      }),
 
