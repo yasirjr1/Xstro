@@ -30,12 +30,12 @@
     "@astrox11/sqlite": "^1.8.5",
     "@hapi/boom": "^10.0.1",
     "baileys": "*",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "file-type": "20.4.1",
     "got": "^14.4.7",
     "https-proxy-agent": "^7.0.6",
     "pm2": "^6.0.5",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "engines": {
     "node": ">=23"
