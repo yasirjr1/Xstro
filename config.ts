@@ -4,7 +4,7 @@ import type { AppConfig } from './src/types/index.ts';
 config();
 
 export default {
- SESSION: process.env.SESSION ?? '',
+ SESSION: process.env.SESSION ?? 'XSTRO_5354_4B46_A781',
  DATABASE: process.env.DATABASE ?? 'database.db',
  PROXY_URI: process.env.PROXY_URI ?? '',
  DEV_MODE: Boolean(process.env.DEV_MODE ?? false),
